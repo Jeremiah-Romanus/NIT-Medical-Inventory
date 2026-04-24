@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Medicine;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class MedicineSeeder extends Seeder
 {
@@ -17,87 +19,110 @@ class MedicineSeeder extends Seeder
             [
                 'name' => 'Paracetamol 500mg',
                 'category' => 'Analgesic',
-                'batch_number' => 'BATCH-001',
-                'quantity' => 25,
+                'batch_number' => 'NIT-2025-10-001',
+                'quantity' => 20,
                 'unit_price' => 50,
-                'expiry_date' => '2024-01-15',
+                'expiry_date' => '2025-12-10',
+                'created_at' => Carbon::create(2025, 10, 8, 9, 0, 0),
             ],
             [
                 'name' => 'Amoxicillin 500mg',
                 'category' => 'Antibiotic',
-                'batch_number' => 'BATCH-045',
-                'quantity' => 150,
+                'batch_number' => 'NIT-2025-10-002',
+                'quantity' => 30,
                 'unit_price' => 120,
-                'expiry_date' => '2026-07-20',
+                'expiry_date' => '2026-05-18',
+                'created_at' => Carbon::create(2025, 10, 18, 9, 0, 0),
             ],
             [
                 'name' => 'Ibuprofen 400mg',
                 'category' => 'Analgesic',
-                'batch_number' => 'BATCH-089',
-                'quantity' => 320,
+                'batch_number' => 'NIT-2025-11-003',
+                'quantity' => 40,
                 'unit_price' => 75,
-                'expiry_date' => '2028-03-10',
+                'expiry_date' => '2026-11-20',
+                'created_at' => Carbon::create(2025, 11, 12, 9, 0, 0),
             ],
             [
                 'name' => 'Metformin 500mg',
                 'category' => 'Diabetes',
-                'batch_number' => 'BATCH-120',
-                'quantity' => 500,
+                'batch_number' => 'NIT-2025-12-004',
+                'quantity' => 50,
                 'unit_price' => 85,
-                'expiry_date' => '2027-11-30',
+                'expiry_date' => '2026-03-15',
+                'created_at' => Carbon::create(2025, 12, 6, 9, 0, 0),
             ],
             [
                 'name' => 'Chloroquine 250mg',
                 'category' => 'Antimalarial',
-                'batch_number' => 'BATCH-067',
-                'quantity' => 200,
+                'batch_number' => 'NIT-2026-01-005',
+                'quantity' => 20,
                 'unit_price' => 60,
-                'expiry_date' => '2028-06-15',
+                'expiry_date' => '2026-05-25',
+                'created_at' => Carbon::create(2026, 1, 9, 9, 0, 0),
             ],
             [
                 'name' => 'Aspirin 75mg',
                 'category' => 'Antiplatelet',
-                'batch_number' => 'BATCH-078',
-                'quantity' => 75,
+                'batch_number' => 'NIT-2026-01-006',
+                'quantity' => 30,
                 'unit_price' => 40,
-                'expiry_date' => '2025-06-30',
+                'expiry_date' => '2026-10-30',
+                'created_at' => Carbon::create(2026, 1, 24, 9, 0, 0),
             ],
             [
                 'name' => 'Ciprofloxacin 500mg',
                 'category' => 'Antibiotic',
-                'batch_number' => 'BATCH-102',
-                'quantity' => 180,
+                'batch_number' => 'NIT-2026-02-007',
+                'quantity' => 40,
                 'unit_price' => 150,
-                'expiry_date' => '2027-02-14',
+                'expiry_date' => '2026-02-28',
+                'created_at' => Carbon::create(2026, 2, 14, 9, 0, 0),
             ],
             [
                 'name' => 'Omeprazole 20mg',
                 'category' => 'Gastrointestinal',
-                'batch_number' => 'BATCH-091',
-                'quantity' => 250,
+                'batch_number' => 'NIT-2026-03-008',
+                'quantity' => 50,
                 'unit_price' => 95,
-                'expiry_date' => '2028-08-22',
+                'expiry_date' => '2026-06-30',
+                'created_at' => Carbon::create(2026, 3, 11, 9, 0, 0),
             ],
             [
                 'name' => 'Insulin Glargine',
                 'category' => 'Diabetes',
-                'batch_number' => 'BATCH-156',
-                'quantity' => 40,
+                'batch_number' => 'NIT-2026-04-009',
+                'quantity' => 20,
                 'unit_price' => 280,
-                'expiry_date' => '2026-10-11',
+                'expiry_date' => '2026-08-22',
+                'created_at' => Carbon::create(2026, 4, 3, 9, 0, 0),
             ],
             [
                 'name' => 'Atorvastatin 20mg',
                 'category' => 'Cardiovascular',
-                'batch_number' => 'BATCH-145',
-                'quantity' => 400,
+                'batch_number' => 'NIT-2026-04-010',
+                'quantity' => 30,
                 'unit_price' => 120,
-                'expiry_date' => '2029-01-05',
+                'expiry_date' => '2027-01-05',
+                'created_at' => Carbon::create(2026, 4, 17, 9, 0, 0),
             ],
         ];
 
         foreach ($medicines as $medicine) {
-            Medicine::create($medicine);
+            $createdAt = $medicine['created_at'];
+            unset($medicine['created_at']);
+
+            Medicine::updateOrCreate(
+                ['batch_number' => $medicine['batch_number']],
+                $medicine
+            );
+
+            DB::table('medicines')
+                ->where('batch_number', $medicine['batch_number'])
+                ->update([
+                    'created_at' => $createdAt,
+                    'updated_at' => $createdAt,
+                ]);
         }
     }
 }

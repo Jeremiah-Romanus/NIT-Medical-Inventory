@@ -50,9 +50,9 @@
             <tbody>
                 @forelse($requests as $request)
                     <tr>
-                        <td>{{ $request->requester }}</td>
-                        <td>{{ $request->medicine }}</td>
-                        <td>{{ $request->quantity }}</td>
+                        <td>{{ $request->user->name }}</td>
+                        <td>{{ $request->medicine->name }}</td>
+                        <td>{{ $request->requested_quantity }}</td>
                         <td>
                             <span class="badge
                                 @if($request->status === 'approved') bg-success
@@ -63,7 +63,23 @@
                             </span>
                         </td>
                         <td>{{ $request->remarks ?: 'No remarks' }}</td>
-                        <td>{{ \Illuminate\Support\Carbon::parse($request->created_at)->format('M d, Y') }}</td>
+                        <td>{{ $request->created_at->format('M d, Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div class="d-flex flex-wrap gap-2">
+                                <form method="POST" action="{{ route('requests.approve', $request->id) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+
+                                <form method="POST" action="{{ route('requests.reject', $request->id) }}" class="d-flex gap-2 flex-wrap">
+                                    @csrf
+                                    <input type="text" name="remarks" class="form-control form-control-sm" placeholder="Rejection reason (optional)" style="min-width: 260px;">
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr>

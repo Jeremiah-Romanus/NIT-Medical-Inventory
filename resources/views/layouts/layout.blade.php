@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #07111f;
-            --panel: rgba(10, 18, 33, 0.88);
-            --panel-2: rgba(15, 26, 45, 0.96);
-            --border: rgba(255, 255, 255, 0.10);
-            --text: #eaf1ff;
-            --muted: #9db2d4;
-            --brand: #60a5fa;
-            --brand-2: #6ee7b7;
-            --warn: #fbbf24;
-            --danger: #fb7185;
+            --bg: #f4f7fb;
+            --panel: #ffffff;
+            --panel-2: #f8fbff;
+            --border: #d9e2ee;
+            --text: #16233a;
+            --muted: #64748b;
+            --brand: #2563eb;
+            --brand-2: #0ea5a8;
+            --warn: #d97706;
+            --danger: #dc2626;
         }
 
         * {
@@ -29,9 +29,9 @@
             min-height: 100vh;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(110, 231, 183, 0.12), transparent 30%),
-                linear-gradient(160deg, #050816 0%, #09111e 100%);
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 28%),
+                linear-gradient(160deg, #f8fbff 0%, #eef4fb 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -49,8 +49,9 @@
             position: fixed;
             inset: 0 auto 0 0;
             padding: 22px 18px;
-            background: linear-gradient(180deg, rgba(8, 15, 28, 0.98), rgba(12, 21, 39, 0.98));
+            background: linear-gradient(180deg, #ffffff, #f7fbff);
             border-right: 1px solid var(--border);
+            box-shadow: 0 18px 55px rgba(37, 99, 235, 0.06);
             overflow-y: auto;
             z-index: 20;
         }
@@ -58,7 +59,7 @@
         .brand {
             padding: 18px;
             border-radius: 22px;
-            background: rgba(255, 255, 255, 0.04);
+            background: #f8fbff;
             border: 1px solid var(--border);
             margin-bottom: 18px;
         }
@@ -83,8 +84,8 @@
             margin-top: 12px;
             padding: 8px 12px;
             border-radius: 999px;
-            background: rgba(96, 165, 250, 0.12);
-            color: #cce2ff;
+            background: rgba(37, 99, 235, 0.10);
+            color: #1d4ed8;
             font-size: 0.82rem;
         }
 
@@ -107,7 +108,7 @@
             gap: 12px;
             padding: 14px 14px;
             border-radius: 16px;
-            color: rgba(234, 241, 255, 0.88);
+            color: var(--text);
             transition: all 0.2s ease;
             margin-bottom: 8px;
             border: 1px solid transparent;
@@ -121,16 +122,16 @@
 
         .side-link:hover,
         .side-link.active {
-            background: rgba(96, 165, 250, 0.12);
-            border-color: rgba(96, 165, 250, 0.2);
-            color: white;
+            background: rgba(37, 99, 235, 0.08);
+            border-color: rgba(37, 99, 235, 0.16);
+            color: var(--brand);
         }
 
         .side-footer {
             margin-top: 18px;
             padding: 16px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.04);
+            background: #f8fbff;
             border: 1px solid var(--border);
         }
 
@@ -148,7 +149,7 @@
             display: grid;
             place-items: center;
             background: linear-gradient(135deg, var(--brand), var(--brand-2));
-            color: #04101f;
+            color: white;
             font-weight: 900;
         }
 
@@ -172,9 +173,9 @@
             gap: 10px;
             padding: 11px 14px;
             border-radius: 14px;
-            border: 1px solid rgba(251, 113, 133, 0.26);
-            background: rgba(251, 113, 133, 0.09);
-            color: #ffd7df;
+            border: 1px solid rgba(220, 38, 38, 0.18);
+            background: rgba(220, 38, 38, 0.06);
+            color: #b91c1c;
             font-weight: 700;
         }
 
@@ -193,9 +194,9 @@
             align-items: center;
             gap: 16px;
             padding: 22px 28px;
-            background: rgba(7, 17, 31, 0.75);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(18px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--border);
         }
 
         .page-head h2 {
@@ -213,28 +214,40 @@
         .status-pill {
             padding: 10px 14px;
             border-radius: 999px;
-            background: rgba(96, 165, 250, 0.12);
-            color: #d8ebff;
-            border: 1px solid rgba(96, 165, 250, 0.14);
+            background: rgba(37, 99, 235, 0.08);
+            color: #1d4ed8;
+            border: 1px solid rgba(37, 99, 235, 0.12);
             font-weight: 700;
             font-size: 0.88rem;
         }
 
         .content-area {
             padding: 28px;
+            flex: 1;
+        }
+
+        .app-footer {
+            padding: 16px 28px 24px;
+            color: var(--muted);
+            font-size: 0.88rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.70);
         }
 
         .card {
             background: var(--panel);
             border: 1px solid var(--border);
             border-radius: 24px;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
             color: var(--text);
         }
 
         .card-header {
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--panel-2);
+            border-bottom: 1px solid var(--border);
             padding: 18px 20px;
             border-top-left-radius: 24px !important;
             border-top-right-radius: 24px !important;
@@ -255,20 +268,20 @@
         }
 
         .table thead th {
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom-color: rgba(255, 255, 255, 0.08);
-            color: #c8d8f0;
+            background: #f8fbff;
+            border-bottom-color: var(--border);
+            color: #334155;
             font-weight: 700;
         }
 
         .table td,
         .table th {
-            border-color: rgba(255, 255, 255, 0.08);
+            border-color: var(--border);
             vertical-align: middle;
         }
 
         .table tbody tr:hover {
-            background: rgba(96, 165, 250, 0.06);
+            background: rgba(37, 99, 235, 0.04);
         }
 
         .alert {
@@ -277,23 +290,23 @@
         }
 
         .alert-success {
-            background: rgba(110, 231, 183, 0.10);
-            color: #d8fff0;
+            background: rgba(14, 165, 168, 0.09);
+            color: #0f766e;
         }
 
         .alert-danger {
-            background: rgba(251, 113, 133, 0.12);
-            color: #ffdce3;
+            background: rgba(220, 38, 38, 0.08);
+            color: #991b1b;
         }
 
         .alert-warning {
-            background: rgba(251, 191, 36, 0.12);
-            color: #fff0c7;
+            background: rgba(245, 158, 11, 0.10);
+            color: #92400e;
         }
 
         .alert-info {
-            background: rgba(96, 165, 250, 0.12);
-            color: #d8ebff;
+            background: rgba(37, 99, 235, 0.08);
+            color: #1d4ed8;
         }
 
         .badge {
@@ -309,7 +322,7 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--brand), var(--brand-2));
             border: 0;
-            color: #07111f;
+            color: white;
         }
 
         .btn-secondary {
@@ -318,14 +331,14 @@
         }
 
         .btn-warning {
-            background: linear-gradient(135deg, #fbbf24, #fb923c);
-            color: #1b1200;
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+            color: white;
             border: 0;
         }
 
         .btn-info {
-            background: linear-gradient(135deg, #38bdf8, #60a5fa);
-            color: #08111f;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: white;
             border: 0;
         }
 
@@ -336,22 +349,22 @@
 
         .form-control,
         .form-select {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #ffffff;
+            border: 1px solid var(--border);
             color: var(--text);
             border-radius: 14px;
         }
 
         .form-control:focus,
         .form-select:focus {
-            background: rgba(255, 255, 255, 0.06);
+            background: #ffffff;
             color: var(--text);
-            border-color: rgba(96, 165, 250, 0.5);
-            box-shadow: 0 0 0 0.18rem rgba(96, 165, 250, 0.14);
+            border-color: rgba(37, 99, 235, 0.45);
+            box-shadow: 0 0 0 0.18rem rgba(37, 99, 235, 0.10);
         }
 
         .modal-content {
-            background: #0d1727;
+            background: #ffffff;
             color: var(--text);
             border: 1px solid var(--border);
             border-radius: 24px;
@@ -359,7 +372,7 @@
 
         .modal-header,
         .modal-footer {
-            border-color: rgba(255, 255, 255, 0.08);
+            border-color: var(--border);
         }
 
         @media (max-width: 991.98px) {
@@ -408,13 +421,18 @@
             .content-area {
                 padding: 18px;
             }
+
+            .app-footer {
+                padding: 14px 18px 20px;
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="app-shell">
         <aside class="sidebar">
-            <div class="brand">
+                <div class="brand">
                 <h1><i class="fa-solid fa-hospital"></i> NIT Medical</h1>
                 <p>Inventory control made simple.</p>
                 <div class="chip">
@@ -519,6 +537,17 @@
 
                 @yield('content')
             </div>
+
+            <footer class="app-footer">
+                <div>
+                    <strong class="text-dark">NIT Medical Inventory</strong>
+                    <div>Digital medicine control for pharmacists and procurement officers.</div>
+                </div>
+                <div class="text-md-end">
+                    <div>Built for easier night-time reading</div>
+                    <div>Copyright &copy; {{ date('Y') }}</div>
+                </div>
+            </footer>
         </main>
     </div>
 

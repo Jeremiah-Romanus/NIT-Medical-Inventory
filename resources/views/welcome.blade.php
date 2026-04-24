@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #07111f;
-            --panel: rgba(10, 18, 33, 0.82);
-            --panel-border: rgba(255, 255, 255, 0.12);
-            --text: #eaf1ff;
-            --muted: #9bb0d1;
-            --accent: #6ee7b7;
-            --accent-2: #60a5fa;
-            --accent-3: #f59e0b;
+            --bg: #f4f7fb;
+            --panel: rgba(255, 255, 255, 0.92);
+            --panel-border: rgba(15, 23, 42, 0.08);
+            --text: #16233a;
+            --muted: #64748b;
+            --accent: #0ea5a8;
+            --accent-2: #2563eb;
+            --accent-3: #d97706;
         }
 
         body {
@@ -23,9 +23,9 @@
             margin: 0;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(96, 165, 250, 0.20), transparent 35%),
-                radial-gradient(circle at bottom right, rgba(110, 231, 183, 0.16), transparent 30%),
-                linear-gradient(160deg, #050816 0%, #0b1730 55%, #09111e 100%);
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 30%),
+                linear-gradient(160deg, #f8fbff 0%, #eef4fb 55%, #f7fafc 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -47,7 +47,7 @@
             backdrop-filter: blur(18px);
             border: 1px solid var(--panel-border);
             border-radius: 28px;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
             overflow: hidden;
         }
 
@@ -57,8 +57,8 @@
             gap: 10px;
             padding: 8px 14px;
             border-radius: 999px;
-            background: rgba(96, 165, 250, 0.12);
-            color: #cfe4ff;
+            background: rgba(37, 99, 235, 0.08);
+            color: #1d4ed8;
             font-size: 0.9rem;
             letter-spacing: 0.02em;
         }
@@ -97,20 +97,20 @@
 
         .btn-hero.primary {
             background: linear-gradient(135deg, var(--accent-2), var(--accent));
-            color: #07111f;
+            color: white;
         }
 
         .btn-hero.secondary {
-            background: rgba(255, 255, 255, 0.07);
+            background: white;
             color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid var(--panel-border);
         }
 
         .feature {
             padding: 18px;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid var(--panel-border);
             height: 100%;
         }
 
@@ -141,8 +141,8 @@
         .stat {
             padding: 16px;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid var(--panel-border);
         }
 
         .stat strong {
@@ -162,8 +162,8 @@
             gap: 8px;
             padding: 8px 12px;
             border-radius: 12px;
-            background: rgba(245, 158, 11, 0.12);
-            color: #ffd28a;
+            background: rgba(217, 119, 6, 0.10);
+            color: #92400e;
             font-size: 0.9rem;
             margin-top: 20px;
         }
@@ -179,9 +179,9 @@
             width: 100%;
             border-radius: 28px;
             background:
-                linear-gradient(180deg, rgba(96, 165, 250, 0.16), rgba(7, 17, 31, 0.95)),
+                linear-gradient(180deg, rgba(37, 99, 235, 0.12), rgba(255, 255, 255, 0.42)),
                 url('https://images.unsplash.com/photo-1580281657527-47f249e8f1b0?auto=format&fit=crop&w=1200&q=80') center/cover;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid var(--panel-border);
             position: relative;
             overflow: hidden;
         }
@@ -190,7 +190,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 30%, rgba(4, 9, 20, 0.82) 100%);
+            background: linear-gradient(180deg, transparent 30%, rgba(15, 23, 42, 0.45) 100%);
         }
 
         .floating-card {
@@ -201,8 +201,8 @@
             z-index: 1;
             padding: 18px 18px 16px;
             border-radius: 18px;
-            background: rgba(7, 17, 31, 0.82);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--panel-border);
             backdrop-filter: blur(16px);
         }
 
@@ -223,6 +223,18 @@
             margin: 0;
             color: var(--muted);
             line-height: 1.6;
+        }
+
+        .footer-note {
+            margin-top: 22px;
+            padding-top: 16px;
+            border-top: 1px solid var(--panel-border);
+            color: var(--muted);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         @media (max-width: 991.98px) {
@@ -327,6 +339,11 @@
                     </div>
                 </div>
             </section>
+
+            <div class="footer-note">
+                <div>NIT Medical Inventory. Clean, calm, daylight-friendly UI.</div>
+                <div>Copyright &copy; {{ date('Y') }}</div>
+            </div>
         </main>
     </div>
 </body>

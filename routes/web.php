@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PharmacistController;
 use App\Http\Controllers\ProcurementController;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\MedicineController;
 
 // Public routes
@@ -26,17 +27,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->group(function () {
     Route::get('/dashboard', [PharmacistController::class, 'dashboard'])->name('pharmacist.dashboard');
     Route::get('/stock', [MedicineController::class, 'index'])->name('pharmacist.stock');
-    Route::get('/request', [PharmacistController::class, 'submitRequest'])->name('pharmacist.request');
+    Route::get('/request', [RequestController::class, 'myRequests'])->name('pharmacist.request');
     Route::get('/expiry', [PharmacistController::class, 'checkExpiry'])->name('pharmacist.expiry');
 });
 
 // Procurement Officer routes
 Route::middleware(['auth', 'role:procurement'])->prefix('procurement')->group(function () {
     Route::get('/dashboard', [ProcurementController::class, 'dashboard'])->name('procurement.dashboard');
-    Route::get('/requests', [ProcurementController::class, 'manageRequests'])->name('procurement.requests');
+    Route::get('/requests', [RequestController::class, 'pendingRequests'])->name('procurement.requests');
     Route::get('/stock', [MedicineController::class, 'index'])->name('procurement.stock');
     Route::get('/distribution', [ProcurementController::class, 'recordDistribution'])->name('procurement.distribution');
     Route::get('/reports', [ProcurementController::class, 'viewReports'])->name('procurement.reports');
+});
+
+Route::middleware(['auth', 'role:pharmacist'])->group(function () {
+    Route::post('/requests', [RequestController::class, 'store'])->name('requests.store');
+});
+
+Route::middleware(['auth', 'role:procurement'])->group(function () {
+    Route::post('/requests/{medicineRequest}/approve', [RequestController::class, 'approve'])->name('requests.approve');
+    Route::post('/requests/{medicineRequest}/reject', [RequestController::class, 'reject'])->name('requests.reject');
 });
 
 // Medicine Routes - Accessible by both roles but with different permissions

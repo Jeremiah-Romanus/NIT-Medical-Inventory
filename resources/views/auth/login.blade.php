@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #07111f;
-            --panel: rgba(10, 18, 33, 0.88);
-            --border: rgba(255, 255, 255, 0.10);
-            --text: #eaf1ff;
-            --muted: #9db2d4;
-            --brand: #60a5fa;
-            --brand-2: #6ee7b7;
+            --bg: #f4f7fb;
+            --panel: rgba(255, 255, 255, 0.94);
+            --border: rgba(15, 23, 42, 0.08);
+            --text: #16233a;
+            --muted: #64748b;
+            --brand: #2563eb;
+            --brand-2: #0ea5a8;
         }
 
         body {
@@ -22,9 +22,9 @@
             min-height: 100vh;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(96, 165, 250, 0.22), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(110, 231, 183, 0.16), transparent 30%),
-                linear-gradient(160deg, #050816 0%, #0b1730 55%, #09111e 100%);
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 30%),
+                linear-gradient(160deg, #f8fbff 0%, #eef4fb 55%, #f7fafc 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -42,15 +42,15 @@
             border-radius: 28px;
             overflow: hidden;
             border: 1px solid var(--border);
-            background: rgba(10, 18, 33, 0.76);
-            box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
             backdrop-filter: blur(20px);
         }
 
         .hero-panel {
             padding: 40px;
             background:
-                linear-gradient(180deg, rgba(7, 17, 31, 0.40), rgba(7, 17, 31, 0.78)),
+                linear-gradient(180deg, rgba(37, 99, 235, 0.10), rgba(255, 255, 255, 0.12)),
                 url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=1200&q=80') center/cover;
             position: relative;
             min-height: 620px;
@@ -60,7 +60,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 35%, rgba(7, 17, 31, 0.88) 100%);
+            background: linear-gradient(180deg, transparent 35%, rgba(15, 23, 42, 0.40) 100%);
         }
 
         .hero-content {
@@ -79,8 +79,8 @@
             gap: 10px;
             padding: 10px 14px;
             border-radius: 999px;
-            background: rgba(96, 165, 250, 0.12);
-            border: 1px solid rgba(96, 165, 250, 0.14);
+            background: rgba(255, 255, 255, 0.90);
+            border: 1px solid var(--border);
             width: fit-content;
         }
 
@@ -97,7 +97,7 @@
 
         .hero-text {
             max-width: 56ch;
-            color: #bfd0ea;
+            color: #334155;
             line-height: 1.8;
         }
 
@@ -111,8 +111,8 @@
         .hero-stat {
             padding: 16px;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.90);
+            border: 1px solid var(--border);
         }
 
         .hero-stat strong {
@@ -121,13 +121,13 @@
         }
 
         .hero-stat span {
-            color: #b8c8e0;
+            color: var(--muted);
             font-size: 0.85rem;
         }
 
         .form-panel {
             padding: 36px;
-            background: rgba(12, 20, 36, 0.95);
+            background: rgba(255, 255, 255, 0.96);
         }
 
         .form-panel h2 {
@@ -140,18 +140,18 @@
         }
 
         .form-control {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #ffffff;
+            border: 1px solid var(--border);
             color: var(--text);
             border-radius: 14px;
             padding: 0.9rem 1rem;
         }
 
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.06);
+            background: #ffffff;
             color: var(--text);
-            border-color: rgba(96, 165, 250, 0.5);
-            box-shadow: 0 0 0 0.2rem rgba(96, 165, 250, 0.16);
+            border-color: rgba(37, 99, 235, 0.45);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.10);
         }
 
         .btn-login {
@@ -159,7 +159,7 @@
             border-radius: 14px;
             padding: 0.95rem 1rem;
             font-weight: 800;
-            color: #07111f;
+            color: white;
             background: linear-gradient(135deg, var(--brand), var(--brand-2));
         }
 
@@ -167,8 +167,8 @@
             margin-top: 24px;
             padding: 18px;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(37, 99, 235, 0.04);
+            border: 1px solid var(--border);
         }
 
         .demo-box h6 {
@@ -178,7 +178,19 @@
 
         .demo-box p {
             margin: 6px 0;
-            color: #d7e4f6;
+            color: #334155;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 0.88rem;
         }
 
         .alert {
@@ -262,6 +274,11 @@
                     <p><strong>Pharmacist:</strong> pharmacist@nit.com</p>
                     <p><strong>Procurement:</strong> procurement@nit.com</p>
                     <p><strong>Password:</strong> password123</p>
+                </div>
+
+                <div class="footer-note">
+                    <div>NIT Medical Inventory</div>
+                    <div>Made easier to read in daylight</div>
                 </div>
             </section>
         </div>
