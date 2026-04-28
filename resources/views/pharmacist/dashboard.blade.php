@@ -46,6 +46,10 @@
                         <div class="fs-3 fw-bold">{{ $stats['expiringSoonCount'] }}</div>
                     </div>
                     <div class="p-3 rounded-4" style="background: rgba(251,113,133,.08);">
+                        <div class="text-secondary small">Expired medicines</div>
+                        <div class="fs-3 fw-bold">{{ $stats['expiredCount'] }}</div>
+                    </div>
+                    <div class="p-3 rounded-4" style="background: rgba(251,113,133,.08);">
                         <div class="text-secondary small">Low stock medicines</div>
                         <div class="fs-3 fw-bold">{{ $stats['lowStockCount'] }}</div>
                     </div>
@@ -155,6 +159,31 @@
     </div>
 
     <div class="col-lg-4">
+        <div class="card h-100 mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Critical alerts</h5>
+            </div>
+            <div class="card-body">
+                <div class="vstack gap-3">
+                    @forelse($criticalMedicines as $medicine)
+                        <div class="p-3 rounded-4" style="background: rgba(251,191,36,.08);">
+                            <div class="fw-semibold">{{ $medicine->name }}</div>
+                            <div class="text-secondary small">
+                                Stock: {{ $medicine->quantity }} |
+                                Expiry: {{ $medicine->expiry_date->format('M d, Y') }}
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-secondary">No critical medicine alerts right now.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
         <div class="card h-100">
             <div class="card-header">
                 <h5 class="card-title">Expiry watchlist</h5>

@@ -195,4 +195,49 @@
         </div>
     </div>
 </div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">High-demand medicines</h5>
+            </div>
+            <div class="card-body">
+                <div class="vstack gap-3">
+                    @forelse($topDemandMedicines as $medicine)
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background: rgba(96,165,250,.08);">
+                            <div class="fw-semibold">{{ $medicine->name }}</div>
+                            <div class="small fw-bold">{{ $medicine->issued_total }} issued</div>
+                        </div>
+                    @empty
+                        <div class="text-secondary">No distribution data yet for demand analysis.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">Critical alerts</h5>
+            </div>
+            <div class="card-body">
+                <div class="vstack gap-3">
+                    @forelse($criticalAlerts as $medicine)
+                        <div class="p-3 rounded-4" style="background: rgba(251,191,36,.08);">
+                            <div class="fw-semibold">{{ $medicine->name }}</div>
+                            <div class="text-secondary small">
+                                Stock: {{ $medicine->quantity }} |
+                                Expiry: {{ $medicine->expiry_date->format('M d, Y') }}
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-secondary">No critical stock or expiry alerts right now.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

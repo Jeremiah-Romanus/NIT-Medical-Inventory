@@ -31,14 +31,14 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Requested quantity</label>
-                            <input type="number" name="requested_quantity" min="1" class="form-control @error('requested_quantity') is-invalid @enderror" placeholder="e.g. 100" required>
+                            <input type="number" name="requested_quantity" min="1" class="form-control @error('requested_quantity') is-invalid @enderror" placeholder="Enter quantity needed" required>
                             @error('requested_quantity')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Remarks</label>
-                            <input type="text" name="remarks" class="form-control @error('remarks') is-invalid @enderror" placeholder="Optional note">
+                            <input type="text" name="remarks" class="form-control @error('remarks') is-invalid @enderror" placeholder="Add a short note if needed">
                             @error('remarks')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -65,7 +65,7 @@
                         Add justification when stock is low or patient demand is rising.
                     </div>
                     <div class="p-3 rounded-4" style="background: rgba(110,231,183,.08);">
-                        Keep this flow lean. We can hook it to the backend next.
+                        Track your submitted requests below and follow approval status in real time.
                     </div>
                 </div>
             </div>

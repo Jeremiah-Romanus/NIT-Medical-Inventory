@@ -40,7 +40,10 @@ Route::middleware(['auth', 'role:procurement'])->prefix('procurement')->group(fu
     Route::get('/requests', [RequestController::class, 'pendingRequests'])->name('procurement.requests');
     Route::get('/stock', [MedicineController::class, 'index'])->name('procurement.stock');
     Route::get('/distribution', [ProcurementController::class, 'recordDistribution'])->name('procurement.distribution');
+    Route::post('/distribution', [ProcurementController::class, 'storeDistribution'])->name('procurement.distribution.store');
     Route::get('/reports', [ProcurementController::class, 'viewReports'])->name('procurement.reports');
+    Route::get('/reports/export', [ProcurementController::class, 'exportReports'])->name('procurement.reports.export');
+    Route::get('/reports/print', [ProcurementController::class, 'printReports'])->name('procurement.reports.print');
 });
 
 Route::middleware(['auth', 'role:pharmacist'])->group(function () {

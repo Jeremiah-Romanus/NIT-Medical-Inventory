@@ -230,6 +230,68 @@
             flex: 1;
         }
 
+        .alerts-panel {
+            margin-bottom: 24px;
+            padding: 20px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+        }
+
+        .alerts-panel h5 {
+            margin: 0 0 16px;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .alert-feed {
+            display: grid;
+            gap: 12px;
+        }
+
+        .alert-item {
+            padding: 14px 16px;
+            border-radius: 18px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            border: 1px solid transparent;
+        }
+
+        .alert-item i {
+            margin-top: 2px;
+        }
+
+        .alert-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .alert-item p {
+            margin: 0;
+            color: inherit;
+            font-size: 0.92rem;
+        }
+
+        .alert-item.info {
+            background: rgba(37, 99, 235, 0.08);
+            color: #1d4ed8;
+            border-color: rgba(37, 99, 235, 0.12);
+        }
+
+        .alert-item.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #92400e;
+            border-color: rgba(245, 158, 11, 0.14);
+        }
+
+        .alert-item.danger {
+            background: rgba(220, 38, 38, 0.08);
+            color: #991b1b;
+            border-color: rgba(220, 38, 38, 0.12);
+        }
+
         .card {
             background: var(--panel);
             border: 1px solid var(--border);
@@ -521,6 +583,23 @@
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if(isset($sharedAlerts) && $sharedAlerts->isNotEmpty())
+                    <div class="alerts-panel">
+                        <h5><i class="fa-solid fa-bell me-2"></i>System Alerts</h5>
+                        <div class="alert-feed">
+                            @foreach($sharedAlerts as $alert)
+                                <div class="alert-item {{ $alert['type'] }}">
+                                    <i class="{{ $alert['icon'] }}"></i>
+                                    <div>
+                                        <strong>{{ $alert['title'] }}</strong>
+                                        <p>{{ $alert['message'] }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 @endif
 
