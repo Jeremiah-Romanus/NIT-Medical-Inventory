@@ -19,8 +19,11 @@ Route::get('/', function () {
 });
 
 // Authentication routes
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'showLoginSelection'])->name('login');
+Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login.role');
+Route::post('/login/{role}', [AuthController::class, 'login'])->name('login.attempt');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Pharmacist routes

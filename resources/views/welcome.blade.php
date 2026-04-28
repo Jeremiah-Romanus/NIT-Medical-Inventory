@@ -6,6 +6,7 @@
     <title>NIT Medical Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    @include('partials.footer-styles')
     <style>
         :root {
             --bg: #f4f7fb;
@@ -104,6 +105,32 @@
             background: white;
             color: var(--text);
             border: 1px solid var(--panel-border);
+        }
+
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .access-card {
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid var(--panel-border);
+        }
+
+        .access-card h6 {
+            margin: 12px 0 8px;
+            font-weight: 700;
+        }
+
+        .access-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         .feature {
@@ -225,24 +252,13 @@
             line-height: 1.6;
         }
 
-        .footer-note {
-            margin-top: 22px;
-            padding-top: 16px;
-            border-top: 1px solid var(--panel-border);
-            color: var(--muted);
-            font-size: 0.9rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
         @media (max-width: 991.98px) {
             .visual {
                 min-height: 340px;
                 margin-top: 28px;
             }
 
+            .access-grid,
             .stats {
                 grid-template-columns: 1fr;
             }
@@ -267,9 +283,13 @@
                         </p>
 
                         <div class="cta-row">
-                            <a href="{{ route('login') }}" class="btn-hero primary">
+                            <a href="{{ route('register') }}" class="btn-hero primary">
+                                <i class="fa-solid fa-user-plus"></i>
+                                Register Account
+                            </a>
+                            <a href="{{ route('login') }}" class="btn-hero secondary">
                                 <i class="fa-solid fa-right-to-bracket"></i>
-                                Login to Dashboard
+                                Already Registered? Login
                             </a>
                             <a href="#features" class="btn-hero secondary">
                                 <i class="fa-solid fa-layer-group"></i>
@@ -294,6 +314,24 @@
                             <div class="stat">
                                 <strong>24/7</strong>
                                 <span>Visibility for stock and expiry tracking</span>
+                            </div>
+                        </div>
+
+                        <div class="access-grid">
+                            <div class="access-card">
+                                <i class="fa-solid fa-user-plus text-primary"></i>
+                                <h6>1. Register once</h6>
+                                <p>Create one account with your name, email, password, and role.</p>
+                            </div>
+                            <div class="access-card">
+                                <i class="fa-solid fa-user-nurse text-primary"></i>
+                                <h6>2. Choose your login</h6>
+                                <p>After registration, sign in through pharmacist or procurement login.</p>
+                            </div>
+                            <div class="access-card">
+                                <i class="fa-solid fa-id-badge text-primary"></i>
+                                <h6>3. Enter the system</h6>
+                                <p>Your account name will now be the one that appears inside the dashboard.</p>
                             </div>
                         </div>
                     </div>
@@ -340,10 +378,9 @@
                 </div>
             </section>
 
-            <div class="footer-note">
-                <div>NIT Medical Inventory. Clean, calm, daylight-friendly UI.</div>
-                <div>Copyright &copy; {{ date('Y') }}</div>
-            </div>
+            @include('partials.footer', [
+                'footerClass' => 'hero-footer',
+            ])
         </main>
     </div>
 </body>

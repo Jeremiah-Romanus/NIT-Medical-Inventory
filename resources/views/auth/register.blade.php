@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ucfirst($role) }} Login - NIT Medical Inventory</title>
+    <title>Register - NIT Medical Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @include('partials.footer-styles')
@@ -29,7 +29,7 @@
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .login-shell {
+        .register-shell {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -38,16 +38,16 @@
             gap: 24px;
         }
 
-        .login-stage {
+        .stage {
             flex: 1;
             display: grid;
             place-items: center;
         }
 
-        .login-card {
+        .card-register {
             width: min(1120px, 100%);
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-columns: 1fr 1fr;
             border-radius: 28px;
             overflow: hidden;
             border: 1px solid var(--border);
@@ -56,30 +56,26 @@
             backdrop-filter: blur(20px);
         }
 
-        .hero-panel {
+        .info-panel {
             padding: 40px;
             background:
                 linear-gradient(180deg, rgba(37, 99, 235, 0.10), rgba(255, 255, 255, 0.12)),
-                url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=1200&q=80') center/cover;
+                url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80') center/cover;
             position: relative;
             min-height: 620px;
         }
 
-        .hero-panel::after {
+        .info-panel::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 35%, rgba(15, 23, 42, 0.40) 100%);
+            background: linear-gradient(180deg, transparent 30%, rgba(15, 23, 42, 0.42) 100%);
         }
 
-        .hero-content {
+        .info-content {
             position: relative;
             z-index: 1;
-            max-width: 540px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 100%;
+            color: #16233a;
         }
 
         .brand {
@@ -97,41 +93,30 @@
             color: var(--brand-2);
         }
 
-        .hero-title {
-            font-size: clamp(2.4rem, 5vw, 4.8rem);
-            line-height: 0.95;
+        .info-content h1 {
+            font-size: clamp(2.2rem, 4vw, 4rem);
+            line-height: 0.98;
             font-weight: 900;
-            margin: 18px 0;
+            margin: 18px 0 12px;
         }
 
-        .hero-text {
-            max-width: 56ch;
+        .info-content p {
+            max-width: 52ch;
             color: #334155;
             line-height: 1.8;
         }
 
-        .hero-stats {
+        .points {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
+            gap: 14px;
             margin-top: 28px;
         }
 
-        .hero-stat {
+        .point {
             padding: 16px;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.90);
             border: 1px solid var(--border);
-        }
-
-        .hero-stat strong {
-            display: block;
-            font-size: 1.4rem;
-        }
-
-        .hero-stat span {
-            color: var(--muted);
-            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.90);
         }
 
         .form-panel {
@@ -148,7 +133,8 @@
             color: var(--muted);
         }
 
-        .form-control {
+        .form-control,
+        .form-select {
             background: #ffffff;
             border: 1px solid var(--border);
             color: var(--text);
@@ -156,7 +142,8 @@
             padding: 0.9rem 1rem;
         }
 
-        .form-control:focus {
+        .form-control:focus,
+        .form-select:focus {
             background: #ffffff;
             color: var(--text);
             border-color: rgba(37, 99, 235, 0.45);
@@ -186,45 +173,28 @@
             justify-content: center;
         }
 
-        .btn-login {
-            border: 0;
+        .btn-submit,
+        .btn-linkish {
             border-radius: 14px;
             padding: 0.95rem 1rem;
             font-weight: 800;
+            text-decoration: none;
+        }
+
+        .btn-submit {
+            border: 0;
             color: white;
             background: linear-gradient(135deg, var(--brand), var(--brand-2));
         }
 
-        .btn-alt {
-            border-radius: 14px;
-            padding: 0.9rem 1rem;
-            font-weight: 700;
+        .btn-linkish {
             color: var(--text);
             background: rgba(37, 99, 235, 0.04);
             border: 1px solid var(--border);
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-
-        .help-box {
-            margin-top: 24px;
-            padding: 18px;
-            border-radius: 18px;
-            background: rgba(37, 99, 235, 0.04);
-            border: 1px solid var(--border);
-        }
-
-        .help-box h6 {
-            margin-bottom: 12px;
-            font-weight: 800;
-        }
-
-        .help-box p {
-            margin: 6px 0;
-            color: #334155;
         }
 
         .alert {
@@ -232,60 +202,40 @@
         }
 
         @media (max-width: 991.98px) {
-            .login-card {
+            .card-register {
                 grid-template-columns: 1fr;
             }
 
-            .hero-panel {
-                min-height: 420px;
+            .info-panel {
+                min-height: 380px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-shell">
-        <div class="login-stage">
-            <div class="login-card">
-                <section class="hero-panel">
-                    <div class="hero-content">
-                        <div>
-                            <div class="brand">
-                                <i class="fa-solid fa-hospital"></i>
-                                <span>NIT Medical Inventory</span>
-                            </div>
-                            <h1 class="hero-title">Inventory control for clinical teams.</h1>
-                            <p class="hero-text">
-                                Keep medicines visible, requests organized, and expiry risks under control with a workflow built for
-                                pharmacists and procurement officers.
-                            </p>
+    <div class="register-shell">
+        <div class="stage">
+            <div class="card-register">
+                <section class="info-panel">
+                    <div class="info-content">
+                        <div class="brand">
+                            <i class="fa-solid fa-hospital"></i>
+                            <span>NIT Medical Inventory</span>
                         </div>
+                        <h1>Create one account, then log in by role.</h1>
+                        <p>Register once with your real details. Your name inside the system will now come directly from the account you create here.</p>
 
-                        <div class="hero-stats">
-                            <div class="hero-stat">
-                                <strong>2 roles</strong>
-                                <span>Role-based access</span>
-                            </div>
-                            <div class="hero-stat">
-                                <strong>Live stock</strong>
-                                <span>Inventory visibility</span>
-                            </div>
-                            <div class="hero-stat">
-                                <strong>Fast flow</strong>
-                                <span>Requests to distribution</span>
-                            </div>
+                        <div class="points">
+                            <div class="point">Choose your role during registration: pharmacist or procurement.</div>
+                            <div class="point">After registration, sign in through the matching role login page.</div>
+                            <div class="point">Your dashboard name will follow the registered account details automatically.</div>
                         </div>
                     </div>
                 </section>
 
                 <section class="form-panel">
-                    <h2>{{ ucfirst($role) }} sign in</h2>
-                    <p class="mb-4">If you already registered as {{ $role }}, use your account to continue. If not, register first.</p>
-
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                    <h2>Create account</h2>
+                    <p class="mb-4">Fill your details once, then use the correct login page for your role.</p>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -295,11 +245,26 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login.attempt', $role) }}">
+                    <form method="POST" action="{{ route('register.store') }}">
                         @csrf
                         <div class="mb-3">
+                            <label for="name" class="form-label">Full name</label>
+                            <input type="text" id="name" name="name" value="{{ old('name') }}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" required autofocus>
+                            <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Account type</label>
+                            <select id="role" name="role" class="form-select" required>
+                                <option value="">Choose role</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role }}" @selected(old('role') === $role)>{{ ucfirst($role) }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="mb-3">
@@ -312,24 +277,24 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-login w-100">Login</button>
+                        <div class="mb-4">
+                            <label for="password_confirmation" class="form-label">Confirm password</label>
+                            <div class="password-field">
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
+                                <button type="button" class="password-toggle" data-toggle-password="password_confirmation" aria-label="Show password">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-submit w-100">Register</button>
                     </form>
 
                     <div class="d-grid gap-2 mt-3">
-                        <a href="{{ route('register') }}" class="btn-alt">
-                            <i class="fa-solid fa-user-plus"></i>
-                            Not registered yet? Register first
+                        <a href="{{ route('login') }}" class="btn-linkish">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            Already registered? Go to login
                         </a>
-                        <a href="{{ route('login') }}" class="btn-alt">
-                            <i class="fa-solid fa-arrow-left"></i>
-                            Choose another login type
-                        </a>
-                    </div>
-
-                    <div class="help-box">
-                        <h6><i class="fa-solid fa-circle-info me-2"></i>Before you log in</h6>
-                        <p>Use only the account details you created during registration.</p>
-                        <p>If you do not have an account yet, register first and then return to this login page.</p>
                     </div>
                 </section>
             </div>

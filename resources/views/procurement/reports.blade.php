@@ -18,7 +18,7 @@
         <div class="card h-100">
             <div class="card-body p-4">
                 <div class="text-secondary small">Inventory value</div>
-                <div class="fs-1 fw-bold">Ksh {{ number_format($summary['inventoryValue'], 0) }}</div>
+                <div class="fs-1 fw-bold">TZS {{ number_format($summary['inventoryValue'], 0) }}</div>
             </div>
         </div>
     </div>

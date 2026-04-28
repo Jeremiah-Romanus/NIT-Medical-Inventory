@@ -91,7 +91,7 @@
                                     {{ $medicine->quantity }} units
                                 </span>
                             </td>
-                            <td>Ksh {{ number_format($medicine->unit_price, 2) }}</td>
+                            <td>TZS {{ number_format($medicine->unit_price, 2) }}</td>
                             <td>
                                 <small>{{ $medicine->expiry_date->format('Y-m-d') }}</small>
                             </td>
@@ -213,7 +213,7 @@
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="unitPrice" class="form-label">Unit Price (Ksh) *</label>
+                            <label for="unitPrice" class="form-label">Unit Price (TZS) *</label>
                             <input type="number" class="form-control @error('unit_price') is-invalid @enderror" name="unit_price" id="unitPrice" placeholder="0.00" value="{{ old('unit_price') }}" step="0.01" required>
                             @error('unit_price')
                                 <div class="invalid-feedback">{{ $message }}</div>

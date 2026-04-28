@@ -12,24 +12,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a Pharmacist user
-        User::firstOrCreate(
-            ['email' => 'pharmacist@nit.com'],
-            [
-                'name' => 'Dr. James Kipchoge',
-                'password' => bcrypt('password123'),
-                'role' => 'pharmacist',
-            ]
-        );
-
-        // Create a Procurement Officer user
-        User::firstOrCreate(
-            ['email' => 'procurement@nit.com'],
-            [
-                'name' => 'John Mwangi',
-                'password' => bcrypt('password123'),
-                'role' => 'procurement',
-            ]
-        );
+        User::whereIn('email', [
+            'pharmacist@nit.com',
+            'procurement@nit.com',
+        ])->delete();
     }
 }

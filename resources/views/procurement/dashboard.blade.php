@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="text-end">
-                        <div class="display-6 fw-bold">Ksh {{ number_format($stats['inventoryValue'], 0) }}</div>
+                        <div class="display-6 fw-bold">TZS {{ number_format($stats['inventoryValue'], 0) }}</div>
                         <div class="text-secondary">Estimated inventory value</div>
                         <div class="mt-3 small text-warning">
                             <i class="fa-solid fa-triangle-exclamation me-2"></i>
@@ -184,7 +184,7 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">{{ $medicine->quantity }} units</div>
-                                <div class="text-secondary small">Ksh {{ number_format($medicine->unit_price, 2) }}</div>
+                                <div class="text-secondary small">TZS {{ number_format($medicine->unit_price, 2) }}</div>
                             </div>
                         </div>
                     @empty

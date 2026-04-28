@@ -6,6 +6,7 @@
     <title>@yield('title', 'Dashboard') - NIT Medical Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    @include('partials.footer-styles')
     <style>
         :root {
             --bg: #f4f7fb;
@@ -183,6 +184,9 @@
             margin-left: 280px;
             flex: 1;
             min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .topbar {
@@ -224,17 +228,6 @@
         .content-area {
             padding: 28px;
             flex: 1;
-        }
-
-        .app-footer {
-            padding: 16px 28px 24px;
-            color: var(--muted);
-            font-size: 0.88rem;
-            display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            border-top: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.70);
         }
 
         .card {
@@ -422,10 +415,6 @@
                 padding: 18px;
             }
 
-            .app-footer {
-                padding: 14px 18px 20px;
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -538,16 +527,10 @@
                 @yield('content')
             </div>
 
-            <footer class="app-footer">
-                <div>
-                    <strong class="text-dark">NIT Medical Inventory</strong>
-                    <div>Digital medicine control for pharmacists and procurement officers.</div>
-                </div>
-                <div class="text-md-end">
-                    <div>Built for easier night-time reading</div>
-                    <div>Copyright &copy; {{ date('Y') }}</div>
-                </div>
-            </footer>
+            @include('partials.footer', [
+                'footerClass' => 'page-footer',
+                'footerAlignClass' => 'text-md-end',
+            ])
         </main>
     </div>
 

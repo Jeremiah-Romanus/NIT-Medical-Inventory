@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-4">
                         <strong>Unit Price</strong>
-                        <div>Ksh {{ number_format($medicine->unit_price, 2) }}</div>
+                        <div>TZS {{ number_format($medicine->unit_price, 2) }}</div>
                     </div>
                     <div class="col-md-4">
                         <strong>Expiry Date</strong>
