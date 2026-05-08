@@ -1,18 +1,18 @@
 <style>
     .shared-footer {
         padding: 22px 28px 26px;
-        background: #0f2747;
-        color: rgba(255, 255, 255, 0.78);
+        background: #f3f9ff;
+        color: #475569;
         font-size: 0.88rem;
         display: flex;
         justify-content: space-between;
         gap: 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 3px solid #8fd3ff;
     }
 
     .shared-footer strong,
     .shared-footer .text-dark {
-        color: #ffffff !important;
+        color: #0f172a !important;
     }
 
     .shared-footer.page-footer {

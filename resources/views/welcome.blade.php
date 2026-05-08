@@ -9,14 +9,14 @@
     @include('partials.footer-styles')
     <style>
         :root {
-            --bg: #f4f7fb;
+            --bg: #f4fafe;
             --panel: rgba(255, 255, 255, 0.92);
-            --panel-border: rgba(15, 23, 42, 0.08);
-            --text: #16233a;
+            --panel-border: rgba(143, 211, 255, 0.35);
+            --text: #0f172a;
             --muted: #64748b;
-            --accent: #0ea5a8;
-            --accent-2: #2563eb;
-            --accent-3: #d97706;
+            --accent: #8fd3ff;
+            --accent-2: #60bdf5;
+            --accent-3: #0f172a;
         }
 
         body {
@@ -24,9 +24,9 @@
             margin: 0;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 35%),
-                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 30%),
-                linear-gradient(160deg, #f8fbff 0%, #eef4fb 55%, #f7fafc 100%);
+                radial-gradient(circle at top left, rgba(143, 211, 255, 0.28), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 28%),
+                linear-gradient(160deg, #ffffff 0%, #eef8ff 55%, #f8fcff 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -59,9 +59,21 @@
             padding: 8px 14px;
             border-radius: 999px;
             background: rgba(37, 99, 235, 0.08);
-            color: #1d4ed8;
+            color: #0f172a;
             font-size: 0.9rem;
             letter-spacing: 0.02em;
+        }
+
+        .nit-lockup {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nit-logo {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
         }
 
         h1 {
@@ -97,7 +109,7 @@
         }
 
         .btn-hero.primary {
-            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
             color: white;
         }
 
@@ -206,18 +218,35 @@
             width: 100%;
             border-radius: 28px;
             background:
-                linear-gradient(180deg, rgba(37, 99, 235, 0.12), rgba(255, 255, 255, 0.42)),
-                url('https://images.unsplash.com/photo-1580281657527-47f249e8f1b0?auto=format&fit=crop&w=1200&q=80') center/cover;
+                linear-gradient(180deg, rgba(143, 211, 255, 0.28), rgba(255, 255, 255, 0.72));
             border: 1px solid var(--panel-border);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .visual-panel::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 30%, rgba(15, 23, 42, 0.45) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(15, 23, 42, 0.16) 100%);
+        }
+
+        .visual-logo-wrap {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            padding: 36px;
+        }
+
+        .visual-logo {
+            width: min(78%, 360px);
+            max-width: 100%;
+            object-fit: contain;
+            opacity: 1;
         }
 
         .floating-card {
@@ -272,8 +301,10 @@
                 <div class="col-lg-7">
                     <div class="card-glass p-4 p-md-5 h-100">
                         <div class="eyebrow">
-                            <i class="fa-solid fa-shield-heart"></i>
-                            Medical inventory for faster, safer dispensing
+                            <span class="nit-lockup">
+                                <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="nit-logo">
+                                <span>Medical inventory for faster, safer dispensing</span>
+                            </span>
                         </div>
 
                         <h1>NIT Medical Inventory System</h1>
@@ -340,6 +371,9 @@
                 <div class="col-lg-5">
                     <div class="visual h-100">
                         <div class="visual-panel">
+                            <div class="visual-logo-wrap" aria-hidden="true">
+                                <img src="{{ asset('images/NIT_logoBg.png') }}" alt="" class="visual-logo">
+                            </div>
                             <div class="floating-card">
                                 <div class="label">Ready for operations</div>
                                 <h5>Built to reduce stock surprises</h5>

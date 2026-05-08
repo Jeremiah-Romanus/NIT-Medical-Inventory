@@ -6,16 +6,17 @@
     <title>{{ ucfirst($role) }} Login - NIT Medical Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('partials.footer-styles')
     <style>
         :root {
-            --bg: #f4f7fb;
+            --bg: #f4fafe;
             --panel: rgba(255, 255, 255, 0.94);
-            --border: rgba(15, 23, 42, 0.08);
-            --text: #16233a;
+            --border: rgba(143, 211, 255, 0.4);
+            --text: #0f172a;
             --muted: #64748b;
-            --brand: #2563eb;
-            --brand-2: #0ea5a8;
+            --brand: #8fd3ff;
+            --brand-2: #60bdf5;
         }
 
         body {
@@ -23,9 +24,9 @@
             min-height: 100vh;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 30%),
-                linear-gradient(160deg, #f8fbff 0%, #eef4fb 55%, #f7fafc 100%);
+                radial-gradient(circle at top left, rgba(143, 211, 255, 0.25), transparent 32%),
+                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 28%),
+                linear-gradient(160deg, #ffffff 0%, #eef8ff 55%, #f8fcff 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -93,8 +94,10 @@
             width: fit-content;
         }
 
-        .brand i {
-            color: var(--brand-2);
+        .brand-logo {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
         }
 
         .hero-title {
@@ -192,7 +195,7 @@
             padding: 0.95rem 1rem;
             font-weight: 800;
             color: white;
-            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
         }
 
         .btn-alt {
@@ -250,7 +253,7 @@
                     <div class="hero-content">
                         <div>
                             <div class="brand">
-                                <i class="fa-solid fa-hospital"></i>
+                                <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
                                 <span>NIT Medical Inventory</span>
                             </div>
                             <h1 class="hero-title">Inventory control for clinical teams.</h1>
@@ -280,12 +283,6 @@
                 <section class="form-panel">
                     <h2>{{ ucfirst($role) }} sign in</h2>
                     <p class="mb-4">If you already registered as {{ $role }}, use your account to continue. If not, register first.</p>
-
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -340,6 +337,7 @@
         ])
     </div>
 
+    @include('partials.sweetalert')
     <script>
         document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
             button.addEventListener('click', function () {

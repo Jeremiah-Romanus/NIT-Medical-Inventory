@@ -6,17 +6,18 @@
     <title>@yield('title', 'Dashboard') - NIT Medical Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('partials.footer-styles')
     <style>
         :root {
-            --bg: #f4f7fb;
+            --bg: #f4fafe;
             --panel: #ffffff;
-            --panel-2: #f8fbff;
-            --border: #d9e2ee;
-            --text: #16233a;
+            --panel-2: #f3f9ff;
+            --border: #cfe5f5;
+            --text: #0f172a;
             --muted: #64748b;
-            --brand: #2563eb;
-            --brand-2: #0ea5a8;
+            --brand: #8fd3ff;
+            --brand-2: #60bdf5;
             --warn: #d97706;
             --danger: #dc2626;
         }
@@ -30,9 +31,9 @@
             min-height: 100vh;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
-                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 28%),
-                linear-gradient(160deg, #f8fbff 0%, #eef4fb 100%);
+                radial-gradient(circle at top left, rgba(143, 211, 255, 0.28), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 24%),
+                linear-gradient(160deg, #ffffff 0%, #eef8ff 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -60,9 +61,22 @@
         .brand {
             padding: 18px;
             border-radius: 22px;
-            background: #f8fbff;
+            background: #f5fbff;
             border: 1px solid var(--border);
             margin-bottom: 18px;
+        }
+
+        .brand-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            flex: 0 0 auto;
         }
 
         .brand h1 {
@@ -86,7 +100,7 @@
             padding: 8px 12px;
             border-radius: 999px;
             background: rgba(37, 99, 235, 0.10);
-            color: #1d4ed8;
+            color: #0f172a;
             font-size: 0.82rem;
         }
 
@@ -123,9 +137,9 @@
 
         .side-link:hover,
         .side-link.active {
-            background: rgba(37, 99, 235, 0.08);
-            border-color: rgba(37, 99, 235, 0.16);
-            color: var(--brand);
+            background: rgba(143, 211, 255, 0.18);
+            border-color: rgba(143, 211, 255, 0.42);
+            color: var(--text);
         }
 
         .side-footer {
@@ -149,7 +163,7 @@
             border-radius: 50%;
             display: grid;
             place-items: center;
-            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            background: linear-gradient(135deg, var(--brand), #3b82f6);
             color: white;
             font-weight: 900;
         }
@@ -219,7 +233,7 @@
             padding: 10px 14px;
             border-radius: 999px;
             background: rgba(37, 99, 235, 0.08);
-            color: #1d4ed8;
+            color: #0f172a;
             border: 1px solid rgba(37, 99, 235, 0.12);
             font-weight: 700;
             font-size: 0.88rem;
@@ -375,14 +389,15 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
             border: 0;
             color: white;
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.10);
+            background: #eaf6ff;
+            border-color: #cfe5f5;
+            color: #0f172a;
         }
 
         .btn-warning {
@@ -443,6 +458,7 @@
             .brand h1,
             .brand p,
             .brand .chip,
+            .brand-logo,
             .side-link span,
             .nav-label,
             .profile,
@@ -484,8 +500,13 @@
     <div class="app-shell">
         <aside class="sidebar">
                 <div class="brand">
-                <h1><i class="fa-solid fa-hospital"></i> NIT Medical</h1>
-                <p>Inventory control made simple.</p>
+                <div class="brand-head">
+                    <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
+                    <div>
+                        <h1>NIT Medical</h1>
+                        <p>Inventory control made simple.</p>
+                    </div>
+                </div>
                 <div class="chip">
                     <i class="fa-solid fa-shield-heart"></i>
                     Role-based access
@@ -579,14 +600,7 @@
                     </div>
                 @endif
 
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                @if(isset($sharedAlerts) && $sharedAlerts->isNotEmpty())
+                @if(request()->routeIs('*.dashboard') && isset($sharedAlerts) && $sharedAlerts->isNotEmpty())
                     <div class="alerts-panel">
                         <h5><i class="fa-solid fa-bell me-2"></i>System Alerts</h5>
                         <div class="alert-feed">
@@ -614,6 +628,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @include('partials.sweetalert')
     @yield('scripts')
 </body>
 </html>

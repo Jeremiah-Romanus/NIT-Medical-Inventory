@@ -19,6 +19,19 @@
             background: #ffffff;
         }
 
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        .logo-row img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -48,7 +61,7 @@
             padding: 10px 14px;
             border-radius: 10px;
             border: 0;
-            background: #0f2747;
+            background: #4aaef0;
             color: #ffffff;
             font-weight: 700;
             cursor: pointer;
@@ -146,7 +159,10 @@
     <div class="page">
         <div class="header">
             <div>
-                <h1>Medical Inventory and Distribution Report</h1>
+                <div class="logo-row">
+                    <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo">
+                    <h1>Medical Inventory and Distribution Report</h1>
+                </div>
                 <p><strong>System:</strong> NIT Medical Inventory</p>
                 <p><strong>Generated:</strong> {{ now()->format('M d, Y H:i') }}</p>
                 <p><strong>Start Date:</strong> {{ $startDate ?: 'All' }}</p>

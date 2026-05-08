@@ -9,13 +9,13 @@
     @include('partials.footer-styles')
     <style>
         :root {
-            --bg: #f4f7fb;
+            --bg: #f4fafe;
             --panel: rgba(255, 255, 255, 0.94);
-            --border: rgba(15, 23, 42, 0.08);
-            --text: #16233a;
+            --border: rgba(143, 211, 255, 0.4);
+            --text: #0f172a;
             --muted: #64748b;
-            --brand: #2563eb;
-            --brand-2: #0ea5a8;
+            --brand: #8fd3ff;
+            --brand-2: #60bdf5;
         }
 
         body {
@@ -23,9 +23,9 @@
             min-height: 100vh;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(14, 165, 168, 0.08), transparent 30%),
-                linear-gradient(160deg, #f8fbff 0%, #eef4fb 55%, #f7fafc 100%);
+                radial-gradient(circle at top left, rgba(143, 211, 255, 0.25), transparent 32%),
+                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 28%),
+                linear-gradient(160deg, #ffffff 0%, #eef8ff 55%, #f8fcff 100%);
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -69,7 +69,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 30%, rgba(15, 23, 42, 0.42) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(15, 23, 42, 0.58) 100%);
         }
 
         .info-content {
@@ -89,8 +89,10 @@
             width: fit-content;
         }
 
-        .brand i {
-            color: var(--brand-2);
+        .brand-logo {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
         }
 
         .info-content h1 {
@@ -98,12 +100,15 @@
             line-height: 0.98;
             font-weight: 900;
             margin: 18px 0 12px;
+            color: #ffffff;
+            text-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
         }
 
         .info-content p {
             max-width: 52ch;
-            color: #334155;
+            color: rgba(255, 255, 255, 0.95);
             line-height: 1.8;
+            text-shadow: 0 6px 18px rgba(15, 23, 42, 0.28);
         }
 
         .points {
@@ -116,7 +121,8 @@
             padding: 16px;
             border-radius: 18px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.90);
+            background: rgba(255, 255, 255, 0.92);
+            color: #0f172a;
         }
 
         .form-panel {
@@ -184,7 +190,7 @@
         .btn-submit {
             border: 0;
             color: white;
-            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
         }
 
         .btn-linkish {
@@ -219,7 +225,7 @@
                 <section class="info-panel">
                     <div class="info-content">
                         <div class="brand">
-                            <i class="fa-solid fa-hospital"></i>
+                            <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
                             <span>NIT Medical Inventory</span>
                         </div>
                         <h1>Create one account, then log in by role.</h1>
