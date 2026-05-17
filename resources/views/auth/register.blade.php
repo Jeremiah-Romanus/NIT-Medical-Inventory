@@ -164,6 +164,35 @@
             padding-right: 3.2rem;
         }
 
+        .phone-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .phone-prefix {
+            padding: 0.9rem 1rem;
+            background: #eef8ff;
+            border-right: 1px solid var(--border);
+            color: #0f172a;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .phone-group .form-control {
+            border: 0;
+            border-radius: 0;
+            box-shadow: none !important;
+        }
+
+        .phone-group:focus-within {
+            border-color: rgba(37, 99, 235, 0.45);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.10);
+        }
+
         .password-toggle {
             position: absolute;
             top: 50%;
@@ -207,6 +236,31 @@
             border-radius: 16px;
         }
 
+        .rule-list {
+            list-style: none;
+            margin: 12px 0 0;
+            padding: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .rule-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92rem;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .rule-list li.valid {
+            color: #16a34a;
+        }
+
+        .rule-list li.invalid {
+            color: #dc2626;
+        }
+
         @media (max-width: 991.98px) {
             .card-register {
                 grid-template-columns: 1fr;
@@ -229,12 +283,12 @@
                             <span>NIT Medical Inventory</span>
                         </div>
                         <h1>Create one account, then log in by role.</h1>
-                        <p>Register once with your real details. Your name inside the system will now come directly from the account you create here.</p>
+                        <p>Register once with your real details. Your name inside the system will now come directly from the secure account you create here.</p>
 
                         <div class="points">
-                            <div class="point">Choose your role during registration: pharmacist or procurement.</div>
-                            <div class="point">After registration, sign in through the matching role login page.</div>
-                            <div class="point">Your dashboard name will follow the registered account details automatically.</div>
+                            <div class="point">Use your full name, phone number, and work email during registration.</div>
+                            <div class="point">Choose your role during registration: Pharmacist or Procurement Officer.</div>
+                            <div class="point">Your password must be strong before the system accepts your account.</div>
                         </div>
                     </div>
                 </section>
@@ -251,16 +305,25 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('register.store') }}">
+                    <form method="POST" action="{{ route('register.store') }}" autocomplete="off">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Full name</label>
-                            <input type="text" id="name" name="name" value="{{ old('name') }}" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" required autocomplete="off">
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" required>
+                            <label for="phone" class="form-label">Phone number</label>
+                            <div class="phone-group">
+                                <span class="phone-prefix">+255</span>
+                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="7XXXXXXXX" required autocomplete="off" inputmode="numeric" maxlength="9" pattern="[0-9]{9}">
+                            </div>
+                            <div class="form-text mt-2">Enter 9 digits only after +255.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Work email address</label>
+                            <input type="email" id="email" name="email" class="form-control" required autocomplete="off" autocapitalize="none" spellcheck="false">
                         </div>
 
                         <div class="mb-3">
@@ -268,7 +331,7 @@
                             <select id="role" name="role" class="form-select" required>
                                 <option value="">Choose role</option>
                                 @foreach ($roles as $role)
-                                    <option value="{{ $role }}" @selected(old('role') === $role)>{{ ucfirst($role) }}</option>
+                                    <option value="{{ $role }}">{{ $role === 'procurement' ? 'Procurement Officer' : 'Pharmacist' }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -276,17 +339,24 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <div class="password-field">
-                                <input type="password" id="password" name="password" class="form-control" required>
+                                <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password">
                                 <button type="button" class="password-toggle" data-toggle-password="password" aria-label="Show password">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
+                            <ul class="rule-list" id="password-rules">
+                                <li class="invalid" data-rule="length"><i class="fa-solid fa-circle"></i><span>Use 8-12 characters</span></li>
+                                <li class="invalid" data-rule="uppercase"><i class="fa-solid fa-circle"></i><span>Include an uppercase letter</span></li>
+                                <li class="invalid" data-rule="lowercase"><i class="fa-solid fa-circle"></i><span>Include a lowercase letter</span></li>
+                                <li class="invalid" data-rule="number"><i class="fa-solid fa-circle"></i><span>Include a number</span></li>
+                                <li class="invalid" data-rule="special"><i class="fa-solid fa-circle"></i><span>Include a special character</span></li>
+                            </ul>
                         </div>
 
                         <div class="mb-4">
                             <label for="password_confirmation" class="form-label">Confirm password</label>
                             <div class="password-field">
-                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required autocomplete="new-password">
                                 <button type="button" class="password-toggle" data-toggle-password="password_confirmation" aria-label="Show password">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
@@ -312,6 +382,44 @@
     </div>
 
     <script>
+        window.addEventListener('pageshow', function () {
+            const form = document.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+        });
+
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function () {
+                phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9);
+            });
+        }
+
+        const passwordInput = document.getElementById('password');
+        const passwordRules = {
+            length: function (value) { return value.length >= 8 && value.length <= 12; },
+            uppercase: function (value) { return /[A-Z]/.test(value); },
+            lowercase: function (value) { return /[a-z]/.test(value); },
+            number: function (value) { return /[0-9]/.test(value); },
+            special: function (value) { return /[^A-Za-z0-9]/.test(value); },
+        };
+
+        function updatePasswordRules() {
+            const value = passwordInput ? passwordInput.value : '';
+
+            document.querySelectorAll('#password-rules [data-rule]').forEach(function (item) {
+                const passed = passwordRules[item.dataset.rule](value);
+                item.classList.toggle('valid', passed);
+                item.classList.toggle('invalid', !passed);
+            });
+        }
+
+        if (passwordInput) {
+            passwordInput.addEventListener('input', updatePasswordRules);
+            updatePasswordRules();
+        }
+
         document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
             button.addEventListener('click', function () {
                 const input = document.getElementById(button.getAttribute('data-toggle-password'));

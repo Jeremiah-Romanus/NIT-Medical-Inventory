@@ -234,6 +234,26 @@
             border-radius: 16px;
         }
 
+        .lockout-box {
+            margin-bottom: 18px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.18);
+            color: #991b1b;
+        }
+
+        .lockout-box strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-locked {
+            opacity: 0.65;
+            pointer-events: none;
+            user-select: none;
+        }
+
         @media (max-width: 991.98px) {
             .login-card {
                 grid-template-columns: 1fr;
@@ -284,6 +304,17 @@
                     <h2>{{ ucfirst($role) }} sign in</h2>
                     <p class="mb-4">If you already registered as {{ $role }}, use your account to continue. If not, register first.</p>
 
+                    @if (!empty($isLocked))
+                        <div class="lockout-box">
+                            <strong>Login temporarily locked</strong>
+                            <div>
+                                Too many failed attempts. Please wait
+                                <span id="lockout-timer" data-seconds="{{ $lockoutSecondsRemaining ?? 0 }}"></span>
+                                before trying again.
+                            </div>
+                        </div>
+                    @endif
+
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             @foreach ($errors->all() as $error)
@@ -292,24 +323,26 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login.attempt', $role) }}">
+                    <form method="POST" action="{{ route('login.attempt', $role) }}" autocomplete="off" class="{{ !empty($isLocked) ? 'form-locked' : '' }}">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" required autofocus>
+                            <input type="email" id="email" name="email" class="form-control" required autofocus autocomplete="off" autocapitalize="none" spellcheck="false" @disabled(!empty($isLocked))>
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <div class="password-field">
-                                <input type="password" id="password" name="password" class="form-control" required>
-                                <button type="button" class="password-toggle" data-toggle-password="password" aria-label="Show password">
+                                <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password" @disabled(!empty($isLocked))>
+                                <button type="button" class="password-toggle" data-toggle-password="password" aria-label="Show password" @disabled(!empty($isLocked))>
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-login w-100">Login</button>
+                        <button type="submit" class="btn btn-login w-100" @disabled(!empty($isLocked))>
+                            {{ !empty($isLocked) ? 'Login Locked' : 'Login' }}
+                        </button>
                     </form>
 
                     <div class="d-grid gap-2 mt-3">
@@ -339,6 +372,38 @@
 
     @include('partials.sweetalert')
     <script>
+        window.addEventListener('pageshow', function () {
+            const form = document.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+        });
+
+        const lockoutTimer = document.getElementById('lockout-timer');
+        if (lockoutTimer) {
+            let seconds = Number(lockoutTimer.dataset.seconds || 0);
+
+            const renderTime = function () {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                lockoutTimer.textContent = minutes + ' minute(s) ' + remainingSeconds + ' second(s)';
+            };
+
+            renderTime();
+
+            const interval = setInterval(function () {
+                seconds -= 1;
+
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    window.location.reload();
+                    return;
+                }
+
+                renderTime();
+            }, 1000);
+        }
+
         document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
             button.addEventListener('click', function () {
                 const input = document.getElementById(button.getAttribute('data-toggle-password'));
