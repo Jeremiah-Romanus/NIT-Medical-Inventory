@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    return view('welcome');
+})->name('home');
+
 // Authentication routes
 Route::get('/login', [AuthController::class, 'showLoginSelection'])->name('login');
 Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login.role');

@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - NIT Medical Inventory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @include('partials.footer-styles')
+    @include('partials.site-header-styles')
     <style>
         :root {
             --bg: #f4fafe;
@@ -26,7 +30,7 @@
                 radial-gradient(circle at top left, rgba(143, 211, 255, 0.25), transparent 32%),
                 radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 28%),
                 linear-gradient(160deg, #ffffff 0%, #eef8ff 55%, #f8fcff 100%);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Inter", sans-serif;
         }
 
         .login-shell {
@@ -34,24 +38,24 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 24px;
-            gap: 24px;
+            gap: 0;
         }
 
         .stage {
             flex: 1;
             display: grid;
             place-items: center;
+            padding: 24px 18px;
         }
 
         .panel {
             width: min(1120px, 100%);
-            border-radius: 28px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.88);
-            box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
-            backdrop-filter: blur(20px);
+            border-radius: 0;
+            overflow: visible;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            backdrop-filter: none;
         }
 
         .hero {
@@ -121,10 +125,11 @@
 
         .choice-card {
             padding: 24px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: #ffffff;
-            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+            border-radius: 0;
+            border: 0;
+            border-bottom: 1px solid var(--border);
+            background: transparent;
+            box-shadow: none;
         }
 
         .choice-card h3 {
@@ -178,6 +183,7 @@
 </head>
 <body>
     <div class="login-shell">
+        @include('partials.site-header')
         <div class="stage">
             <div class="panel">
                 <section class="hero">
@@ -230,5 +236,6 @@
             'footerClass' => 'standalone-footer',
         ])
     </div>
+    @include('partials.site-header-script')
 </body>
 </html>

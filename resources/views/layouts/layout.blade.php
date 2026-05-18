@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - NIT Medical Inventory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('partials.footer-styles')
+    @include('partials.site-header-styles')
     <style>
         :root {
             --bg: #f4fafe;
@@ -34,22 +38,31 @@
                 radial-gradient(circle at top left, rgba(143, 211, 255, 0.28), transparent 30%),
                 radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 24%),
                 linear-gradient(160deg, #ffffff 0%, #eef8ff 100%);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Inter", sans-serif;
         }
 
         a {
             text-decoration: none;
         }
 
+        .page-shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         .app-shell {
             display: flex;
-            min-height: 100vh;
+            flex: 1;
+            min-height: 0;
         }
 
         .sidebar {
             width: 280px;
             position: fixed;
-            inset: 0 auto 0 0;
+            top: 76px;
+            left: 0;
+            bottom: 0;
             padding: 22px 18px;
             background: linear-gradient(180deg, #ffffff, #f7fbff);
             border-right: 1px solid var(--border);
@@ -58,11 +71,16 @@
             z-index: 20;
         }
 
+        .sidebar-backdrop {
+            display: none;
+        }
+
         .brand {
-            padding: 18px;
-            border-radius: 22px;
-            background: #f5fbff;
-            border: 1px solid var(--border);
+            padding: 12px 0 18px;
+            border-radius: 0;
+            background: transparent;
+            border: 0;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 18px;
         }
 
@@ -144,10 +162,11 @@
 
         .side-footer {
             margin-top: 18px;
-            padding: 16px;
-            border-radius: 20px;
-            background: #f8fbff;
-            border: 1px solid var(--border);
+            padding: 16px 0 0;
+            border-radius: 0;
+            background: transparent;
+            border: 0;
+            border-top: 1px solid var(--border);
         }
 
         .profile {
@@ -198,7 +217,7 @@
             margin-left: 280px;
             flex: 1;
             min-width: 0;
-            min-height: 100vh;
+            min-height: 0;
             display: flex;
             flex-direction: column;
         }
@@ -246,11 +265,12 @@
 
         .alerts-panel {
             margin-bottom: 24px;
-            padding: 20px;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--border);
-            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+            padding: 0 0 20px;
+            border-radius: 0;
+            background: transparent;
+            border: 0;
+            border-bottom: 1px solid var(--border);
+            box-shadow: none;
         }
 
         .alerts-panel h5 {
@@ -307,19 +327,20 @@
         }
 
         .card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
+            background: transparent;
+            border: 0;
+            border-bottom: 1px solid var(--border);
+            border-radius: 0;
+            box-shadow: none;
             color: var(--text);
         }
 
         .card-header {
-            background: var(--panel-2);
+            background: transparent;
             border-bottom: 1px solid var(--border);
             padding: 18px 20px;
-            border-top-left-radius: 24px !important;
-            border-top-right-radius: 24px !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
         }
 
         .card-title {
@@ -337,7 +358,7 @@
         }
 
         .table thead th {
-            background: #f8fbff;
+            background: transparent;
             border-bottom-color: var(--border);
             color: #334155;
             font-weight: 700;
@@ -350,7 +371,7 @@
         }
 
         .table tbody tr:hover {
-            background: rgba(37, 99, 235, 0.04);
+            background: rgba(143, 211, 255, 0.08);
         }
 
         .alert {
@@ -447,40 +468,39 @@
 
         @media (max-width: 991.98px) {
             .sidebar {
-                width: 88px;
-                padding: 16px 10px;
+                width: 280px;
+                padding: 22px 18px;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                z-index: 1050;
             }
 
             .content-shell {
-                margin-left: 88px;
+                margin-left: 0;
             }
 
-            .brand h1,
-            .brand p,
-            .brand .chip,
-            .brand-logo,
-            .side-link span,
-            .nav-label,
-            .profile,
-            .logout-btn span {
-                display: none;
+            body.sidebar-open .sidebar {
+                transform: translateX(0);
             }
 
-            .side-link {
-                justify-content: center;
-                padding: 14px 10px;
+            .sidebar-backdrop {
+                display: block;
+                position: fixed;
+                inset: 76px 0 0 0;
+                background: rgba(15, 23, 42, 0.26);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.25s ease;
+                z-index: 1040;
             }
 
-            .side-footer {
-                padding: 12px;
+            body.sidebar-open .sidebar-backdrop {
+                opacity: 1;
+                pointer-events: auto;
             }
         }
 
         @media (max-width: 767.98px) {
-            .sidebar {
-                display: none;
-            }
-
             .content-shell {
                 margin-left: 0;
             }
@@ -497,7 +517,10 @@
     </style>
 </head>
 <body>
+    <div class="page-shell">
+    @include('partials.site-header')
     <div class="app-shell">
+        <div class="sidebar-backdrop"></div>
         <aside class="sidebar">
                 <div class="brand">
                 <div class="brand-head">
@@ -580,13 +603,6 @@
                         <p>@yield('page-subtitle')</p>
                     @endif
                 </div>
-
-                <div class="d-flex align-items-center gap-2">
-                    <span class="status-pill d-none d-md-inline-flex">
-                        <i class="fa-solid fa-circle-nodes me-2"></i>
-                        Live inventory workspace
-                    </span>
-                </div>
             </div>
 
             <div class="content-area">
@@ -620,14 +636,18 @@
                 @yield('content')
             </div>
 
-            @include('partials.footer', [
-                'footerClass' => 'page-footer',
-                'footerAlignClass' => 'text-md-end',
-            ])
         </main>
+    </div>
+    <div class="dashboard-footer-shell">
+        @include('partials.footer', [
+            'footerClass' => 'page-footer dashboard-footer',
+            'footerAlignClass' => 'text-md-end',
+        ])
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @include('partials.site-header-script')
     @include('partials.sweetalert')
     @yield('scripts')
 </body>

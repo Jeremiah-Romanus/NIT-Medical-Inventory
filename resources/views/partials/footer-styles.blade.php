@@ -20,16 +20,30 @@
     }
 
     .shared-footer.standalone-footer {
-        width: min(1120px, 100%);
-        margin: 0 auto;
-        border-radius: 16px;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
     }
 
     .shared-footer.hero-footer {
-        margin-top: 22px;
+        margin-top: 0;
+    }
+
+    .dashboard-footer-shell {
+        margin-left: 280px;
+    }
+
+    .shared-footer.dashboard-footer {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
     }
 
     @media (max-width: 767.98px) {
+        .dashboard-footer-shell {
+            margin-left: 0;
+        }
+
         .shared-footer {
             padding: 14px 18px 20px;
             flex-direction: column;

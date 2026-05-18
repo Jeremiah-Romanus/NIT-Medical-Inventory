@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     protected array $roles = ['pharmacist', 'procurement'];
     protected int $maxLoginAttempts = 5;
-    protected int $lockoutSeconds = 500;
+    protected int $lockoutSeconds = 300;
 
     /**
      * Show the login selector page
