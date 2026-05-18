@@ -30,6 +30,7 @@
     }
 
     .dashboard-footer-shell {
+        width: 100%;
         margin-left: 280px;
     }
 
@@ -37,6 +38,12 @@
         width: 100%;
         margin: 0;
         border-radius: 0;
+    }
+
+    @media (max-width: 991.98px) {
+        .dashboard-footer-shell {
+            margin-left: 0;
+        }
     }
 
     @media (max-width: 767.98px) {
@@ -47,6 +54,14 @@
         .shared-footer {
             padding: 14px 18px 20px;
             flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .shared-footer.dashboard-footer,
+        .shared-footer.standalone-footer,
+        .shared-footer.hero-footer,
+        .shared-footer.page-footer {
+            width: 100%;
         }
     }
 </style>
