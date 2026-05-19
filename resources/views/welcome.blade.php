@@ -237,7 +237,7 @@
         </div>
 
         <div class="welcome-footer">
-            @include('partials.footer', ['footerClass' => 'standalone-footer'])
+            @include('partials.footer', ['footerClass' => 'standalone-footer page-footer'])
         </div>
     </div>
     @include('partials.site-header-script')
