@@ -26,10 +26,7 @@
             min-height: 100vh;
             margin: 0;
             color: var(--text);
-            background:
-                radial-gradient(circle at top left, rgba(143, 211, 255, 0.24), transparent 34%),
-                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.16), transparent 30%),
-                linear-gradient(160deg, #ffffff 0%, #eef8ff 56%, #f8fcff 100%);
+            background: #f7fbff;
             font-family: "Inter", sans-serif;
         }
 
@@ -61,11 +58,12 @@
             line-height: 1.06;
             font-weight: 800;
             margin: 0 0 14px;
-            max-width: 10ch;
+            max-width: none;
         }
 
-        .hero-copy .accent {
+        .hero-copy h1 .accent {
             color: #1692de;
+            white-space: nowrap;
         }
 
         .hero-copy p {
@@ -97,9 +95,9 @@
         }
 
         .btn-hero.primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            background: var(--accent-2);
             color: #ffffff;
-            box-shadow: 0 14px 28px rgba(74, 174, 240, 0.24);
+            box-shadow: none;
         }
 
         .btn-hero.secondary {
@@ -139,9 +137,7 @@
             width: min(100%, 430px);
             aspect-ratio: 1 / 1;
             border-radius: 50%;
-            background:
-                radial-gradient(circle at center, rgba(255, 255, 255, 0.82), rgba(143, 211, 255, 0.22)),
-                #eff8ff;
+            background: #eff8ff;
             border: 4px solid rgba(74, 174, 240, 0.65);
             box-shadow: 0 28px 50px rgba(74, 174, 240, 0.16);
             display: grid;
@@ -195,7 +191,7 @@
             <div class="row align-items-center g-4 g-lg-5">
                 <div class="col-lg-6">
                     <div class="hero-copy">
-                        <h1><span class="accent">Medical Inventory</span> System</h1>
+                        <h1><span class="accent">Medical Inventory</span><br>System</h1>
                         <p>
                             A simple and secure workspace for tracking medicine stock, managing expiry dates,
                             and connecting pharmacy with procurement through one clear workflow.

@@ -26,10 +26,7 @@
             margin: 0;
             min-height: 100vh;
             color: var(--text);
-            background:
-                radial-gradient(circle at top left, rgba(143, 211, 255, 0.25), transparent 32%),
-                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 28%),
-                linear-gradient(160deg, #ffffff 0%, #eef8ff 55%, #f8fcff 100%);
+            background: #f7fbff;
             font-family: "Inter", sans-serif;
         }
 
@@ -61,7 +58,6 @@
         .hero {
             padding: 40px;
             background:
-                linear-gradient(180deg, rgba(37, 99, 235, 0.10), rgba(255, 255, 255, 0.12)),
                 url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=1200&q=80') center/cover;
             position: relative;
         }
@@ -70,7 +66,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(15, 23, 42, 0.56) 100%);
+            background: rgba(15, 23, 42, 0.34);
         }
 
         .hero-content {
@@ -165,7 +161,7 @@
         .btn-main {
             border: 0;
             color: white;
-            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
+            background: #4aaef0;
         }
 
         .btn-alt {
@@ -237,5 +233,6 @@
         ])
     </div>
     @include('partials.site-header-script')
+    @include('partials.sweetalert')
 </body>
 </html>

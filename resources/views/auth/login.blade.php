@@ -27,10 +27,7 @@
             margin: 0;
             min-height: 100vh;
             color: var(--text);
-            background:
-                radial-gradient(circle at top left, rgba(143, 211, 255, 0.25), transparent 32%),
-                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 28%),
-                linear-gradient(160deg, #ffffff 0%, #eef8ff 55%, #f8fcff 100%);
+            background: #f7fbff;
             font-family: "Inter", sans-serif;
         }
 
@@ -64,7 +61,6 @@
         .hero-panel {
             padding: 40px;
             background:
-                linear-gradient(180deg, rgba(37, 99, 235, 0.10), rgba(255, 255, 255, 0.12)),
                 url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=1200&q=80') center/cover;
             position: relative;
             min-height: 620px;
@@ -74,7 +70,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 35%, rgba(15, 23, 42, 0.40) 100%);
+            background: rgba(15, 23, 42, 0.30);
         }
 
         .hero-content {
@@ -200,7 +196,7 @@
             padding: 0.95rem 1rem;
             font-weight: 800;
             color: white;
-            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
+            background: #4aaef0;
         }
 
         .btn-alt {

@@ -34,10 +34,7 @@
             margin: 0;
             min-height: 100vh;
             color: var(--text);
-            background:
-                radial-gradient(circle at top left, rgba(143, 211, 255, 0.28), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(143, 211, 255, 0.14), transparent 24%),
-                linear-gradient(160deg, #ffffff 0%, #eef8ff 100%);
+            background: #f7fbff;
             font-family: "Inter", sans-serif;
         }
 
@@ -64,7 +61,7 @@
             left: 0;
             bottom: 0;
             padding: 22px 18px;
-            background: linear-gradient(180deg, #ffffff, #f7fbff);
+            background: #ffffff;
             border-right: 1px solid var(--border);
             box-shadow: 0 18px 55px rgba(37, 99, 235, 0.06);
             overflow-y: auto;
@@ -182,7 +179,7 @@
             border-radius: 50%;
             display: grid;
             place-items: center;
-            background: linear-gradient(135deg, var(--brand), #3b82f6);
+            background: #60bdf5;
             color: white;
             font-weight: 900;
         }
@@ -410,7 +407,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #8fd3ff, #4aaef0);
+            background: #4aaef0;
             border: 0;
             color: white;
         }
@@ -422,19 +419,19 @@
         }
 
         .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #f97316);
+            background: #f59e0b;
             color: white;
             border: 0;
         }
 
         .btn-info {
-            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            background: #0ea5e9;
             color: white;
             border: 0;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #fb7185, #ef4444);
+            background: #ef4444;
             border: 0;
         }
 

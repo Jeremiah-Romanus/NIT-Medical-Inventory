@@ -114,7 +114,7 @@
             border: 1px solid rgba(143, 211, 255, 0.32);
             box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;99
             gap: 8px;
             z-index: 1200;
         }
