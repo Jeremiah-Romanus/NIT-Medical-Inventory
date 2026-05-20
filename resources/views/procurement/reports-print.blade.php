@@ -170,7 +170,7 @@
                 <p><strong>Generated:</strong> {{ now()->format('M d, Y H:i') }}</p>
                 <p><strong>Start Date:</strong> {{ $startDate ?: 'All' }}</p>
                 <p><strong>End Date:</strong> {{ $endDate ?: 'All' }}</p>
-                <p><strong>Category:</strong> {{ $category ?: 'All' }}</p>
+                <p><strong>Catalog Coverage:</strong> All medicines</p>
             </div>
             <div class="print-actions">
                 <button type="button" class="print-btn" onclick="window.print()">Print / Save as PDF</button>
@@ -238,21 +238,23 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Medicine</th>
-                        <th>Category</th>
+                        <th>Medical ID</th>
+                        <th>Generic Name</th>
+                        <th>Formulation / Strength</th>
                         <th>Total Requested</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($topRequested as $medicine)
                         <tr>
+                            <td>{{ $medicine->medical_id }}</td>
                             <td>{{ $medicine->name }}</td>
-                            <td>{{ $medicine->category }}</td>
+                            <td>{{ $medicine->formulation_strength }}</td>
                             <td>{{ $medicine->total_requested }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="muted">No request data found for the selected filters.</td>
+                            <td colspan="4" class="muted">No request data found for the selected filters.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -264,21 +266,23 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Medicine</th>
-                        <th>Category</th>
+                        <th>Medical ID</th>
+                        <th>Generic Name</th>
+                        <th>Formulation / Strength</th>
                         <th>Total Issued</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($topDistributed as $medicine)
                         <tr>
+                            <td>{{ $medicine->medical_id }}</td>
                             <td>{{ $medicine->name }}</td>
-                            <td>{{ $medicine->category }}</td>
+                            <td>{{ $medicine->formulation_strength }}</td>
                             <td>{{ $medicine->total_issued }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="muted">No distribution data found for the selected filters.</td>
+                            <td colspan="4" class="muted">No distribution data found for the selected filters.</td>
                         </tr>
                     @endforelse
                 </tbody>

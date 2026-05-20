@@ -30,13 +30,17 @@ class MedicineController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'medical_id' => 'required|string|max:20|unique:medicines,medical_id',
             'name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
+            'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines',
             'quantity' => 'required|integer|min:0',
+            'stored_date' => 'required|date',
             'expiry_date' => 'required|date',
             'unit_price' => 'required|numeric|min:0',
         ]);
+
+        $validated['category'] = '';
 
         Medicine::create($validated);
 
@@ -66,13 +70,17 @@ class MedicineController extends Controller
     public function update(Request $request, Medicine $medicine)
     {
         $validated = $request->validate([
+            'medical_id' => 'required|string|max:20|unique:medicines,medical_id,' . $medicine->id,
             'name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
+            'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines,batch_number,' . $medicine->id,
             'quantity' => 'required|integer|min:0',
+            'stored_date' => 'required|date',
             'expiry_date' => 'required|date',
             'unit_price' => 'required|numeric|min:0',
         ]);
+
+        $validated['category'] = '';
 
         $medicine->update($validated);
 

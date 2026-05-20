@@ -19,20 +19,15 @@
                     <input type="date" id="end_date" name="end_date" value="{{ $endDate }}" class="form-control">
                 </div>
                 <div class="col-md-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select id="category" name="category" class="form-select">
-                        <option value="">All categories</option>
-                        @foreach($categories as $categoryOption)
-                            <option value="{{ $categoryOption }}" @selected($category === $categoryOption)>{{ $categoryOption }}</option>
-                        @endforeach
-                    </select>
+                    <label class="form-label">Catalog coverage</label>
+                    <input type="text" class="form-control" value="All medicines" disabled>
                 </div>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-primary w-100">Apply filters</button>
                 </div>
                 <div class="col-md-3">
                     <a
-                        href="{{ route('procurement.reports.export', ['start_date' => $startDate, 'end_date' => $endDate, 'category' => $category]) }}"
+                        href="{{ route('procurement.reports.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
                         class="btn btn-secondary w-100"
                     >
                         Export CSV
@@ -40,7 +35,7 @@
                 </div>
                 <div class="col-md-3">
                     <a
-                        href="{{ route('procurement.reports.print', ['start_date' => $startDate, 'end_date' => $endDate, 'category' => $category]) }}"
+                        href="{{ route('procurement.reports.print', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
                         target="_blank"
                         class="btn btn-info w-100"
                     >
@@ -126,8 +121,8 @@
                 <div class="vstack gap-3">
                     @forelse($topDistributed as $medicine)
                         <div class="p-3 rounded-4" style="background: rgba(96,165,250,.08);">
-                            <div class="fw-semibold">{{ $medicine->name }}</div>
-                            <div class="text-secondary small">{{ $medicine->category }} | {{ $medicine->total_issued }} issued</div>
+                            <div class="fw-semibold">{{ $medicine->medical_id }} - {{ $medicine->name }}</div>
+                            <div class="text-secondary small">{{ $medicine->formulation_strength }} | {{ $medicine->total_issued }} issued</div>
                         </div>
                     @empty
                         <div class="p-3 rounded-4" style="background: rgba(96,165,250,.08);">
@@ -174,21 +169,23 @@
                 <table class="table mb-0 align-middle">
                     <thead>
                         <tr>
-                            <th>Medicine</th>
-                            <th>Category</th>
+                            <th>Medical ID</th>
+                            <th>Generic Name</th>
+                            <th>Formulation / Strength</th>
                             <th>Total requested</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($topRequested as $medicine)
                             <tr>
+                                <td>{{ $medicine->medical_id }}</td>
                                 <td>{{ $medicine->name }}</td>
-                                <td>{{ $medicine->category }}</td>
+                                <td>{{ $medicine->formulation_strength }}</td>
                                 <td>{{ $medicine->total_requested }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center text-secondary py-4">No request data found for the selected filters.</td>
+                                <td colspan="4" class="text-center text-secondary py-4">No request data found for the selected filters.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -206,21 +203,23 @@
                 <table class="table mb-0 align-middle">
                     <thead>
                         <tr>
-                            <th>Medicine</th>
-                            <th>Category</th>
+                            <th>Medical ID</th>
+                            <th>Generic Name</th>
+                            <th>Formulation / Strength</th>
                             <th>Total issued</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($topDistributed as $medicine)
                             <tr>
+                                <td>{{ $medicine->medical_id }}</td>
                                 <td>{{ $medicine->name }}</td>
-                                <td>{{ $medicine->category }}</td>
+                                <td>{{ $medicine->formulation_strength }}</td>
                                 <td>{{ $medicine->total_issued }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center text-secondary py-4">No distribution data found for the selected filters.</td>
+                                <td colspan="4" class="text-center text-secondary py-4">No distribution data found for the selected filters.</td>
                             </tr>
                         @endforelse
                     </tbody>

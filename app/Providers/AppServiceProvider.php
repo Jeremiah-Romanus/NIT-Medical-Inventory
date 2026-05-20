@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $today = now()->toDateString();
-            $threeMonthsLater = now()->addMonths(3)->toDateString();
+            $sixMonthsLater = now()->addMonths(6)->toDateString();
 
             $alerts = collect();
 
@@ -46,14 +46,14 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $expiringSoonCount = Medicine::whereDate('expiry_date', '>=', $today)
-                ->whereDate('expiry_date', '<=', $threeMonthsLater)
+                ->whereDate('expiry_date', '<=', $sixMonthsLater)
                 ->count();
             if ($expiringSoonCount > 0) {
                 $alerts->push([
                     'type' => 'warning',
                     'icon' => 'fa-solid fa-hourglass-half',
                     'title' => 'Near-expiry medicines',
-                    'message' => $expiringSoonCount . ' medicine records are expiring within the next 3 months.',
+                    'message' => $expiringSoonCount . ' medicine records are expiring within the next 6 months.',
                 ]);
             }
 

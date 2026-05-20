@@ -15,14 +15,14 @@ class PharmacistController extends Controller
     public function dashboard()
     {
         $today = now()->toDateString();
-        $threeMonthsLater = now()->addMonths(3)->toDateString();
+        $sixMonthsLater = now()->addMonths(6)->toDateString();
 
         $stats = [
             'totalMedicines' => Medicine::count(),
             'lowStockCount' => Medicine::where('quantity', '<', 50)->count(),
             'expiredCount' => Medicine::whereDate('expiry_date', '<', $today)->count(),
             'expiringSoonCount' => Medicine::whereDate('expiry_date', '>=', $today)
-                ->whereDate('expiry_date', '<=', $threeMonthsLater)
+                ->whereDate('expiry_date', '<=', $sixMonthsLater)
                 ->count(),
             'pendingRequests' => DB::table('requests')->where('user_id', Auth::id())->where('status', 'pending')->count(),
             'approvedRequests' => DB::table('requests')->where('user_id', Auth::id())->where('status', 'approved')->count(),
@@ -44,18 +44,18 @@ class PharmacistController extends Controller
             ->get();
 
         $expiringMedicines = Medicine::whereDate('expiry_date', '>=', $today)
-            ->whereDate('expiry_date', '<=', $threeMonthsLater)
+            ->whereDate('expiry_date', '<=', $sixMonthsLater)
             ->orderBy('expiry_date')
             ->limit(5)
             ->get();
 
         $criticalMedicines = Medicine::query()
-            ->where(function ($query) use ($today, $threeMonthsLater) {
+            ->where(function ($query) use ($today, $sixMonthsLater) {
                 $query->where('quantity', '<', 50)
                     ->orWhereDate('expiry_date', '<', $today)
-                    ->orWhereDate('expiry_date', '<=', $threeMonthsLater);
+                    ->orWhereDate('expiry_date', '<=', $sixMonthsLater);
             })
-            ->orderByRaw("CASE WHEN expiry_date < ? THEN 0 WHEN expiry_date <= ? THEN 1 ELSE 2 END", [$today, $threeMonthsLater])
+            ->orderByRaw("CASE WHEN expiry_date < ? THEN 0 WHEN expiry_date <= ? THEN 1 ELSE 2 END", [$today, $sixMonthsLater])
             ->orderBy('quantity')
             ->limit(5)
             ->get();

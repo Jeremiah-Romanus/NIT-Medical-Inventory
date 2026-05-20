@@ -11,15 +11,19 @@ class Medicine extends Model
     use HasFactory;
 
     protected $fillable = [
+        'medical_id',
         'name',
         'category',
+        'formulation_strength',
         'batch_number',
         'quantity',
+        'stored_date',
         'expiry_date',
         'unit_price',
     ];
 
     protected $casts = [
+        'stored_date' => 'date',
         'expiry_date' => 'date',
         'unit_price' => 'decimal:2',
     ];
@@ -33,12 +37,12 @@ class Medicine extends Model
     }
 
     /**
-     * Check if medicine is expiring soon (within 3 months)
+     * Check if medicine is expiring soon (within 6 months)
      */
     public function isExpiringSoon(): bool
     {
-        $threeMonthsLater = now()->addMonths(3);
-        return $this->expiry_date <= $threeMonthsLater && !$this->isExpired();
+        $sixMonthsLater = now()->addMonths(6);
+        return $this->expiry_date <= $sixMonthsLater && !$this->isExpired();
     }
 
     /**

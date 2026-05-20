@@ -5,6 +5,45 @@
 @section('page-title', 'Inventory Management')
 
 @section('content')
+<style>
+    .inventory-table th {
+        white-space: nowrap;
+        font-size: 0.86rem;
+    }
+
+    .inventory-table td {
+        vertical-align: middle;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-badge.active {
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #86efac;
+    }
+
+    .status-badge.expiring {
+        background: #fef3c7;
+        color: #b45309;
+        border: 1px solid #fcd34d;
+    }
+
+    .status-badge.expired {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fca5a5;
+    }
+</style>
 <div class="container-fluid">
     <!-- Alerts for Expired Medicines -->
     @php
@@ -31,9 +70,12 @@
     <!-- Medicine Table Card -->
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">
+            <div>
+                <h5 class="card-title">
                 <i class="fas fa-pills"></i> Medicine Stock List
-            </h5>
+                </h5>
+                <div class="text-secondary small mt-1">{{ $medicines->count() }} medicine types currently in the system.</div>
+            </div>
             
             <!-- Add Medicine Button - Only for Procurement Officers -->
             @if (auth()->user()->role === 'procurement')
@@ -44,14 +86,16 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover inventory-table">
                 <thead>
                     <tr>
-                        <th>Medicine Name</th>
-                        <th>Category</th>
+                        <th>Medical ID</th>
+                        <th>Generic Name</th>
+                        <th>Formulation / Strength</th>
                         <th>Batch Number</th>
                         <th>Stock Level</th>
                         <th>Unit Price</th>
+                        <th>Stored Date</th>
                         <th>Expiry Date</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -63,10 +107,11 @@
                             'expired' => $medicine->isExpired(),
                             'expiring-soon' => $medicine->isExpiringSoon() && !$medicine->isExpired()
                         ])>
+                            <td>{{ $medicine->medical_id }}</td>
                             <td>
                                 <strong>{{ $medicine->name }}</strong>
                             </td>
-                            <td>{{ $medicine->category }}</td>
+                            <td>{{ $medicine->formulation_strength }}</td>
                             <td>{{ $medicine->batch_number }}</td>
                             <td>
                                 <span class="badge @if($medicine->quantity < 50) bg-danger @elseif($medicine->quantity < 100) bg-warning @else bg-success @endif">
@@ -75,19 +120,22 @@
                             </td>
                             <td>TZS {{ number_format($medicine->unit_price, 2) }}</td>
                             <td>
+                                <small>{{ optional($medicine->stored_date)->format('Y-m-d') ?: 'N/A' }}</small>
+                            </td>
+                            <td>
                                 <small>{{ $medicine->expiry_date->format('Y-m-d') }}</small>
                             </td>
                             <td>
                                 @if($medicine->isExpired())
-                                    <span class="badge badge-expired">
+                                    <span class="status-badge expired">
                                         <i class="fas fa-times-circle"></i> EXPIRED
                                     </span>
                                 @elseif($medicine->isExpiringSoon())
-                                    <span class="badge badge-expiring">
+                                    <span class="status-badge expiring">
                                         <i class="fas fa-clock"></i> EXPIRING SOON
                                     </span>
                                 @else
-                                    <span class="badge badge-active">
+                                    <span class="status-badge active">
                                         <i class="fas fa-check-circle"></i> ACTIVE
                                     </span>
                                 @endif
@@ -113,7 +161,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 <i class="fas fa-inbox" style="font-size: 30px; color: #ccc;"></i>
                                 <p class="mt-2 text-muted">No medicines found. @if(auth()->user()->role === 'procurement') <a href="#addMedicineModal" data-bs-toggle="modal">Add one now</a>.@endif</p>
                             </td>
@@ -123,22 +171,6 @@
             </table>
         </div>
 
-        <!-- Table Footer with Pagination -->
-        <div style="padding: 20px; text-align: center; border-top: 1px solid #e9ecef;">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
 </div>
 
@@ -157,25 +189,23 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="medicineName" class="form-label">Medicine Name *</label>
+                        <label for="medicalId" class="form-label">Medical ID *</label>
+                        <input type="text" class="form-control @error('medical_id') is-invalid @enderror" name="medical_id" id="medicalId" placeholder="e.g., MED-001" value="{{ old('medical_id') }}" required>
+                        @error('medical_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="medicineName" class="form-label">Generic Name *</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="medicineName" placeholder="e.g., Paracetamol" value="{{ old('name') }}" required>
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="category" class="form-label">Category *</label>
-                        <select class="form-select @error('category') is-invalid @enderror" name="category" id="category" required>
-                            <option selected disabled value="">Select Category</option>
-                            <option value="Analgesic" @selected(old('category') == 'Analgesic')>Analgesic</option>
-                            <option value="Antibiotic" @selected(old('category') == 'Antibiotic')>Antibiotic</option>
-                            <option value="Antifungal" @selected(old('category') == 'Antifungal')>Antifungal</option>
-                            <option value="Antiviral" @selected(old('category') == 'Antiviral')>Antiviral</option>
-                            <option value="Diabetes" @selected(old('category') == 'Diabetes')>Diabetes</option>
-                            <option value="Heart" @selected(old('category') == 'Heart')>Heart</option>
-                            <option value="Antimalarial" @selected(old('category') == 'Antimalarial')>Antimalarial</option>
-                        </select>
-                        @error('category')
+                        <label for="formulationStrength" class="form-label">Formulation / Strength *</label>
+                        <input type="text" class="form-control @error('formulation_strength') is-invalid @enderror" name="formulation_strength" id="formulationStrength" placeholder="e.g., Tablet 500mg" value="{{ old('formulation_strength') }}" required>
+                        @error('formulation_strength')
                             <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
@@ -201,6 +231,13 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="storedDate" class="form-label">Stored Date *</label>
+                        <input type="date" class="form-control @error('stored_date') is-invalid @enderror" name="stored_date" id="storedDate" value="{{ old('stored_date', now()->format('Y-m-d')) }}" required>
+                        @error('stored_date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="expiryDate" class="form-label">Expiry Date *</label>
@@ -229,7 +266,7 @@
     // JavaScript to check expiry dates and apply styles dynamically
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date();
-        const threeMonthsLater = new Date(today.getFullYear(), today.getMonth() + 3, today.getDate());
+        const sixMonthsLater = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
         
         document.querySelectorAll('table tbody tr').forEach(row => {
             // Skip if already has expiry class
@@ -237,12 +274,12 @@
                 return;
             }
             
-            const expiryDateText = row.querySelector('td:nth-child(6) small').textContent.trim();
+            const expiryDateText = row.querySelector('td:nth-child(8) small').textContent.trim();
             const expiryDate = new Date(expiryDateText);
             
             if (expiryDate < today) {
                 row.classList.add('expired');
-            } else if (expiryDate < threeMonthsLater) {
+            } else if (expiryDate < sixMonthsLater) {
                 row.classList.add('expiring-soon');
             }
         });

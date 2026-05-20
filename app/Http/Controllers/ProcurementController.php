@@ -17,7 +17,7 @@ class ProcurementController extends Controller
     public function dashboard()
     {
         $today = now()->toDateString();
-        $threeMonthsLater = now()->addMonths(3)->toDateString();
+        $sixMonthsLater = now()->addMonths(6)->toDateString();
 
         $stats = [
             'totalMedicines' => Medicine::count(),
@@ -29,7 +29,7 @@ class ProcurementController extends Controller
             'lowStockCount' => Medicine::where('quantity', '<', 50)->count(),
             'expiredCount' => Medicine::whereDate('expiry_date', '<', $today)->count(),
             'expiringSoonCount' => Medicine::whereDate('expiry_date', '>=', $today)
-                ->whereDate('expiry_date', '<=', $threeMonthsLater)
+                ->whereDate('expiry_date', '<=', $sixMonthsLater)
                 ->count(),
         ];
 
@@ -62,12 +62,12 @@ class ProcurementController extends Controller
             ->get();
 
         $criticalAlerts = Medicine::query()
-            ->where(function ($query) use ($today, $threeMonthsLater) {
+            ->where(function ($query) use ($today, $sixMonthsLater) {
                 $query->where('quantity', '<', 50)
                     ->orWhereDate('expiry_date', '<', $today)
-                    ->orWhereDate('expiry_date', '<=', $threeMonthsLater);
+                    ->orWhereDate('expiry_date', '<=', $sixMonthsLater);
             })
-            ->orderByRaw("CASE WHEN expiry_date < ? THEN 0 WHEN expiry_date <= ? THEN 1 ELSE 2 END", [$today, $threeMonthsLater])
+            ->orderByRaw("CASE WHEN expiry_date < ? THEN 0 WHEN expiry_date <= ? THEN 1 ELSE 2 END", [$today, $sixMonthsLater])
             ->orderBy('quantity')
             ->limit(5)
             ->get();
@@ -166,10 +166,8 @@ class ProcurementController extends Controller
             'summary' => $summary,
             'topRequested' => $topRequested,
             'topDistributed' => $topDistributed,
-            'categories' => $categories,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'category' => $category,
             'distributionTrend' => $distributionTrend,
             'requestTrend' => $requestTrend,
         ] = $this->buildReportData(request());
@@ -178,10 +176,8 @@ class ProcurementController extends Controller
             'summary',
             'topRequested',
             'topDistributed',
-            'categories',
             'startDate',
             'endDate',
-            'category',
             'distributionTrend',
             'requestTrend'
         ));
@@ -198,7 +194,6 @@ class ProcurementController extends Controller
             'topDistributed' => $topDistributed,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'category' => $category,
         ] = $this->buildReportData($request);
 
         $filename = 'inventory-report-' . now()->format('Y-m-d-His') . '.csv';
@@ -208,15 +203,13 @@ class ProcurementController extends Controller
             $topRequested,
             $topDistributed,
             $startDate,
-            $endDate,
-            $category
+            $endDate
         ) {
             $handle = fopen('php://output', 'w');
 
             fputcsv($handle, ['Medical Inventory and Distribution Report']);
             fputcsv($handle, ['Start Date', $startDate ?: 'All']);
             fputcsv($handle, ['End Date', $endDate ?: 'All']);
-            fputcsv($handle, ['Category', $category ?: 'All']);
             fputcsv($handle, []);
 
             fputcsv($handle, ['Summary']);
@@ -229,16 +222,16 @@ class ProcurementController extends Controller
             fputcsv($handle, []);
 
             fputcsv($handle, ['Top Requested Medicines']);
-            fputcsv($handle, ['Medicine', 'Category', 'Total Requested']);
+            fputcsv($handle, ['Medical ID', 'Generic Name', 'Formulation / Strength', 'Total Requested']);
             foreach ($topRequested as $medicine) {
-                fputcsv($handle, [$medicine->name, $medicine->category, $medicine->total_requested]);
+                fputcsv($handle, [$medicine->medical_id, $medicine->name, $medicine->formulation_strength, $medicine->total_requested]);
             }
             fputcsv($handle, []);
 
             fputcsv($handle, ['Top Distributed Medicines']);
-            fputcsv($handle, ['Medicine', 'Category', 'Total Issued']);
+            fputcsv($handle, ['Medical ID', 'Generic Name', 'Formulation / Strength', 'Total Issued']);
             foreach ($topDistributed as $medicine) {
-                fputcsv($handle, [$medicine->name, $medicine->category, $medicine->total_issued]);
+                fputcsv($handle, [$medicine->medical_id, $medicine->name, $medicine->formulation_strength, $medicine->total_issued]);
             }
 
             fclose($handle);
@@ -258,7 +251,6 @@ class ProcurementController extends Controller
             'topDistributed' => $topDistributed,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'category' => $category,
             'distributionTrend' => $distributionTrend,
             'requestTrend' => $requestTrend,
         ] = $this->buildReportData($request);
@@ -269,7 +261,6 @@ class ProcurementController extends Controller
             'topDistributed',
             'startDate',
             'endDate',
-            'category',
             'distributionTrend',
             'requestTrend'
         ));
@@ -279,15 +270,7 @@ class ProcurementController extends Controller
     {
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
-        $category = $request->query('category');
-
-        $medicinesQuery = Medicine::query();
-
-        if ($category) {
-            $medicinesQuery->where('category', $category);
-        }
-
-        $medicines = $medicinesQuery->get();
+        $medicines = Medicine::query()->get();
         $summary = [
             'totalMedicines' => $medicines->count(),
             'expiredCount' => $medicines->filter(fn ($medicine) => $medicine->isExpired())->count(),
@@ -298,37 +281,36 @@ class ProcurementController extends Controller
 
         $topRequested = DB::table('requests')
             ->join('medicines', 'requests.medicine_id', '=', 'medicines.id')
-            ->when($category, fn ($query) => $query->where('medicines.category', $category))
             ->when($startDate, fn ($query) => $query->whereDate('requests.created_at', '>=', $startDate))
             ->when($endDate, fn ($query) => $query->whereDate('requests.created_at', '<=', $endDate))
             ->select(
+                'medicines.medical_id',
                 'medicines.name',
-                'medicines.category',
+                'medicines.formulation_strength',
                 DB::raw('SUM(requests.requested_quantity) as total_requested')
             )
-            ->groupBy('medicines.id', 'medicines.name', 'medicines.category')
+            ->groupBy('medicines.id', 'medicines.medical_id', 'medicines.name', 'medicines.formulation_strength')
             ->orderByDesc('total_requested')
             ->limit(5)
             ->get();
 
         $topDistributed = DB::table('distributions')
             ->join('medicines', 'distributions.medicine_id', '=', 'medicines.id')
-            ->when($category, fn ($query) => $query->where('medicines.category', $category))
             ->when($startDate, fn ($query) => $query->whereDate('distributions.transaction_date', '>=', $startDate))
             ->when($endDate, fn ($query) => $query->whereDate('distributions.transaction_date', '<=', $endDate))
             ->select(
+                'medicines.medical_id',
                 'medicines.name',
-                'medicines.category',
+                'medicines.formulation_strength',
                 DB::raw('SUM(distributions.quantity_issued) as total_issued')
             )
-            ->groupBy('medicines.id', 'medicines.name', 'medicines.category')
+            ->groupBy('medicines.id', 'medicines.medical_id', 'medicines.name', 'medicines.formulation_strength')
             ->orderByDesc('total_issued')
             ->limit(5)
             ->get();
 
         $distributionTrend = DB::table('distributions')
             ->join('medicines', 'distributions.medicine_id', '=', 'medicines.id')
-            ->when($category, fn ($query) => $query->where('medicines.category', $category))
             ->when($startDate, fn ($query) => $query->whereDate('distributions.transaction_date', '>=', $startDate))
             ->when($endDate, fn ($query) => $query->whereDate('distributions.transaction_date', '<=', $endDate))
             ->selectRaw('DATE(distributions.transaction_date) as day, SUM(distributions.quantity_issued) as total_issued')
@@ -338,7 +320,6 @@ class ProcurementController extends Controller
 
         $requestTrend = DB::table('requests')
             ->join('medicines', 'requests.medicine_id', '=', 'medicines.id')
-            ->when($category, fn ($query) => $query->where('medicines.category', $category))
             ->when($startDate, fn ($query) => $query->whereDate('requests.created_at', '>=', $startDate))
             ->when($endDate, fn ($query) => $query->whereDate('requests.created_at', '<=', $endDate))
             ->selectRaw('DATE(requests.created_at) as day, SUM(requests.requested_quantity) as total_requested')
@@ -346,20 +327,12 @@ class ProcurementController extends Controller
             ->orderBy('day')
             ->get();
 
-        $categories = Medicine::query()
-            ->select('category')
-            ->distinct()
-            ->orderBy('category')
-            ->pluck('category');
-
         return compact(
             'summary',
             'topRequested',
             'topDistributed',
-            'categories',
             'startDate',
             'endDate',
-            'category',
             'distributionTrend',
             'requestTrend'
         );

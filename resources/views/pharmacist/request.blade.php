@@ -19,7 +19,7 @@
                         <select name="medicine_id" class="form-select @error('medicine_id') is-invalid @enderror" required>
                             <option selected disabled>Select medicine</option>
                             @forelse($medicines as $medicine)
-                                <option value="{{ $medicine->id }}">{{ $medicine->name }} - {{ $medicine->category }}</option>
+                                <option value="{{ $medicine->id }}">{{ $medicine->medical_id }} - {{ $medicine->name }} ({{ $medicine->formulation_strength }})</option>
                             @empty
                                 <option disabled>No medicines available</option>
                             @endforelse
@@ -92,7 +92,7 @@
             <tbody>
                 @forelse($myRequests as $request)
                     <tr>
-                        <td>{{ $request->medicine->name }}</td>
+                        <td>{{ $request->medicine->medical_id }} - {{ $request->medicine->name }}</td>
                         <td>{{ $request->requested_quantity }}</td>
                         <td>
                             <span class="badge

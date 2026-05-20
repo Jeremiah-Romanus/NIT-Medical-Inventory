@@ -28,7 +28,7 @@
             <ul style="margin-left: 20px; margin-top: 15px;">
                 <li>View all available medicines</li>
                 <li>Check quantities and batch numbers</li>
-                <li>Filter by category</li>
+                <li>Search by medical ID or generic name</li>
                 <li>Export inventory report</li>
             </ul>
         </div>

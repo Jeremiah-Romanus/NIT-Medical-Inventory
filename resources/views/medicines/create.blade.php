@@ -16,14 +16,19 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="form-label">Medical ID</label>
+                            <input type="text" name="medical_id" class="form-control @error('medical_id') is-invalid @enderror" value="{{ old('medical_id') }}" required>
+                            @error('medical_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label">Medicine Name</label>
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
                             @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Category</label>
-                            <input type="text" name="category" class="form-control @error('category') is-invalid @enderror" value="{{ old('category') }}" required>
-                            @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <label class="form-label">Formulation / Strength</label>
+                            <input type="text" name="formulation_strength" class="form-control @error('formulation_strength') is-invalid @enderror" value="{{ old('formulation_strength') }}" required>
+                            @error('formulation_strength')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Batch Number</label>
@@ -39,6 +44,11 @@
                             <label class="form-label">Unit Price</label>
                             <input type="number" step="0.01" min="0" name="unit_price" class="form-control @error('unit_price') is-invalid @enderror" value="{{ old('unit_price') }}" required>
                             @error('unit_price')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stored Date</label>
+                            <input type="date" name="stored_date" class="form-control @error('stored_date') is-invalid @enderror" value="{{ old('stored_date', now()->format('Y-m-d')) }}" required>
+                            @error('stored_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Expiry Date</label>

@@ -18,7 +18,7 @@
                             <option value="">Select medicine</option>
                             @foreach($medicines as $medicine)
                                 <option value="{{ $medicine->id }}" @selected(old('medicine_id') == $medicine->id)>
-                                    {{ $medicine->name }} | Stock: {{ $medicine->quantity }}
+                                    {{ $medicine->medical_id }} | {{ $medicine->name }} | {{ $medicine->formulation_strength }} | Stock: {{ $medicine->quantity }}
                                 </option>
                             @endforeach
                         </select>
@@ -127,7 +127,7 @@
             <tbody>
                 @forelse($distributions as $distribution)
                     <tr>
-                        <td>{{ $distribution->medicine->name }}</td>
+                        <td>{{ $distribution->medicine->medical_id }} - {{ $distribution->medicine->name }}</td>
                         <td>{{ $distribution->distributed_to }}</td>
                         <td>{{ $distribution->quantity_issued }}</td>
                         <td>{{ $distribution->transaction_date->format('M d, Y H:i') }}</td>
