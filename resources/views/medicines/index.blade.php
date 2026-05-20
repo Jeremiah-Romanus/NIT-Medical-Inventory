@@ -120,10 +120,10 @@
                             </td>
                             <td>TZS {{ number_format($medicine->unit_price, 2) }}</td>
                             <td>
-                                <small>{{ optional($medicine->stored_date)->format('Y-m-d') ?: 'N/A' }}</small>
+                                <small>{{ optional($medicine->stored_date) ? \App\Helpers\DateHelper::formatDate($medicine->stored_date) : 'N/A' }}</small>
                             </td>
                             <td>
-                                <small>{{ $medicine->expiry_date->format('Y-m-d') }}</small>
+                                <small>{{ \App\Helpers\DateHelper::formatDate($medicine->expiry_date) }}</small>
                             </td>
                             <td>
                                 @if($medicine->isExpired())

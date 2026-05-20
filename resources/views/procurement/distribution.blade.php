@@ -130,7 +130,7 @@
                         <td>{{ $distribution->medicine->medical_id }} - {{ $distribution->medicine->name }}</td>
                         <td>{{ $distribution->distributed_to }}</td>
                         <td>{{ $distribution->quantity_issued }}</td>
-                        <td>{{ $distribution->transaction_date->format('M d, Y H:i') }}</td>
+                        <td>{{ \App\Helpers\DateHelper::formatDateTime($distribution->transaction_date) }}</td>
                     </tr>
                 @empty
                     <tr>

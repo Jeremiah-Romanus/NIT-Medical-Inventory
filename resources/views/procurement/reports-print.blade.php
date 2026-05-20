@@ -167,7 +167,7 @@
                     <h1>Medical Inventory and Distribution Report</h1>
                 </div>
                 <p><strong>System:</strong> NIT Medical Inventory</p>
-                <p><strong>Generated:</strong> {{ now()->format('M d, Y H:i') }}</p>
+                <p><strong>Generated:</strong> {{ \App\Helpers\DateHelper::formatDateTime(now()) }}</p>
                 <p><strong>Start Date:</strong> {{ $startDate ?: 'All' }}</p>
                 <p><strong>End Date:</strong> {{ $endDate ?: 'All' }}</p>
                 <p><strong>Catalog Coverage:</strong> All medicines</p>

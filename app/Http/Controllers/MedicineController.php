@@ -35,9 +35,11 @@ class MedicineController extends Controller
             'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines',
             'quantity' => 'required|integer|min:0',
-            'stored_date' => 'required|date',
-            'expiry_date' => 'required|date',
+            'stored_date' => 'required|date_format:Y-m-d',
+            'expiry_date' => 'required|date_format:Y-m-d|after_or_equal:today|after_or_equal:stored_date',
             'unit_price' => 'required|numeric|min:0',
+        ], [
+            'expiry_date.after_or_equal' => 'Expiry date must be today or a future date, and it cannot be earlier than the stored date.',
         ]);
 
         $validated['category'] = '';
@@ -75,9 +77,11 @@ class MedicineController extends Controller
             'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines,batch_number,' . $medicine->id,
             'quantity' => 'required|integer|min:0',
-            'stored_date' => 'required|date',
-            'expiry_date' => 'required|date',
+            'stored_date' => 'required|date_format:Y-m-d',
+            'expiry_date' => 'required|date_format:Y-m-d|after_or_equal:today|after_or_equal:stored_date',
             'unit_price' => 'required|numeric|min:0',
+        ], [
+            'expiry_date.after_or_equal' => 'Expiry date must be today or a future date, and it cannot be earlier than the stored date.',
         ]);
 
         $validated['category'] = '';

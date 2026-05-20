@@ -8,6 +8,7 @@ use App\Models\Medicine;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class ProcurementController extends Controller
 {
@@ -132,7 +133,7 @@ class ProcurementController extends Controller
             'medicine_id' => ['required', 'exists:medicines,id'],
             'distributed_to' => ['required', 'string', 'max:255'],
             'quantity_issued' => ['required', 'integer', 'min:1'],
-            'transaction_date' => ['required', 'date'],
+            'transaction_date' => ['required', 'date_format:Y-m-d\TH:i'],
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -146,6 +147,9 @@ class ProcurementController extends Controller
                     'quantity_issued' => 'Issued quantity exceeds the available stock.',
                 ]);
             }
+
+            // Convert datetime-local format to proper datetime
+            $validated['transaction_date'] = Carbon::createFromFormat('Y-m-d\TH:i', $validated['transaction_date'])->format('Y-m-d H:i:00');
 
             Distribution::create($validated);
 
@@ -196,7 +200,7 @@ class ProcurementController extends Controller
             'endDate' => $endDate,
         ] = $this->buildReportData($request);
 
-        $filename = 'inventory-report-' . now()->format('Y-m-d-His') . '.csv';
+        $filename = 'inventory-report-' . now()->format('d-m-Y-His') . '.csv';
 
         return response()->streamDownload(function () use (
             $summary,

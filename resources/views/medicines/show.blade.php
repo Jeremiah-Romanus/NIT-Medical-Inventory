@@ -126,17 +126,24 @@
                     </div>
                     <div class="detail-card">
                         <strong>Stored Date</strong>
-                        <div class="value">{{ optional($medicine->stored_date)->format('Y-m-d') ?: 'N/A' }}</div>
+                        <div class="value">{{ optional($medicine->stored_date) ? \App\Helpers\DateHelper::formatDate($medicine->stored_date) : 'N/A' }}</div>
                     </div>
                     <div class="detail-card">
-                        <strong>Time in Store</strong>
+                        <strong>Months Remaining in Store</strong>
                         <div class="value">
-                            {{ $medicine->stored_date ? $medicine->stored_date->diffInDays(now()) . ' days' : 'N/A' }}
+                            @if($medicine->isExpired())
+                                Expired
+                            @else
+                                @php
+                                    $monthsRemaining = max(0, (int) floor(now()->floatDiffInMonths($medicine->expiry_date)));
+                                @endphp
+                                {{ $monthsRemaining }} {{ $monthsRemaining === 1 ? 'month' : 'months' }} remaining
+                            @endif
                         </div>
                     </div>
                     <div class="detail-card">
                         <strong>Expiry Date</strong>
-                        <div class="value">{{ $medicine->expiry_date->format('Y-m-d') }}</div>
+                        <div class="value">{{ \App\Helpers\DateHelper::formatDate($medicine->expiry_date) }}</div>
                     </div>
                     <div class="detail-card">
                         <strong>Status</strong>

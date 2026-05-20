@@ -57,7 +57,7 @@
                         <td>{{ $medicine->name }}</td>
                         <td>{{ $medicine->batch_number }}</td>
                         <td>{{ $medicine->quantity }}</td>
-                        <td>{{ $medicine->expiry_date->format('M d, Y') }}</td>
+                        <td>{{ \App\Helpers\DateHelper::formatDate($medicine->expiry_date) }}</td>
                         <td>
                             @if($medicine->isExpired())
                                 <span class="badge bg-danger">Expired</span>
