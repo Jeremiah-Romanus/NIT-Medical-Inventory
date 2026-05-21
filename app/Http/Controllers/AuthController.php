@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
+use Throwable;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -35,6 +39,111 @@ class AuthController extends Controller
         $lockoutSecondsRemaining = $isLocked ? RateLimiter::availableIn($throttleKey) : 0;
 
         return view('auth.login', compact('role', 'isLocked', 'lockoutSecondsRemaining'));
+    }
+
+    public function showForgotPassword(string $role)
+    {
+        $role = $this->normalizeRole($role);
+
+        return view('auth.forgot-password', compact('role'));
+    }
+
+    public function sendPasswordOtp(Request $request, string $role)
+    {
+        $role = $this->normalizeRole($role);
+
+        $validated = $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $validated['email'])
+            ->where('role', $role)
+            ->first();
+
+        if ($user) {
+            if (! $this->mailIsConfigured()) {
+                throw ValidationException::withMessages([
+                    'email' => 'Mailtrap SMTP settings are not complete yet. Add your Mailtrap host, username, and password in the .env file, then try again.',
+                ]);
+            }
+
+            $otp = random_int(100000, 999999);
+            $cacheKey = 'password-otp:' . strtolower($user->email);
+            Cache::put($cacheKey, $otp, now()->addMinutes(10));
+
+            try {
+                Mail::send('emails.password-otp', ['user' => $user, 'otp' => $otp], function ($message) use ($user) {
+                    $message->to($user->email, $user->name)
+                        ->subject('Your NIT Medical Inventory password reset OTP');
+                });
+            } catch (Throwable $exception) {
+                report($exception);
+
+                throw ValidationException::withMessages([
+                    'email' => 'The reset email could not be sent right now. Please confirm your Mailtrap SMTP credentials and try again.',
+                ]);
+            }
+        }
+
+        return redirect()
+            ->route('password.reset', ['role' => $role, 'email' => $validated['email']])
+            ->with('status', 'If this email is registered for the selected role, an OTP has been sent.');
+    }
+
+    public function showResetPassword(Request $request, string $role)
+    {
+        $role = $this->normalizeRole($role);
+        $email = $request->query('email');
+
+        return view('auth.reset-password', compact('role', 'email'));
+    }
+
+    public function resetPassword(Request $request, string $role)
+    {
+        $role = $this->normalizeRole($role);
+
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|digits:6',
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->max(12)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+            ],
+        ]);
+
+        $user = User::where('email', $validated['email'])
+            ->where('role', $role)
+            ->first();
+
+        if (! $user) {
+            throw ValidationException::withMessages([
+                'email' => 'No account found for this email and role.',
+            ]);
+        }
+
+        $cacheKey = 'password-otp:' . strtolower($validated['email']);
+        $otp = Cache::get($cacheKey);
+
+        if (! $otp || (string) $otp !== $validated['otp']) {
+            throw ValidationException::withMessages([
+                'otp' => 'The OTP code is invalid or has expired.',
+            ]);
+        }
+
+        $user->password = Hash::make($validated['password']);
+        $user->setRememberToken(Str::random(60));
+        $user->save();
+
+        Cache::forget($cacheKey);
+
+        return redirect()
+            ->route('login.role', $role)
+            ->with('success', 'Your password has been updated. You can now login.');
     }
 
     /**
@@ -164,5 +273,19 @@ class AuthController extends Controller
     protected function throttleKey(Request $request, string $role): string
     {
         return Str::transliterate($role . '|' . $request->ip());
+    }
+
+    protected function mailIsConfigured(): bool
+    {
+        $host = (string) config('mail.mailers.smtp.host');
+        $username = (string) config('mail.mailers.smtp.username');
+        $password = (string) config('mail.mailers.smtp.password');
+
+        if ($host === '' || $username === '' || $password === '') {
+            return false;
+        }
+
+        return ! in_array($username, ['your_mailtrap_username', 'null'], true)
+            && ! in_array($password, ['your_mailtrap_password', 'null'], true);
     }
 }

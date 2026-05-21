@@ -318,6 +318,12 @@
                         </div>
                     @endif
 
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             @foreach ($errors->all() as $error)
@@ -347,6 +353,10 @@
                             {{ !empty($isLocked) ? 'Login Locked' : 'Login' }}
                         </button>
                     </form>
+
+                    <div class="mt-3 text-end">
+                        <a href="{{ route('password.request', $role) }}" class="text-decoration-none">Forgot password?</a>
+                    </div>
 
                     <div class="d-grid gap-2 mt-3">
                         <a href="{{ route('register') }}" class="btn-alt">

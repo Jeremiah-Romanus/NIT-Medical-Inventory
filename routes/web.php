@@ -26,6 +26,10 @@ Route::get('/home', function () {
 Route::get('/login', [AuthController::class, 'showLoginSelection'])->name('login');
 Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login.role');
 Route::post('/login/{role}', [AuthController::class, 'login'])->name('login.attempt');
+Route::get('/login/{role}/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/login/{role}/forgot-password', [AuthController::class, 'sendPasswordOtp'])->name('password.email');
+Route::get('/login/{role}/reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/login/{role}/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
