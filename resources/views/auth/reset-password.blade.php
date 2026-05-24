@@ -99,7 +99,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.update', $role) }}">
+                <form method="POST" action="{{ route('password.update') }}">
                     @csrf
                     <div class="mb-3">
                         <label for="email" class="form-label">Registered email address</label>
@@ -124,7 +124,7 @@
                     <button type="submit" class="btn btn-primary w-100">Update password</button>
                 </form>
 
-                <a href="{{ route('login.role', $role) }}" class="help-link">
+                <a href="{{ route('login') }}" class="help-link">
                     <i class="fa-solid fa-arrow-left"></i>Return to login
                 </a>
             </div>

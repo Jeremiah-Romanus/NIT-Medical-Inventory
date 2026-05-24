@@ -12,9 +12,9 @@
 
     .shared-site-header-inner {
         width: 100%;
-        max-width: 80%;
+        max-width: 1180px;
         margin: 0 auto;
-        padding: 16px 42px;
+        padding: 14px 28px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -56,7 +56,7 @@
         gap: 10px;
         flex-wrap: wrap;
         justify-content: flex-end;
-        margin-right: 0;
+        margin-right: 6px;
     }
 
     .mobile-nav-toggle {
@@ -84,7 +84,7 @@
     .shared-site-nav a {
         text-decoration: none;
         color: #0f172a;
-        font-size: 0.92rem;
+        font-size: 1rem;
         font-weight: 600;
         padding: 10px 14px;
         border-radius: 999px;
@@ -114,7 +114,7 @@
             border: 1px solid rgba(143, 211, 255, 0.32);
             box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
             flex-direction: column;
-            align-items: stretch;99
+            align-items: stretch;
             gap: 8px;
             z-index: 1200;
         }

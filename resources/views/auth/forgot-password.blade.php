@@ -83,7 +83,7 @@
         <div class="form-stage">
             <div class="form-panel">
                 <h2>Forgot password</h2>
-                <p>Enter the email you used to register as {{ ucfirst($role) }}. We will send a one-time OTP to that email.</p>
+                <p>Enter the email you used to register. We will send a one-time OTP to that email.</p>
 
                 @if (session('status'))
                     <div class="alert alert-success">{{ session('status') }}</div>
@@ -97,7 +97,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.email', $role) }}">
+                <form method="POST" action="{{ route('password.email') }}">
                     @csrf
                     <div class="mb-3">
                         <label for="email" class="form-label">Registered email address</label>
@@ -107,7 +107,7 @@
                     <button type="submit" class="btn btn-primary w-100">Send OTP</button>
                 </form>
 
-                <a href="{{ route('login.role', $role) }}" class="help-link">
+                <a href="{{ route('login') }}" class="help-link">
                     <i class="fa-solid fa-arrow-left"></i>Return to login
                 </a>
             </div>

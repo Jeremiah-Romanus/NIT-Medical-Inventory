@@ -40,7 +40,7 @@
             flex: 1;
             display: flex;
             align-items: center;
-            padding: 28px 18px 22px;
+            padding: 16px 18px 12px;
         }
 
         .hero {
@@ -49,8 +49,19 @@
             margin: 0 auto;
         }
 
+        .hero-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
+
         .hero-copy {
-            padding: 10px 0 4px;
+            flex: 1 1 52%;
+            width: 100%;
+            padding: 6px 0 0;
+            text-align: left;
         }
 
         .hero-copy h1 {
@@ -106,31 +117,14 @@
             color: var(--text);
         }
 
-        .meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 28px;
-        }
-
-        .meta-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid var(--panel-border);
-            color: #33506c;
-            font-size: 0.88rem;
-            font-weight: 600;
-        }
-
         .visual-wrap {
             position: relative;
-            min-height: 440px;
-            display: grid;
-            place-items: center;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 48%;
+            width: 100%;
         }
 
         .visual-circle {
@@ -147,8 +141,9 @@
         }
 
         .visual-circle img {
-            width: 74%;
-            height: 74%;
+            width: 76%;
+            height: 76%;
+            margin: auto;
             object-fit: contain;
         }
 
@@ -165,10 +160,15 @@
             padding-right: max(18px, calc((100vw - 1180px) / 2 + 18px));
         }
 
-        @media (max-width: 991.98px) {
+        @media (min-width: 768px) {
             .shell {
-                align-items: flex-start;
-                padding-top: 22px;
+                padding-top: 14px;
+            }
+
+            .hero-layout {
+                flex-direction: row;
+                align-items: center;
+                gap: 44px;
             }
 
             .hero-copy h1 {
@@ -176,8 +176,22 @@
             }
 
             .visual-wrap {
-                min-height: 380px;
-                margin-top: 12px;
+                min-height: 360px;
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .shell {
+                padding: 12px 18px 8px;
+            }
+
+            .visual-wrap {
+                min-height: 280px;
+            }
+
+            .visual-circle {
+                width: min(100%, 320px);
             }
         }
     </style>
@@ -188,48 +202,25 @@
 
         <div class="shell">
         <main class="hero">
-            <div class="row align-items-center g-4 g-lg-5">
-                <div class="col-lg-6">
-                    <div class="hero-copy">
+            <div class="hero-layout">
+                <div class="hero-copy">
                         <h1><span class="accent">Medical Inventory</span><br>System</h1>
                         <p>
                             A simple and secure workspace for tracking medicine stock, managing expiry dates,
                             and connecting pharmacy with procurement through one clear workflow.
                         </p>
-                    </div>
 
                     <div class="cta-row">
                         <a href="{{ route('login') }}" class="btn-hero primary">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             Login Now
                         </a>
-                        <a href="{{ route('register') }}" class="btn-hero secondary">
-                            <i class="fa-solid fa-user-plus"></i>
-                            Create Account
-                        </a>
-                    </div>
-
-                    <div class="meta-row">
-                        <div class="meta-pill">
-                            <i class="fa-solid fa-user-nurse"></i>
-                            Pharmacist
-                        </div>
-                        <div class="meta-pill">
-                            <i class="fa-solid fa-briefcase-medical"></i>
-                            Procurement Officer
-                        </div>
-                        <div class="meta-pill">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            Secure Access
-                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6">
-                    <div class="visual-wrap">
-                        <div class="visual-circle">
-                            <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo">
-                        </div>
+                <div class="visual-wrap">
+                    <div class="visual-circle">
+                        <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo">
                     </div>
                 </div>
             </div>

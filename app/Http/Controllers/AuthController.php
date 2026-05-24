@@ -16,49 +16,34 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    protected array $roles = ['pharmacist', 'procurement'];
+    protected array $roles = ['admin', 'pharmacist', 'procurement'];
     protected int $maxLoginAttempts = 5;
     protected int $lockoutSeconds = 300;
 
     /**
      * Show the login selector page
      */
-    public function showLoginSelection()
+    public function showLogin(Request $request)
     {
-        return view('auth.login-selector');
-    }
-
-    /**
-     * Show the login form
-     */
-    public function showLogin(Request $request, string $role)
-    {
-        $role = $this->normalizeRole($role);
-        $throttleKey = $this->throttleKey($request, $role);
+        $throttleKey = $this->throttleKey($request);
         $isLocked = RateLimiter::tooManyAttempts($throttleKey, $this->maxLoginAttempts);
         $lockoutSecondsRemaining = $isLocked ? RateLimiter::availableIn($throttleKey) : 0;
 
-        return view('auth.login', compact('role', 'isLocked', 'lockoutSecondsRemaining'));
+        return view('auth.login', compact('isLocked', 'lockoutSecondsRemaining'));
     }
 
-    public function showForgotPassword(string $role)
+    public function showForgotPassword()
     {
-        $role = $this->normalizeRole($role);
-
-        return view('auth.forgot-password', compact('role'));
+        return view('auth.forgot-password');
     }
 
-    public function sendPasswordOtp(Request $request, string $role)
+    public function sendPasswordOtp(Request $request)
     {
-        $role = $this->normalizeRole($role);
-
         $validated = $request->validate([
             'email' => 'required|email',
         ]);
 
-        $user = User::where('email', $validated['email'])
-            ->where('role', $role)
-            ->first();
+        $user = User::where('email', $validated['email'])->first();
 
         if ($user) {
             if (! $this->mailIsConfigured()) {
@@ -86,22 +71,19 @@ class AuthController extends Controller
         }
 
         return redirect()
-            ->route('password.reset', ['role' => $role, 'email' => $validated['email']])
-            ->with('status', 'If this email is registered for the selected role, an OTP has been sent.');
+            ->route('password.reset', ['email' => $validated['email']])
+            ->with('status', 'If this email is registered, an OTP has been sent.');
     }
 
-    public function showResetPassword(Request $request, string $role)
+    public function showResetPassword(Request $request)
     {
-        $role = $this->normalizeRole($role);
         $email = $request->query('email');
 
-        return view('auth.reset-password', compact('role', 'email'));
+        return view('auth.reset-password', compact('email'));
     }
 
-    public function resetPassword(Request $request, string $role)
+    public function resetPassword(Request $request)
     {
-        $role = $this->normalizeRole($role);
-
         $validated = $request->validate([
             'email' => 'required|email',
             'otp' => 'required|digits:6',
@@ -116,13 +98,11 @@ class AuthController extends Controller
             ],
         ]);
 
-        $user = User::where('email', $validated['email'])
-            ->where('role', $role)
-            ->first();
+        $user = User::where('email', $validated['email'])->first();
 
         if (! $user) {
             throw ValidationException::withMessages([
-                'email' => 'No account found for this email and role.',
+                'email' => 'No account found for this email address.',
             ]);
         }
 
@@ -142,7 +122,7 @@ class AuthController extends Controller
         Cache::forget($cacheKey);
 
         return redirect()
-            ->route('login.role', $role)
+            ->route('login')
             ->with('success', 'Your password has been updated. You can now login.');
     }
 
@@ -151,22 +131,22 @@ class AuthController extends Controller
      */
     public function showRegister()
     {
-        return view('auth.register', ['roles' => $this->roles]);
+        return redirect()
+            ->route('login')
+            ->with('warning', 'Account registration is currently managed by the system administrator.');
     }
 
     /**
      * Handle login request
      */
-    public function login(Request $request, string $role)
+    public function login(Request $request)
     {
-        $role = $this->normalizeRole($role);
-
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $validated = $request->validate([
+            'login' => 'required|string',
             'password' => 'required',
         ]);
 
-        $throttleKey = $this->throttleKey($request, $role);
+        $throttleKey = $this->throttleKey($request);
 
         if (RateLimiter::tooManyAttempts($throttleKey, $this->maxLoginAttempts)) {
             $seconds = RateLimiter::availableIn($throttleKey);
@@ -177,9 +157,14 @@ class AuthController extends Controller
             ]);
         }
 
-        $credentials['role'] = $role;
+        $identifier = trim($validated['login']);
 
-        if (Auth::attempt($credentials)) {
+        $user = User::query()
+            ->where('email', $identifier)
+            ->orWhere('name', $identifier)
+            ->first();
+
+        if ($user && Auth::attempt(['email' => $user->email, 'password' => $validated['password']])) {
             $request->session()->regenerate();
             RateLimiter::clear($throttleKey);
             return redirect()
@@ -199,38 +184,9 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => ['required', 'digits:9', 'regex:/^[0-9]{9}$/'],
-            'email' => 'required|email|max:255|unique:users,email',
-            'role' => 'required|in:pharmacist,procurement',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->max(12)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols(),
-            ],
-        ], [
-            'phone.digits' => 'Phone number must contain exactly 9 digits after +255.',
-            'phone.regex' => 'Phone number must contain digits only.',
-        ]);
-
-        $validated['phone'] = '+255' . $validated['phone'];
-
-        if (User::where('phone', $validated['phone'])->exists()) {
-            throw ValidationException::withMessages([
-                'phone' => 'This phone number is already registered.',
-            ]);
-        }
-
-        User::create($validated);
-
         return redirect()
-            ->route('login.role', $validated['role'])
-            ->with('success', 'Registration completed. You can now log in.');
+            ->route('login')
+            ->with('warning', 'Account registration is disabled. Please ask the administrator to create or assign your account.');
     }
 
     /**
@@ -244,9 +200,11 @@ class AuthController extends Controller
             return '/pharmacist/dashboard';
         } elseif ($user->role === 'procurement') {
             return '/procurement/dashboard';
+        } elseif ($user->role === 'admin') {
+            return '/admin/dashboard';
         }
 
-        return '/dashboard';
+        return '/home';
     }
 
     /**
@@ -261,18 +219,11 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    protected function normalizeRole(string $role): string
+    protected function throttleKey(Request $request): string
     {
-        $role = strtolower($role);
+        $identifier = strtolower((string) $request->input('login', $request->input('email', 'guest')));
 
-        abort_unless(in_array($role, $this->roles, true), 404);
-
-        return $role;
-    }
-
-    protected function throttleKey(Request $request, string $role): string
-    {
-        return Str::transliterate($role . '|' . $request->ip());
+        return Str::transliterate($identifier . '|' . $request->ip());
     }
 
     protected function mailIsConfigured(): bool

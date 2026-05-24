@@ -284,12 +284,12 @@
                             <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
                             <span>NIT Medical Inventory</span>
                         </div>
-                        <h1>Create one account, then log in by role.</h1>
+                        <h1>Create one account, then sign in from one shared login page.</h1>
                         <p>Register once with your real details. Your name inside the system will now come directly from the secure account you create here.</p>
 
                         <div class="points">
                             <div class="point">Use your full name, phone number, and work email during registration.</div>
-                            <div class="point">Choose your role during registration: Pharmacist or Procurement Officer.</div>
+                            <div class="point">New accounts are created securely, then an admin can manage roles from the admin panel.</div>
                             <div class="point">Your password must be strong before the system accepts your account.</div>
                         </div>
                     </div>
@@ -297,7 +297,7 @@
 
                 <section class="form-panel">
                     <h2>Create account</h2>
-                    <p class="mb-4">Fill your details once, then use the correct login page for your role.</p>
+                    <p class="mb-4">Fill your details once, then use the shared login page to access the system.</p>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -326,16 +326,6 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Work email address</label>
                             <input type="email" id="email" name="email" class="form-control" required autocomplete="off" autocapitalize="none" spellcheck="false">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Account type</label>
-                            <select id="role" name="role" class="form-select" required>
-                                <option value="">Choose role</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role }}">{{ $role === 'procurement' ? 'Procurement Officer' : 'Pharmacist' }}</option>
-                                @endforeach
-                            </select>
                         </div>
 
                         <div class="mb-3">

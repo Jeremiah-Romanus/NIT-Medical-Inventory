@@ -554,12 +554,33 @@
 
             <div class="nav-group">
                 <div class="nav-label">Navigation</div>
-                <a href="{{ auth()->user()->role === 'pharmacist' ? route('pharmacist.dashboard') : route('procurement.dashboard') }}" class="side-link {{ request()->routeIs('*.dashboard') ? 'active' : '' }}">
+                <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'pharmacist' ? route('pharmacist.dashboard') : route('procurement.dashboard')) }}" class="side-link {{ request()->routeIs('*.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
 
-                @if(auth()->user()->role === 'pharmacist')
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.users') }}" class="side-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>User Management</span>
+                    </a>
+                    <a href="{{ route('medicines.index') }}" class="side-link {{ request()->routeIs('medicines.*', 'procurement.stock') ? 'active' : '' }}">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        <span>Inventory</span>
+                    </a>
+                    <a href="{{ route('procurement.requests') }}" class="side-link {{ request()->routeIs('procurement.requests') ? 'active' : '' }}">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Requests</span>
+                    </a>
+                    <a href="{{ route('procurement.distribution') }}" class="side-link {{ request()->routeIs('procurement.distribution') ? 'active' : '' }}">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>Distribution</span>
+                    </a>
+                    <a href="{{ route('procurement.reports') }}" class="side-link {{ request()->routeIs('procurement.reports') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-column"></i>
+                        <span>Reports</span>
+                    </a>
+                @elseif(auth()->user()->role === 'pharmacist')
                     <a href="{{ route('pharmacist.stock') }}" class="side-link {{ request()->routeIs('pharmacist.stock') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i>
                         <span>Inventory</span>
@@ -597,7 +618,9 @@
                     <div class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
                     <div>
                         <h6>{{ auth()->user()->name }}</h6>
-                        <p>{{ ucfirst(auth()->user()->role) }}</p>
+                        <p>
+                            {{ auth()->user()->role === 'admin' ? 'Administrator' : (auth()->user()->role === 'procurement' ? 'Procurement Officer' : 'Pharmacist') }}
+                        </p>
                     </div>
                 </div>
 

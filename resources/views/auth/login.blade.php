@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ucfirst($role) }} Login - NIT Medical Inventory</title>
+    <title>Login - NIT Medical Inventory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -304,8 +304,8 @@
                 </section>
 
                 <section class="form-panel">
-                    <h2>{{ ucfirst($role) }} sign in</h2>
-                    <p class="mb-4">If you already registered as {{ $role }}, use your account to continue. If not, register first.</p>
+                    <h2>Sign in</h2>
+                    <p class="mb-4">Use one login page for admin, pharmacist, and procurement officer accounts assigned inside the system.</p>
 
                     @if (!empty($isLocked))
                         <div class="lockout-box">
@@ -332,11 +332,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login.attempt', $role) }}" autocomplete="off" class="{{ !empty($isLocked) ? 'form-locked' : '' }}">
+                    <form method="POST" action="{{ route('login.attempt') }}" autocomplete="off" class="{{ !empty($isLocked) ? 'form-locked' : '' }}">
                         @csrf
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" id="email" name="email" class="form-control" required autofocus autocomplete="off" autocapitalize="none" spellcheck="false" @disabled(!empty($isLocked))>
+                            <label for="login" class="form-label">Username or email address</label>
+                            <input type="text" id="login" name="login" class="form-control" required autofocus autocomplete="off" autocapitalize="none" spellcheck="false" @disabled(!empty($isLocked))>
                         </div>
 
                         <div class="mb-3">
@@ -355,24 +355,20 @@
                     </form>
 
                     <div class="mt-3 text-end">
-                        <a href="{{ route('password.request', $role) }}" class="text-decoration-none">Forgot password?</a>
+                        <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot password?</a>
                     </div>
 
                     <div class="d-grid gap-2 mt-3">
-                        <a href="{{ route('register') }}" class="btn-alt">
-                            <i class="fa-solid fa-user-plus"></i>
-                            Not registered yet? Register first
-                        </a>
-                        <a href="{{ route('login') }}" class="btn-alt">
+                        <a href="{{ route('home') }}" class="btn-alt">
                             <i class="fa-solid fa-arrow-left"></i>
-                            Choose another login type
+                            Back Home
                         </a>
                     </div>
 
                     <div class="help-box">
                         <h6><i class="fa-solid fa-circle-info me-2"></i>Before you log in</h6>
-                        <p>Use only the account details you created during registration.</p>
-                        <p>If you do not have an account yet, register first and then return to this login page.</p>
+                        <p>Use only the account details assigned to you inside the system.</p>
+                        <p>If you need access or a role change, contact the system administrator.</p>
                     </div>
                 </section>
             </div>
