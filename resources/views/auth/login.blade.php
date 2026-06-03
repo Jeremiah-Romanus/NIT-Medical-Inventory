@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - NIT Medical Inventory</title>
+    <title>{{ __('auth.login') }} - {{ __('app.name') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
     @include('partials.footer-styles')
     @include('partials.site-header-styles')
     <style>
@@ -199,6 +200,41 @@
             background: #4aaef0;
         }
 
+        .locale-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .locale-btn:hover {
+            background: rgba(143, 211, 255, 0.18);
+            border-color: rgba(143, 211, 255, 0.42);
+        }
+
+        .locale-btn.active {
+            background: rgba(37, 99, 235, 0.12);
+            border-color: rgba(37, 99, 235, 0.25);
+        }
+
+        .locale-switcher {
+            display: flex;
+            gap: 4px;
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 2;
+        }
+
         .btn-alt {
             border-radius: 14px;
             padding: 0.9rem 1rem;
@@ -276,36 +312,41 @@
                     <div class="hero-content">
                         <div>
                             <div class="brand">
-                                <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
-                                <span>NIT Medical Inventory</span>
+                                <img src="{{ asset('images/NIT_logoBg.png') }}" alt="{{ __('app.name') }}" class="brand-logo">
+                                <span>{{ __('app.name') }}</span>
                             </div>
-                            <h1 class="hero-title">Inventory control for clinical teams.</h1>
-                            <p class="hero-text">
-                                Keep medicines visible, requests organized, and expiry risks under control with a workflow built for
-                                pharmacists and procurement officers.
-                            </p>
+                            <h1 class="hero-title">{{ __('app.subtitle') }}</h1>
+                            <p class="hero-text">{{ __('hero.description') }}</p>
                         </div>
 
                         <div class="hero-stats">
                             <div class="hero-stat">
-                                <strong>2 roles</strong>
-                                <span>Role-based access</span>
+                                <strong>{{ __('hero.stat1_title') }}</strong>
+                                <span>{{ __('hero.stat1_sub') }}</span>
                             </div>
                             <div class="hero-stat">
-                                <strong>Live stock</strong>
-                                <span>Inventory visibility</span>
+                                <strong>{{ __('hero.stat2_title') }}</strong>
+                                <span>{{ __('hero.stat2_sub') }}</span>
                             </div>
                             <div class="hero-stat">
-                                <strong>Fast flow</strong>
-                                <span>Requests to distribution</span>
+                                <strong>{{ __('hero.stat3_title') }}</strong>
+                                <span>{{ __('hero.stat3_sub') }}</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section class="form-panel">
-                    <h2>Sign in</h2>
-                    <p class="mb-4">Use one login page for admin, pharmacist, and procurement officer accounts assigned inside the system.</p>
+                <section class="form-panel" x-data="{ passwordVisible: false }">
+                    <div class="locale-switcher">
+                        <a href="{{ route('locale.switch', 'en') }}" class="locale-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
+                            <span>🇬🇧</span> EN
+                        </a>
+                        <a href="{{ route('locale.switch', 'sw') }}" class="locale-btn {{ app()->getLocale() === 'sw' ? 'active' : '' }}">
+                            <span>🇹🇿</span> SW
+                        </a>
+                    </div>
+                    <h2>{{ __('auth.login') }}</h2>
+                    <p class="mb-4">{{ __('auth.login_title') }}</p>
 
                     @if (!empty($isLocked))
                         <div class="lockout-box">
@@ -335,40 +376,40 @@
                     <form method="POST" action="{{ route('login.attempt') }}" autocomplete="off" class="{{ !empty($isLocked) ? 'form-locked' : '' }}">
                         @csrf
                         <div class="mb-3">
-                            <label for="login" class="form-label">Username or email address</label>
+                            <label for="login" class="form-label">{{ __('auth.email') }}</label>
                             <input type="text" id="login" name="login" class="form-control" required autofocus autocomplete="off" autocapitalize="none" spellcheck="false" @disabled(!empty($isLocked))>
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label">{{ __('auth.password') }}</label>
                             <div class="password-field">
                                 <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password" @disabled(!empty($isLocked))>
-                                <button type="button" class="password-toggle" data-toggle-password="password" aria-label="Show password" @disabled(!empty($isLocked))>
-                                    <i class="fa-regular fa-eye"></i>
+                                <button type="button" class="password-toggle" @@click="passwordVisible = !passwordVisible" aria-label="Show password" @disabled(!empty($isLocked))>
+                                    <i :class="passwordVisible ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'"></i>
                                 </button>
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-login w-100" @disabled(!empty($isLocked))>
-                            {{ !empty($isLocked) ? 'Login Locked' : 'Login' }}
+                            {{ !empty($isLocked) ? __('common.loading') : __('auth.login') }}
                         </button>
                     </form>
 
                     <div class="mt-3 text-end">
-                        <a href="{{ route('password.request') }}" class="text-decoration-none">Forgot password?</a>
+                        <a href="{{ route('password.request') }}" class="text-decoration-none">{{ __('auth.forgot_password') }}</a>
                     </div>
 
                     <div class="d-grid gap-2 mt-3">
                         <a href="{{ route('home') }}" class="btn-alt">
                             <i class="fa-solid fa-arrow-left"></i>
-                            Back Home
+                            {{ __('common.back') }}
                         </a>
                     </div>
 
                     <div class="help-box">
-                        <h6><i class="fa-solid fa-circle-info me-2"></i>Before you log in</h6>
-                        <p>Use only the account details assigned to you inside the system.</p>
-                        <p>If you need access or a role change, contact the system administrator.</p>
+                        <h6><i class="fa-solid fa-circle-info me-2"></i>{{ __('auth.login_title') }}</h6>
+                        <p>{{ __('auth.logged_in_as') }}</p>
+                        <p>{{ __('user.subtitle') }}</p>
                     </div>
                 </section>
             </div>

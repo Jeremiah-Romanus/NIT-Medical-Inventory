@@ -1,52 +1,61 @@
 @extends('layouts.layout')
 
-@section('title', 'User Management')
-@section('page-title', 'User Management')
-@section('page-subtitle', 'Assign each account to the right system role and keep access organized from one place.')
+@section('title', __('user.title'))
+@section('page-title', __('user.title'))
+@section('page-subtitle', __('user.subtitle'))
 
 @section('content')
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title">All registered users</h5>
-            <span class="text-muted small">{{ $users->count() }} total users</span>
+    <div class="card" x-data="{ search: '' }">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h5 class="card-title">{{ __('user.title') }}</h5>
+            <div class="d-flex align-items-center gap-2">
+                <input type="text" x-model="search" class="form-control form-control-sm table-filter-input" placeholder="{{ __('common.search') }}">
+                <span class="text-muted small">{{ $users->count() }} {{ __('user.total') }}</span>
+            </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Current role</th>
-                            <th>Joined</th>
-                            <th class="text-end">Update role</th>
+                            <th>{{ __('user.name') }}</th>
+                            <th>{{ __('user.email') }}</th>
+                            <th>{{ __('user.phone') }}</th>
+                            <th>{{ __('user.role') }}</th>
+                            <th>{{ __('user.joined') }}</th>
+                            <th class="text-end">{{ __('user.update_role') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($users as $user)
-                            <tr>
+                            <tr x-show="!search || '{{ strtolower($user->name) }} {{ strtolower($user->email) }} {{ strtolower($user->role) }}'.includes(search.toLowerCase())" class="fade-in">
                                 <td class="fw-semibold">{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone }}</td>
-                                <td>{{ $user->role === 'procurement' ? 'Procurement Officer' : ucfirst($user->role) }}</td>
+                                <td>
+                                    @switch($user->role)
+                                        @case('admin') {{ __('role.admin') }} @break
+                                        @case('procurement') {{ __('role.procurement') }} @break
+                                        @default {{ __('role.pharmacist') }}
+                                    @endswitch
+                                </td>
                                 <td>{{ $user->created_at->format('d M Y') }}</td>
                                 <td class="text-end">
                                     <form method="POST" action="{{ route('admin.users.role', $user) }}" class="d-inline-flex gap-2 align-items-center justify-content-end">
                                         @csrf
                                         @method('PUT')
                                         <select name="role" class="form-select form-select-sm" style="min-width: 200px;">
-                                            <option value="admin" @selected($user->role === 'admin')>Admin</option>
-                                            <option value="pharmacist" @selected($user->role === 'pharmacist')>Pharmacist</option>
-                                            <option value="procurement" @selected($user->role === 'procurement')>Procurement Officer</option>
+                                            <option value="admin" @selected($user->role === 'admin')>{{ __('role.admin') }}</option>
+                                            <option value="pharmacist" @selected($user->role === 'pharmacist')>{{ __('role.pharmacist') }}</option>
+                                            <option value="procurement" @selected($user->role === 'procurement')>{{ __('role.procurement') }}</option>
                                         </select>
-                                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                        <button type="submit" class="btn btn-primary btn-sm">{{ __('user.save') }}</button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">No users available yet.</td>
+                                <td colspan="6" class="text-center py-4 text-muted">{{ __('user.no_users') }}</td>
                             </tr>
                         @endforelse
                     </tbody>

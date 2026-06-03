@@ -65,9 +65,9 @@ class AdminController extends Controller
             ]);
         }
 
-        $user->update([
+        $user->forceFill([
             'role' => $validated['role'],
-        ]);
+        ])->save();
 
         return back()->with('success', 'User role updated successfully.');
     }

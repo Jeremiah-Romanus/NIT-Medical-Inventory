@@ -5,8 +5,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PharmacistController;
 use App\Http\Controllers\ProcurementController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\LocaleController;
 
 // Public routes
 Route::get('/', function () {
@@ -37,6 +39,11 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 // Admin routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
@@ -84,3 +91,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/medicines/{medicine}', [MedicineController::class, 'update'])->name('medicines.update')->middleware('role:procurement,admin');
     Route::delete('/medicines/{medicine}', [MedicineController::class, 'destroy'])->name('medicines.destroy')->middleware('role:procurement,admin');
 });
+
+// Locale switching
+Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');

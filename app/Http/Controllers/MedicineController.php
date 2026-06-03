@@ -8,12 +8,49 @@ use App\Models\Medicine;
 class MedicineController extends Controller
 {
     /**
-     * Display all medicines
+     * Display medicine listing with pagination, search and filters.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $medicines = Medicine::all();
-        return view('medicines.index', compact('medicines'));
+        $query = Medicine::query();
+
+        // Global search across name, medical_id and batch_number
+        if ($request->filled('q')) {
+            $term = $request->input('q');
+            $query->where(function ($qb) use ($term) {
+                $qb->where('name', 'like', '%' . $term . '%')
+                   ->orWhere('medical_id', 'like', '%' . $term . '%')
+                   ->orWhere('batch_number', 'like', '%' . $term . '%');
+            });
+        }
+
+        // Category filter
+        if ($request->filled('category')) {
+            $query->where('category', $request->input('category'));
+        }
+
+        // Status filter (expired / expiring_soon / active)
+        if ($request->filled('status')) {
+            if ($request->input('status') === 'expired') {
+                $query->where('expiry_date', '<', now());
+            } elseif ($request->input('status') === 'expiring_soon') {
+                $query->whereBetween('expiry_date', [now(), now()->addMonths(6)]);
+            } elseif ($request->input('status') === 'active') {
+                $query->where('expiry_date', '>=', now()->addMonths(6));
+            }
+        }
+
+        // Counts for alerts (computed over entire dataset)
+        $expiredCount = Medicine::where('expiry_date', '<', now())->count();
+        $expiringCount = Medicine::whereBetween('expiry_date', [now(), now()->addMonths(6)])->count();
+
+        // Categories for filter dropdown
+        $categories = Medicine::select('category')->distinct()->pluck('category')->filter()->values();
+
+        // Paginate results and preserve query string
+        $medicines = $query->orderBy('name')->paginate(25)->withQueryString();
+
+        return view('medicines.index', compact('medicines', 'expiredCount', 'expiringCount', 'categories'));
     }
 
     /**

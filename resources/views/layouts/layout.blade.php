@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard') - NIT Medical Inventory</title>
+    <title>@yield('title', __('app.name')) - {{ __('app.name') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
     @include('partials.footer-styles')
     @include('partials.site-header-styles')
     <style>
@@ -440,6 +441,11 @@
             border: 0;
         }
 
+        .btn-outline-primary {
+            border-color: #cfe5f5;
+            color: #0f172a;
+        }
+
         .form-control,
         .form-select {
             background: #ffffff;
@@ -466,6 +472,49 @@
         .modal-header,
         .modal-footer {
             border-color: var(--border);
+        }
+
+        .locale-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .locale-btn:hover {
+            background: rgba(143, 211, 255, 0.18);
+            border-color: rgba(143, 211, 255, 0.42);
+        }
+
+        .locale-btn.active {
+            background: rgba(37, 99, 235, 0.12);
+            border-color: rgba(37, 99, 235, 0.25);
+        }
+
+        .locale-switcher {
+            display: flex;
+            gap: 4px;
+        }
+
+        .table-filter-input {
+            max-width: 280px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 991.98px) {
@@ -532,83 +581,83 @@
         }
     </style>
 </head>
-<body>
+<body x-data="{ sidebarOpen: false }" :class="{ 'sidebar-open': sidebarOpen }">
     <div class="page-shell">
     @include('partials.site-header')
     <div class="app-shell">
-        <div class="sidebar-backdrop"></div>
+        <div class="sidebar-backdrop" @@click="sidebarOpen = false"></div>
         <aside class="sidebar">
                 <div class="brand">
                 <div class="brand-head">
                     <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
                     <div>
-                        <h1>NIT Medical</h1>
-                        <p>Inventory control made simple.</p>
+                        <h1>{{ __('app.name') }}</h1>
+                        <p>{{ __('app.subtitle') }}</p>
                     </div>
                 </div>
                 <div class="chip">
                     <i class="fa-solid fa-shield-heart"></i>
-                    Role-based access
+                    {{ __('nav.role_badge') }}
                 </div>
             </div>
 
             <div class="nav-group">
-                <div class="nav-label">Navigation</div>
+                <div class="nav-label">{{ __('nav.dashboard') }}</div>
                 <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'pharmacist' ? route('pharmacist.dashboard') : route('procurement.dashboard')) }}" class="side-link {{ request()->routeIs('*.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-chart-line"></i>
-                    <span>Dashboard</span>
+                    <span>{{ __('nav.dashboard') }}</span>
                 </a>
 
                 @if(auth()->user()->role === 'admin')
                     <a href="{{ route('admin.users') }}" class="side-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                         <i class="fa-solid fa-users-gear"></i>
-                        <span>User Management</span>
+                        <span>{{ __('nav.users') }}</span>
                     </a>
                     <a href="{{ route('medicines.index') }}" class="side-link {{ request()->routeIs('medicines.*', 'procurement.stock') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i>
-                        <span>Inventory</span>
+                        <span>{{ __('nav.inventory') }}</span>
                     </a>
                     <a href="{{ route('procurement.requests') }}" class="side-link {{ request()->routeIs('procurement.requests') ? 'active' : '' }}">
                         <i class="fa-solid fa-circle-check"></i>
-                        <span>Requests</span>
+                        <span>{{ __('nav.approvals') }}</span>
                     </a>
                     <a href="{{ route('procurement.distribution') }}" class="side-link {{ request()->routeIs('procurement.distribution') ? 'active' : '' }}">
                         <i class="fa-solid fa-truck"></i>
-                        <span>Distribution</span>
+                        <span>{{ __('nav.distribution') }}</span>
                     </a>
                     <a href="{{ route('procurement.reports') }}" class="side-link {{ request()->routeIs('procurement.reports') ? 'active' : '' }}">
                         <i class="fa-solid fa-chart-column"></i>
-                        <span>Reports</span>
+                        <span>{{ __('nav.reports') }}</span>
                     </a>
                 @elseif(auth()->user()->role === 'pharmacist')
                     <a href="{{ route('pharmacist.stock') }}" class="side-link {{ request()->routeIs('pharmacist.stock') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i>
-                        <span>Inventory</span>
+                        <span>{{ __('nav.inventory') }}</span>
                     </a>
                     <a href="{{ route('pharmacist.request') }}" class="side-link {{ request()->routeIs('pharmacist.request') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-list"></i>
-                        <span>Requests</span>
+                        <span>{{ __('nav.requests') }}</span>
                     </a>
                     <a href="{{ route('pharmacist.expiry') }}" class="side-link {{ request()->routeIs('pharmacist.expiry') ? 'active' : '' }}">
                         <i class="fa-solid fa-calendar-days"></i>
-                        <span>Expiry</span>
+                        <span>{{ __('nav.expiry') }}</span>
                     </a>
                 @else
                     <a href="{{ route('procurement.stock') }}" class="side-link {{ request()->routeIs('procurement.stock') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i>
-                        <span>Inventory</span>
+                        <span>{{ __('nav.inventory') }}</span>
                     </a>
                     <a href="{{ route('procurement.requests') }}" class="side-link {{ request()->routeIs('procurement.requests') ? 'active' : '' }}">
                         <i class="fa-solid fa-circle-check"></i>
-                        <span>Approvals</span>
+                        <span>{{ __('nav.approvals') }}</span>
                     </a>
                     <a href="{{ route('procurement.distribution') }}" class="side-link {{ request()->routeIs('procurement.distribution') ? 'active' : '' }}">
                         <i class="fa-solid fa-truck"></i>
-                        <span>Distribution</span>
+                        <span>{{ __('nav.distribution') }}</span>
                     </a>
                     <a href="{{ route('procurement.reports') }}" class="side-link {{ request()->routeIs('procurement.reports') ? 'active' : '' }}">
                         <i class="fa-solid fa-chart-column"></i>
-                        <span>Reports</span>
+                        <span>{{ __('nav.reports') }}</span>
                     </a>
                 @endif
             </div>
@@ -619,16 +668,30 @@
                     <div>
                         <h6>{{ auth()->user()->name }}</h6>
                         <p>
-                            {{ auth()->user()->role === 'admin' ? 'Administrator' : (auth()->user()->role === 'procurement' ? 'Procurement Officer' : 'Pharmacist') }}
+                            @switch(auth()->user()->role)
+                                @case('admin')
+                                    {{ __('role.admin') }}
+                                    @break
+                                @case('procurement')
+                                    {{ __('role.procurement') }}
+                                    @break
+                                @default
+                                    {{ __('role.pharmacist') }}
+                            @endswitch
                         </p>
                     </div>
                 </div>
+
+                <a href="{{ route('profile.edit') }}" class="side-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-user-pen"></i>
+                    <span>{{ __('nav.profile') }}</span>
+                </a>
 
                 <form method="POST" action="{{ route('logout') }}" class="m-0">
                     @csrf
                     <button type="submit" class="logout-btn">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Logout</span>
+                        <span>{{ __('nav.logout') }}</span>
                     </button>
                 </form>
             </div>
@@ -637,10 +700,23 @@
         <main class="content-shell">
             <div class="topbar">
                 <div class="page-head">
-                    <h2>@yield('page-title', 'Dashboard')</h2>
+                    <button class="btn btn-outline-primary d-lg-none me-2" @@click="sidebarOpen = !sidebarOpen">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2>@yield('page-title', __('nav.dashboard'))</h2>
                     @hasSection('page-subtitle')
                         <p>@yield('page-subtitle')</p>
                     @endif
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="locale-switcher">
+                        <a href="{{ route('locale.switch', 'en') }}" class="locale-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
+                            <span>🇬🇧</span> EN
+                        </a>
+                        <a href="{{ route('locale.switch', 'sw') }}" class="locale-btn {{ app()->getLocale() === 'sw' ? 'active' : '' }}">
+                            <span>🇹🇿</span> SW
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -657,7 +733,7 @@
 
                 @if(request()->routeIs('*.dashboard') && isset($sharedAlerts) && $sharedAlerts->isNotEmpty())
                     <div class="alerts-panel">
-                        <h5><i class="fa-solid fa-bell me-2"></i>System Alerts</h5>
+                        <h5><i class="fa-solid fa-bell me-2"></i>{{ __('dashboard.system_alerts') }}</h5>
                         <div class="alert-feed">
                             @foreach($sharedAlerts as $alert)
                                 <div class="alert-item {{ $alert['type'] }}">

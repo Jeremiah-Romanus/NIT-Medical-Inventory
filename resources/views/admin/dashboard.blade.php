@@ -1,18 +1,18 @@
 @extends('layouts.layout')
 
-@section('title', 'Admin Dashboard')
-@section('page-title', 'Admin Dashboard')
-@section('page-subtitle', 'Manage users, monitor stock activity, and supervise the whole medical inventory workflow.')
+@section('title', __('nav.dashboard') . ' — ' . __('role.admin'))
+@section('page-title', __('role.admin') . ' ' . __('nav.dashboard'))
+@section('page-subtitle', __('dashboard.system_alerts'))
 
 @section('content')
     <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <div class="text-muted small mb-2">System users</div>
+                    <div class="text-muted small mb-2">{{ __('dashboard.total_users') }}</div>
                     <div class="display-6 fw-bold">{{ $stats['totalUsers'] }}</div>
                     <div class="small text-muted mt-2">
-                        {{ $stats['pharmacists'] }} pharmacists, {{ $stats['procurementOfficers'] }} procurement officers
+                        {{ $stats['pharmacists'] }} {{ __('role.pharmacist') }}, {{ $stats['procurementOfficers'] }} {{ __('role.procurement') }}
                     </div>
                 </div>
             </div>
@@ -20,27 +20,27 @@
         <div class="col-xl-3 col-md-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <div class="text-muted small mb-2">Medicines in system</div>
+                    <div class="text-muted small mb-2">{{ __('dashboard.total_medicines') }}</div>
                     <div class="display-6 fw-bold">{{ $stats['totalMedicines'] }}</div>
-                    <div class="small text-muted mt-2">All medicine records currently available</div>
+                    <div class="small text-muted mt-2">{{ __('medicine.total') }}</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <div class="text-muted small mb-2">Pending requests</div>
+                    <div class="text-muted small mb-2">{{ __('dashboard.pending_requests') }}</div>
                     <div class="display-6 fw-bold">{{ $stats['pendingRequests'] }}</div>
-                    <div class="small text-muted mt-2">Requests waiting for review</div>
+                    <div class="small text-muted mt-2">{{ __('request.pending') }}</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card h-100">
                 <div class="card-body">
-                    <div class="text-muted small mb-2">Inventory value</div>
-                    <div class="display-6 fw-bold">TZS {{ number_format($stats['inventoryValue'], 2) }}</div>
-                    <div class="small text-muted mt-2">{{ $stats['totalDistributions'] }} distributions recorded</div>
+                    <div class="text-muted small mb-2">{{ __('dashboard.inventory_value_short') }}</div>
+                    <div class="display-6 fw-bold">{{ __('currency.tzs') }} {{ number_format($stats['inventoryValue'], 2) }}</div>
+                    <div class="small text-muted mt-2">{{ $stats['totalDistributions'] }} {{ __('dashboard.total_distributions') }}</div>
                 </div>
             </div>
         </div>
@@ -50,20 +50,20 @@
         <div class="col-lg-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title">Quick health view</h5>
+                    <h5 class="card-title">{{ __('dashboard.health_check') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                        <span>Expired medicines</span>
+                        <span>{{ __('dashboard.expired') }}</span>
                         <strong>{{ $stats['expiredCount'] }}</strong>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                        <span>Expiring within 6 months</span>
+                        <span>{{ __('dashboard.expiring_soon') }}</span>
                         <strong>{{ $stats['expiringSoonCount'] }}</strong>
                     </div>
                     <div class="d-flex justify-content-between align-items-center py-2">
-                        <span>Active system roles</span>
-                        <strong>Admin, Pharmacist, Procurement</strong>
+                        <span>{{ __('dashboard.total_users') }}</span>
+                        <strong>{{ __('role.admin') }}, {{ __('role.pharmacist') }}, {{ __('role.procurement') }}</strong>
                     </div>
                 </div>
             </div>
@@ -72,19 +72,19 @@
         <div class="col-lg-8">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Recent users</h5>
-                    <a href="{{ route('admin.users') }}" class="btn btn-primary btn-sm">Manage users</a>
+                    <h5 class="card-title">{{ __('dashboard.recent_users') }}</h5>
+                    <a href="{{ route('admin.users') }}" class="btn btn-primary btn-sm">{{ __('nav.users') }}</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table mb-0">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Role</th>
-                                    <th>Joined</th>
+                                    <th>{{ __('user.name') }}</th>
+                                    <th>{{ __('user.email') }}</th>
+                                    <th>{{ __('user.phone') }}</th>
+                                    <th>{{ __('user.role') }}</th>
+                                    <th>{{ __('user.joined') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,12 +93,18 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->role === 'procurement' ? 'Procurement Officer' : ucfirst($user->role) }}</td>
+                                        <td>
+                                            @switch($user->role)
+                                                @case('admin') {{ __('role.admin') }} @break
+                                                @case('procurement') {{ __('role.procurement') }} @break
+                                                @default {{ __('role.pharmacist') }}
+                                            @endswitch
+                                        </td>
                                         <td>{{ $user->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
+                                        <td colspan="5" class="text-center py-4 text-muted">{{ __('user.no_users') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -111,18 +117,18 @@
 
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Recent medicine requests</h5>
+            <h5 class="card-title">{{ __('request.title') }}</h5>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <th>Requester</th>
-                            <th>Medicine</th>
-                            <th>Quantity</th>
-                            <th>Status</th>
-                            <th>Submitted</th>
+                            <th>{{ __('request.requester') }}</th>
+                            <th>{{ __('request.medicine') }}</th>
+                            <th>{{ __('request.quantity') }}</th>
+                            <th>{{ __('medicine.status') }}</th>
+                            <th>{{ __('request.title') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,12 +137,12 @@
                                 <td>{{ $request->user?->name }}</td>
                                 <td>{{ $request->medicine?->name }}</td>
                                 <td>{{ $request->requested_quantity }}</td>
-                                <td>{{ ucfirst($request->status) }}</td>
+                                <td>{{ __($request->status === 'pending' ? 'request.status.pending' : ($request->status === 'approved' ? 'request.status.approved' : 'request.status.rejected')) }}</td>
                                 <td>{{ $request->created_at->format('d M Y H:i') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4 text-muted">No requests recorded yet.</td>
+                                <td colspan="5" class="text-center py-4 text-muted">{{ __('request.no_requests') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
