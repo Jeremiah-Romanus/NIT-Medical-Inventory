@@ -39,7 +39,7 @@
                                         @default {{ __('role.pharmacist') }}
                                     @endswitch
                                 </td>
-                                <td>{{ $user->created_at->format('d M Y') }}</td>
+                                <td>{{ \App\Helpers\DateHelper::formatDate($user->created_at) }}</td>
                                 <td class="text-end">
                                     <form method="POST" action="{{ route('admin.users.role', $user) }}" class="d-inline-flex gap-2 align-items-center justify-content-end">
                                         @csrf

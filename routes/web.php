@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/audit-trail', [AdminController::class, 'auditTrail'])->name('admin.audit-trail');
     Route::put('/users/{user}/role', [AdminController::class, 'updateUserRole'])->name('admin.users.role');
 });
 

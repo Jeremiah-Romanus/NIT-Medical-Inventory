@@ -292,6 +292,47 @@
             user-select: none;
         }
 
+        .btn-login,
+        .btn-alt,
+        .locale-btn,
+        .password-toggle {
+            transition:
+                transform 0.22s ease-in-out,
+                background-color 0.22s ease-in-out,
+                border-color 0.22s ease-in-out,
+                box-shadow 0.22s ease-in-out,
+                color 0.22s ease-in-out;
+        }
+
+        .btn-login:hover,
+        .btn-alt:hover,
+        .locale-btn:hover,
+        .password-toggle:hover {
+            transform: scale(1.025);
+            box-shadow: 0 0.45rem 1rem rgba(13, 110, 253, 0.14);
+        }
+
+        .btn-login:active,
+        .btn-alt:active,
+        .locale-btn:active,
+        .password-toggle:active {
+            transform: scale(0.97);
+            box-shadow: 0 0.2rem 0.45rem rgba(13, 110, 253, 0.12);
+        }
+
+        .hero-stat {
+            transition:
+                transform 0.25s ease-in-out,
+                box-shadow 0.25s ease-in-out,
+                border-color 0.25s ease-in-out;
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.85rem 1.8rem rgba(15, 23, 42, 0.10);
+            border-color: rgba(74, 174, 240, 0.26);
+        }
+
         @media (max-width: 991.98px) {
             .login-card {
                 grid-template-columns: 1fr;

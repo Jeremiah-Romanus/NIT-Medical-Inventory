@@ -40,7 +40,10 @@
                 <div class="card-body">
                     <div class="text-muted small mb-2">{{ __('dashboard.inventory_value_short') }}</div>
                     <div class="display-6 fw-bold">{{ __('currency.tzs') }} {{ number_format($stats['inventoryValue'], 2) }}</div>
-                    <div class="small text-muted mt-2">{{ $stats['totalDistributions'] }} {{ __('dashboard.total_distributions') }}</div>
+                    <div class="small text-muted mt-2">
+                        {{ $stats['totalDistributions'] }} {{ __('dashboard.total_distributions') }},
+                        {{ $stats['auditLogs'] }} audit logs
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,7 +103,7 @@
                                                 @default {{ __('role.pharmacist') }}
                                             @endswitch
                                         </td>
-                                        <td>{{ $user->created_at->format('d M Y') }}</td>
+                                        <td>{{ \App\Helpers\DateHelper::formatDate($user->created_at) }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -111,6 +114,41 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Recent audit activity</h5>
+            <a href="{{ route('admin.audit-trail') }}" class="btn btn-primary btn-sm">View audit trail</a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Record</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentAuditLogs as $log)
+                            <tr>
+                                <td>{{ \App\Helpers\DateHelper::formatDateTime($log->created_at) }}</td>
+                                <td>{{ $log->user?->name ?? 'System' }}</td>
+                                <td>{{ str_replace(['.', '_'], [' ', ' '], $log->action) }}</td>
+                                <td>{{ $log->subject ?? 'Not specified' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No audit records yet.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -138,7 +176,7 @@
                                 <td>{{ $request->medicine?->name }}</td>
                                 <td>{{ $request->requested_quantity }}</td>
                                 <td>{{ __($request->status === 'pending' ? 'request.status.pending' : ($request->status === 'approved' ? 'request.status.approved' : 'request.status.rejected')) }}</td>
-                                <td>{{ $request->created_at->format('d M Y H:i') }}</td>
+                                <td>{{ \App\Helpers\DateHelper::formatDateTime($request->created_at) }}</td>
                             </tr>
                         @empty
                             <tr>

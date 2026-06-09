@@ -69,6 +69,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Date & Time Formats
+    |--------------------------------------------------------------------------
+    |
+    | These values determine the default date and datetime formats used
+    | throughout the system. Setting these here allows for a central 
+    | location to manage how inventory dates are presented.
+    |
+    */
+
+'date_format' => env('APP_DATE_FORMAT', 'd/m/Y'),
+
+    'datetime_format' => env('APP_DATETIME_FORMAT', 'd/m/Y H:i'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |

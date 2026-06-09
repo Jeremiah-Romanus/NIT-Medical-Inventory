@@ -6,6 +6,8 @@ use App\Models\Distribution;
 use App\Models\Medicine;
 use App\Models\MedicineRequest;
 use App\Models\User;
+use App\Models\AuditLog;
+use App\Support\AuditTrail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -24,6 +26,7 @@ class AdminController extends Controller
             'totalMedicines' => Medicine::count(),
             'pendingRequests' => MedicineRequest::where('status', 'pending')->count(),
             'totalDistributions' => Distribution::count(),
+            'auditLogs' => AuditLog::count(),
             'inventoryValue' => (float) (Medicine::query()
                 ->selectRaw('COALESCE(SUM(quantity * unit_price), 0) as total_value')
                 ->value('total_value') ?? 0),
@@ -35,8 +38,9 @@ class AdminController extends Controller
 
         $recentUsers = User::latest()->limit(6)->get();
         $recentRequests = MedicineRequest::with(['user', 'medicine'])->latest()->limit(6)->get();
+        $recentAuditLogs = AuditLog::with('user')->latest()->limit(6)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentRequests'));
+        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentRequests', 'recentAuditLogs'));
     }
 
     public function users()
@@ -53,6 +57,32 @@ class AdminController extends Controller
         return view('admin.users', compact('users'));
     }
 
+    public function auditTrail(Request $request)
+    {
+        $query = AuditLog::with('user')->latest();
+
+        if ($request->filled('q')) {
+            $term = $request->input('q');
+            $query->where(function ($builder) use ($term) {
+                $builder->where('action', 'like', '%' . $term . '%')
+                    ->orWhere('subject', 'like', '%' . $term . '%')
+                    ->orWhereHas('user', function ($userQuery) use ($term) {
+                        $userQuery->where('name', 'like', '%' . $term . '%')
+                            ->orWhere('email', 'like', '%' . $term . '%');
+                    });
+            });
+        }
+
+        if ($request->filled('action')) {
+            $query->where('action', $request->input('action'));
+        }
+
+        $actions = AuditLog::select('action')->distinct()->orderBy('action')->pluck('action');
+        $logs = $query->paginate(25)->withQueryString();
+
+        return view('admin.audit-trail', compact('logs', 'actions'));
+    }
+
     public function updateUserRole(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -65,9 +95,21 @@ class AdminController extends Controller
             ]);
         }
 
+        $oldRole = $user->role;
+
         $user->forceFill([
             'role' => $validated['role'],
         ])->save();
+
+        if ($oldRole !== $user->role) {
+            AuditTrail::record(
+                'user.role_updated',
+                $user,
+                $user->name,
+                ['role' => $oldRole],
+                ['role' => $user->role]
+            );
+        }
 
         return back()->with('success', 'User role updated successfully.');
     }

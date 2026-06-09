@@ -80,12 +80,6 @@
             <div class="d-flex gap-2 align-items-center">
               <form method="GET" action="{{ route('medicines.index') }}" class="d-flex gap-2 align-items-center" role="search">
                 <input type="search" name="q" value="{{ request('q') }}" class="form-control form-control-sm" placeholder="{{ __('common.search') }} {{ __('medicine.name') }}...">
-                <!-- <select name="category" class="form-select form-select-sm">
-                  <option value="">{{ __('common.all') }}</option>
-                  @foreach($categories as $cat)
-                    <option value="{{ $cat }}" @selected(request('category') === $cat)>{{ $cat }}</option>
-                  @endforeach
-                </select> -->
                 <select name="status" class="form-select form-select-sm">
                   <option value="">{{ __('common.all') }}</option>
                   <option value="active" @selected(request('status') === 'active')>{{ __('medicine.active') }}</option>
@@ -121,7 +115,7 @@
                 </thead>
                 <tbody>
                     @forelse($medicines as $medicine)
-                        <tr class="fade-in">
+                        <tr class="fade-in lively-hover">
                             <td>{{ $medicine->medical_id }}</td>
                             <td>
                                 <strong>{{ $medicine->name }}</strong>
@@ -129,7 +123,7 @@
                             <td>{{ $medicine->formulation_strength }}</td>
                             <td>{{ $medicine->batch_number }}</td>
                             <td>
-                                <span class="badge stock-badge @if($medicine->quantity < 50) bg-danger @elseif($medicine->quantity < 100) bg-warning @else bg-success @endif">
+                                <span class="badge stock-badge lively-pop @if($medicine->quantity < 50) bg-danger @elseif($medicine->quantity < 100) bg-warning @else bg-success @endif">
                                     {{ $medicine->quantity }}
                                 </span>
                             </td>
@@ -142,32 +136,32 @@
                             </td>
                             <td>
                                 @if($medicine->isExpired())
-                                    <span class="status-badge expired">
+                                    <span class="status-badge expired lively-pop">
                                         <i class="fas fa-times-circle"></i> {{ __('medicine.expired') }}
                                     </span>
                                 @elseif($medicine->isExpiringSoon())
-                                    <span class="status-badge expiring">
+                                    <span class="status-badge expiring lively-pop">
                                         <i class="fas fa-clock"></i> {{ __('medicine.expiring_soon') }}
                                     </span>
                                 @else
-                                    <span class="status-badge active">
+                                    <span class="status-badge active lively-pop">
                                         <i class="fas fa-check-circle"></i> {{ __('medicine.active') }}
                                     </span>
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('medicines.show', $medicine->id) }}" class="btn btn-sm btn-info text-white" title="{{ __('common.edit') }}">
+                                <a href="{{ route('medicines.show', $medicine->id) }}" class="btn btn-sm btn-info text-white lively-pop" title="{{ __('common.edit') }}">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
                                 @if (auth()->user()->role === 'procurement' || auth()->user()->role === 'admin')
-                                    <a href="{{ route('medicines.edit', $medicine->id) }}" class="btn btn-sm btn-warning" title="{{ __('common.edit') }}">
+                                    <a href="{{ route('medicines.edit', $medicine->id) }}" class="btn btn-sm btn-warning lively-pop" title="{{ __('common.edit') }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" action="{{ route('medicines.destroy', $medicine->id) }}" style="display:inline;" onsubmit="return confirm('{{ __('alert.warning') }}: {{ __('common.delete') }}?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" title="{{ __('common.delete') }}">
+                                        <button type="submit" class="btn btn-sm btn-danger lively-pop" title="{{ __('common.delete') }}">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -177,7 +171,7 @@
                     @empty
                         <tr>
                             <td colspan="10" class="text-center py-4">
-                                <i class="fas fa-inbox" style="font-size: 30px; color: #ccc;"></i>
+                                <i class="fas fa-inbox lively-wiggle" style="font-size: 30px; color: #ccc;"></i>
                                 <p class="mt-2 text-muted">{{ __('medicine.no_medicines') }}
                                     @if(auth()->user()->role === 'procurement' || auth()->user()->role === 'admin')
                                         <a href="{{ route('medicines.create') }}">{{ __('medicine.add_first') }}</a>

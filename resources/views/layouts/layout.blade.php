@@ -141,7 +141,12 @@
             padding: 14px 14px;
             border-radius: 16px;
             color: var(--text);
-            transition: all 0.2s ease;
+            transition:
+                transform 0.22s ease-in-out,
+                padding-left 0.22s ease-in-out,
+                background-color 0.22s ease-in-out,
+                border-color 0.22s ease-in-out,
+                color 0.22s ease-in-out;
             margin-bottom: 8px;
             border: 1px solid transparent;
         }
@@ -157,6 +162,11 @@
             background: rgba(143, 211, 255, 0.18);
             border-color: rgba(143, 211, 255, 0.42);
             color: var(--text);
+        }
+
+        .side-link:hover {
+            padding-left: 18px;
+            transform: translateX(2px);
         }
 
         .side-footer {
@@ -336,6 +346,18 @@
             border-radius: 0;
             box-shadow: none;
             color: var(--text);
+            transition:
+                transform 0.25s ease-in-out,
+                box-shadow 0.25s ease-in-out,
+                border-color 0.25s ease-in-out,
+                background-color 0.25s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.85rem 1.8rem rgba(15, 23, 42, 0.10);
+            background: rgba(255, 255, 255, 0.64);
+            border-color: rgba(74, 174, 240, 0.26);
         }
 
         .card-header {
@@ -410,6 +432,26 @@
         .btn {
             border-radius: 14px;
             font-weight: 700;
+            transition:
+                transform 0.22s ease-in-out,
+                background-color 0.22s ease-in-out,
+                border-color 0.22s ease-in-out,
+                box-shadow 0.22s ease-in-out,
+                color 0.22s ease-in-out;
+        }
+
+        .btn:hover,
+        .logout-btn:hover,
+        .locale-btn:hover {
+            transform: scale(1.025);
+            box-shadow: 0 0.45rem 1rem rgba(13, 110, 253, 0.14);
+        }
+
+        .btn:active,
+        .logout-btn:active,
+        .locale-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 0.2rem 0.45rem rgba(13, 110, 253, 0.12);
         }
 
         .btn-primary {
@@ -485,7 +527,12 @@
             color: var(--text);
             font-size: 0.82rem;
             font-weight: 600;
-            transition: all 0.2s ease;
+            transition:
+                transform 0.22s ease-in-out,
+                background-color 0.22s ease-in-out,
+                border-color 0.22s ease-in-out,
+                box-shadow 0.22s ease-in-out,
+                color 0.22s ease-in-out;
             cursor: pointer;
         }
 
@@ -612,6 +659,10 @@
                     <a href="{{ route('admin.users') }}" class="side-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                         <i class="fa-solid fa-users-gear"></i>
                         <span>{{ __('nav.users') }}</span>
+                    </a>
+                    <a href="{{ route('admin.audit-trail') }}" class="side-link {{ request()->routeIs('admin.audit-trail') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Audit Trail</span>
                     </a>
                     <a href="{{ route('medicines.index') }}" class="side-link {{ request()->routeIs('medicines.*', 'procurement.stock') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i>

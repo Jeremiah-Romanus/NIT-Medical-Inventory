@@ -88,7 +88,7 @@
                             </span>
                         </td>
                         <td>{{ $request->remarks ?: '—' }}</td>
-                        <td>{{ $request->created_at->format('M d, Y') }}</td>
+                        <td>{{ \App\Helpers\DateHelper::formatDate($request->created_at) }}</td>
                         <td>
                             @if($request->status === 'pending')
                                 <div class="d-flex flex-wrap gap-2 align-items-center">

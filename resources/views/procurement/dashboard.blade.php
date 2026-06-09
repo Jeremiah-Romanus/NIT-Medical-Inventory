@@ -151,7 +151,7 @@
                                             {{ __($req->status === 'pending' ? 'request.status.pending' : ($req->status === 'approved' ? 'request.status.approved' : 'request.status.rejected')) }}
                                         </span>
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y H:i') }}</td>
+                                    <td>{{ \App\Helpers\DateHelper::formatDateTime($req->created_at) }}</td>
                                 </tr>
                             @empty
                                 <tr>

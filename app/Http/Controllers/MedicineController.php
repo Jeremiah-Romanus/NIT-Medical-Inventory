@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Medicine;
+use App\Support\AuditTrail;
+use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class MedicineController extends Controller
 {
@@ -72,16 +75,26 @@ class MedicineController extends Controller
             'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines',
             'quantity' => 'required|integer|min:0',
-            'stored_date' => 'required|date_format:Y-m-d',
-            'expiry_date' => 'required|date_format:Y-m-d|after_or_equal:today|after_or_equal:stored_date',
+            'stored_date' => 'required|date_format:d/m/Y',
+            'expiry_date' => 'required|date_format:d/m/Y',
             'unit_price' => 'required|numeric|min:0',
         ], [
-            'expiry_date.after_or_equal' => 'Expiry date must be today or a future date, and it cannot be earlier than the stored date.',
+            'stored_date.date_format' => 'Stored date must use DD/MM/YYYY format.',
+            'expiry_date.date_format' => 'Expiry date must use DD/MM/YYYY format.',
         ]);
 
+        $validated = $this->prepareMedicineDates($validated);
         $validated['category'] = '';
 
-        Medicine::create($validated);
+        $medicine = Medicine::create($validated);
+
+        AuditTrail::record(
+            'medicine.created',
+            $medicine,
+            $medicine->name,
+            null,
+            $medicine->fresh()->toArray()
+        );
 
         return redirect()->route('medicines.index')
                         ->with('success', 'Medicine added successfully!');
@@ -114,16 +127,28 @@ class MedicineController extends Controller
             'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines,batch_number,' . $medicine->id,
             'quantity' => 'required|integer|min:0',
-            'stored_date' => 'required|date_format:Y-m-d',
-            'expiry_date' => 'required|date_format:Y-m-d|after_or_equal:today|after_or_equal:stored_date',
+            'stored_date' => 'required|date_format:d/m/Y',
+            'expiry_date' => 'required|date_format:d/m/Y',
             'unit_price' => 'required|numeric|min:0',
         ], [
-            'expiry_date.after_or_equal' => 'Expiry date must be today or a future date, and it cannot be earlier than the stored date.',
+            'stored_date.date_format' => 'Stored date must use DD/MM/YYYY format.',
+            'expiry_date.date_format' => 'Expiry date must use DD/MM/YYYY format.',
         ]);
 
+        $validated = $this->prepareMedicineDates($validated);
         $validated['category'] = '';
 
+        $oldValues = $medicine->only(array_keys($validated));
+
         $medicine->update($validated);
+
+        AuditTrail::record(
+            'medicine.updated',
+            $medicine,
+            $medicine->name,
+            $oldValues,
+            $medicine->fresh()->only(array_keys($validated))
+        );
 
         return redirect()->route('medicines.index')
                         ->with('success', 'Medicine updated successfully!');
@@ -134,9 +159,42 @@ class MedicineController extends Controller
      */
     public function destroy(Medicine $medicine)
     {
+        $oldValues = $medicine->toArray();
+        $subject = $medicine->name;
+
         $medicine->delete();
+
+        AuditTrail::record(
+            'medicine.deleted',
+            $medicine,
+            $subject,
+            $oldValues
+        );
 
         return redirect()->route('medicines.index')
                         ->with('success', 'Medicine deleted successfully!');
+    }
+
+    private function prepareMedicineDates(array $validated): array
+    {
+        $storedDate = Carbon::createFromFormat('d/m/Y', $validated['stored_date'])->startOfDay();
+        $expiryDate = Carbon::createFromFormat('d/m/Y', $validated['expiry_date'])->startOfDay();
+
+        if ($expiryDate->lt(now()->startOfDay())) {
+            throw ValidationException::withMessages([
+                'expiry_date' => 'Expiry date must be today or a future date.',
+            ]);
+        }
+
+        if ($expiryDate->lt($storedDate)) {
+            throw ValidationException::withMessages([
+                'expiry_date' => 'Expiry date cannot be earlier than the stored date.',
+            ]);
+        }
+
+        $validated['stored_date'] = $storedDate->format('Y-m-d');
+        $validated['expiry_date'] = $expiryDate->format('Y-m-d');
+
+        return $validated;
     }
 }

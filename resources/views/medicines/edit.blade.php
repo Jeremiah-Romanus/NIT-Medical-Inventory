@@ -48,12 +48,14 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Stored Date</label>
-                            <input type="date" name="stored_date" class="form-control @error('stored_date') is-invalid @enderror" value="{{ old('stored_date', optional($medicine->stored_date)->format('Y-m-d')) }}" required>
+                            <input type="text" name="stored_date" class="form-control @error('stored_date') is-invalid @enderror" value="{{ old('stored_date', \App\Helpers\DateHelper::formatDate($medicine->stored_date)) }}" placeholder="DD/MM/YYYY" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" required>
+                            <div class="form-text">Use DD/MM/YYYY format.</div>
                             @error('stored_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Expiry Date</label>
-                            <input type="date" name="expiry_date" class="form-control @error('expiry_date') is-invalid @enderror" value="{{ old('expiry_date', optional($medicine->expiry_date)->format('Y-m-d')) }}" required>
+                            <input type="text" name="expiry_date" class="form-control @error('expiry_date') is-invalid @enderror" value="{{ old('expiry_date', \App\Helpers\DateHelper::formatDate($medicine->expiry_date)) }}" placeholder="DD/MM/YYYY" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" required>
+                            <div class="form-text">Use DD/MM/YYYY format.</div>
                             @error('expiry_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                     </div>

@@ -103,6 +103,22 @@
             font-weight: 700;
             border: 1px solid transparent;
             font-size: 0.95rem;
+            transition:
+                transform 0.22s ease-in-out,
+                background-color 0.22s ease-in-out,
+                border-color 0.22s ease-in-out,
+                box-shadow 0.22s ease-in-out,
+                color 0.22s ease-in-out;
+        }
+
+        .btn-hero:hover {
+            transform: scale(1.025);
+            box-shadow: 0 0.45rem 1rem rgba(13, 110, 253, 0.16);
+        }
+
+        .btn-hero:active {
+            transform: scale(0.97);
+            box-shadow: 0 0.2rem 0.45rem rgba(13, 110, 253, 0.12);
         }
 
         .btn-hero.primary {

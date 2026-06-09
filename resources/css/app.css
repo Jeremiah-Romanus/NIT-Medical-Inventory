@@ -15,3 +15,153 @@
 body {
     font-family: var(--app-font-sans);
 }
+
+/* ===========================================================
+   Liveliness Hover Utilities
+   - Add to images/cards/icons: .lively-hover or .lively-img
+   - Provides subtle movement on hover/focus to indicate interactivity
+   =========================================================== */
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lively-hover,
+  .lively-img,
+  .card-lively {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .lively-hover::after,
+  .lively-img::after {
+    animation: none !important;
+  }
+}
+
+/* Base transition for lively elements */
+.lively-hover,
+.lively-img,
+.card-lively {
+  transition: transform 280ms cubic-bezier(.2,.9,.2,1), box-shadow 280ms ease, filter 280ms ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Slight scale + lift on hover/focus */
+.lively-hover:hover,
+.lively-hover:focus,
+.lively-img:hover,
+.lively-img:focus,
+.card-lively:hover,
+.card-lively:focus {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(16,24,40,0.12);
+  filter: saturate(1.03);
+  outline: none;
+}
+
+/* Subtle tilt for images */
+.lively-img {
+  transform-origin: 50% 60%;
+}
+
+.lively-img:hover,
+.lively-img:focus {
+  transform: translateY(-4px) scale(1.03) rotate(-0.8deg);
+}
+
+/* Gentle wiggle (very subtle) used on hover of specific important items */
+@keyframes wiggle-subtle {
+  0% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-2px) rotate(-0.5deg); }
+  40% { transform: translateX(2px) rotate(0.5deg); }
+  60% { transform: translateX(-1px) rotate(-0.3deg); }
+  80% { transform: translateX(1px) rotate(0.3deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+
+/* Play the wiggle once on hover for attention (not continuous) */
+.lively-wiggle:hover,
+.lively-wiggle:focus {
+  animation: wiggle-subtle 700ms ease both;
+}
+
+/* JS-triggerable wiggle (useful for keyboard or touch) */
+.wiggle-anim {
+  animation: wiggle-subtle 700ms ease both;
+}
+
+/* Floating glow behind hero/product images when hovered */
+.lively-glow {
+  position: relative;
+}
+
+.lively-glow::after {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at center, rgba(221,100,52,0.12), transparent 40%);
+  opacity: 0;
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+
+.lively-glow:hover::after,
+.lively-glow:focus::after {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* Pop micro-interaction for clickable badges/buttons */
+.lively-pop {
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1);
+}
+
+.lively-pop:hover,
+.lively-pop:focus {
+  transform: scale(1.06);
+  box-shadow: 0 8px 26px rgba(16,24,40,0.12);
+}
+
+/* Small bounce for cards when hovered (single, tasteful bounce) */
+@keyframes bounce-subtle {
+  0% { transform: translateY(0); }
+  30% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+.card-lively-bounce:hover {
+  animation: bounce-subtle 420ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* Focus-visible styling for keyboard users */
+.lively-hover:focus-visible,
+.lively-img:focus-visible,
+.card-lively:focus-visible {
+  box-shadow: 0 0 0 4px rgba(221,100,52,0.12);
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* Utility: apply gentle parallax on mousemove for a container
+   (activate by adding .lively-parallax and small JS listener if desired)
+*/
+.lively-parallax {
+  perspective: 1000px;
+  --lp-rot-x: 0deg;
+  --lp-rot-y: 0deg;
+  transform-style: preserve-3d;
+  transition: transform 120ms linear;
+}
+.lively-parallax .parallax-inner {
+  transform: rotateX(var(--lp-rot-x)) rotateY(var(--lp-rot-y));
+  transition: transform 120ms linear;
+}
+
+/* Example usage comments:
+   - <img src="..." class="img-fluid lively-img lively-glow" />
+   - <div class="card card-lively card-lively-bounce">...</div>
+   - <button class="btn lively-pop">Call to Order</button>
+   - <div class="badge lively-pop lively-wiggle">Special</div>
+*/
+
+/* End of lively hover utilities */

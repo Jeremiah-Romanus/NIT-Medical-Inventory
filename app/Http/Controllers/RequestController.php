@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Medicine;
 use App\Models\MedicineRequest;
+use App\Support\AuditTrail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,13 +28,26 @@ class RequestController extends Controller
             ]);
         }
 
-        MedicineRequest::create([
+        $medicineRequest = MedicineRequest::create([
             'user_id' => Auth::id(),
             'medicine_id' => $medicine->id,
             'requested_quantity' => $validated['requested_quantity'],
             'remarks' => $validated['remarks'] ?? null,
             'status' => 'pending',
         ]);
+
+        AuditTrail::record(
+            'request.created',
+            $medicineRequest,
+            $medicine->name,
+            null,
+            [
+                'medicine' => $medicine->name,
+                'requested_quantity' => $medicineRequest->requested_quantity,
+                'status' => $medicineRequest->status,
+                'remarks' => $medicineRequest->remarks,
+            ]
+        );
 
         return redirect()
             ->route('pharmacist.request')
@@ -91,11 +105,32 @@ class RequestController extends Controller
                 ]);
             }
 
+            $oldRequestValues = $request->only(['status', 'remarks']);
+            $oldMedicineQuantity = $medicine->quantity;
+
             $medicine->quantity -= $request->requested_quantity;
             $medicine->save();
 
             $request->status = 'approved';
             $request->save();
+
+            AuditTrail::record(
+                'request.approved',
+                $request,
+                $medicine->name,
+                [
+                    'request' => $oldRequestValues,
+                    'medicine_quantity' => $oldMedicineQuantity,
+                ],
+                [
+                    'request' => $request->only(['status', 'remarks']),
+                    'medicine_quantity' => $medicine->quantity,
+                ],
+                [
+                    'requested_quantity' => $request->requested_quantity,
+                    'medicine_id' => $medicine->id,
+                ]
+            );
         });
 
         return back()->with('success', 'Request approved and stock updated.');
@@ -111,10 +146,22 @@ class RequestController extends Controller
             return back()->with('error', 'Only pending requests can be rejected.');
         }
 
+        $oldValues = $medicineRequest->only(['status', 'remarks']);
+
         $medicineRequest->update([
             'status' => 'rejected',
             'remarks' => $validated['remarks'] ?? $medicineRequest->remarks,
         ]);
+
+        $medicineRequest->loadMissing('medicine');
+
+        AuditTrail::record(
+            'request.rejected',
+            $medicineRequest,
+            $medicineRequest->medicine?->name,
+            $oldValues,
+            $medicineRequest->fresh()->only(['status', 'remarks'])
+        );
 
         return back()->with('success', 'Request rejected.');
     }

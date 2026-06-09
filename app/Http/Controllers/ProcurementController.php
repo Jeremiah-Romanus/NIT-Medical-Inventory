@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Distribution;
 use Illuminate\Http\Request;
 use App\Models\Medicine;
+use App\Support\AuditTrail;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -151,9 +152,25 @@ class ProcurementController extends Controller
             // Convert datetime-local format to proper datetime
             $validated['transaction_date'] = Carbon::createFromFormat('Y-m-d\TH:i', $validated['transaction_date'])->format('Y-m-d H:i:00');
 
-            Distribution::create($validated);
+            $oldQuantity = $medicine->quantity;
+            $distribution = Distribution::create($validated);
 
             $medicine->decrement('quantity', $validated['quantity_issued']);
+            $medicine->refresh();
+
+            AuditTrail::record(
+                'distribution.created',
+                $distribution,
+                $medicine->name,
+                ['medicine_quantity' => $oldQuantity],
+                [
+                    'medicine_quantity' => $medicine->quantity,
+                    'distributed_to' => $distribution->distributed_to,
+                    'quantity_issued' => $distribution->quantity_issued,
+                    'transaction_date' => $distribution->transaction_date?->toDateTimeString(),
+                ],
+                ['medicine_id' => $medicine->id]
+            );
         });
 
         return redirect()
@@ -320,7 +337,11 @@ class ProcurementController extends Controller
             ->selectRaw('DATE(distributions.transaction_date) as day, SUM(distributions.quantity_issued) as total_issued')
             ->groupBy('day')
             ->orderBy('day')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->day = \App\Helpers\DateHelper::formatDate($item->day);
+                return $item;
+            });
 
         $requestTrend = DB::table('requests')
             ->join('medicines', 'requests.medicine_id', '=', 'medicines.id')
@@ -329,7 +350,11 @@ class ProcurementController extends Controller
             ->selectRaw('DATE(requests.created_at) as day, SUM(requests.requested_quantity) as total_requested')
             ->groupBy('day')
             ->orderBy('day')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $item->day = \App\Helpers\DateHelper::formatDate($item->day);
+                return $item;
+            });
 
         return compact(
             'summary',

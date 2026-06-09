@@ -74,6 +74,41 @@
             text-decoration: none;
             font-weight: 700;
         }
+
+        .btn-primary,
+        .help-link {
+            transition:
+                transform 0.22s ease-in-out,
+                background-color 0.22s ease-in-out,
+                border-color 0.22s ease-in-out,
+                box-shadow 0.22s ease-in-out,
+                color 0.22s ease-in-out;
+        }
+
+        .btn-primary:hover,
+        .help-link:hover {
+            transform: scale(1.025);
+            box-shadow: 0 0.45rem 1rem rgba(13, 110, 253, 0.14);
+        }
+
+        .btn-primary:active,
+        .help-link:active {
+            transform: scale(0.97);
+            box-shadow: 0 0.2rem 0.45rem rgba(13, 110, 253, 0.12);
+        }
+
+        .form-panel {
+            transition:
+                transform 0.25s ease-in-out,
+                box-shadow 0.25s ease-in-out,
+                border-color 0.25s ease-in-out;
+        }
+
+        .form-panel:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.85rem 1.8rem rgba(15, 23, 42, 0.10);
+            border-color: rgba(74, 174, 240, 0.26);
+        }
     </style>
 </head>
 <body>

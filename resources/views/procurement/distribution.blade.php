@@ -66,7 +66,7 @@
                                 type="datetime-local"
                                 id="transaction_date"
                                 name="transaction_date"
-                                value="{{ old('transaction_date', now()->format('Y-m-d\TH:i')) }}"
+                                value="{{ old('transaction_date', \App\Helpers\DateHelper::formatForDateTimeInput(now())) }}"
                                 class="form-control @error('transaction_date') is-invalid @enderror"
                                 required
                             >

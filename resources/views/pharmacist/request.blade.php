@@ -104,7 +104,7 @@
                             </span>
                         </td>
                         <td>{{ $request->remarks ?: 'No remarks' }}</td>
-                        <td>{{ $request->created_at->format('M d, Y') }}</td>
+                        <td>{{ \App\Helpers\DateHelper::formatDate($request->created_at) }}</td>
                     </tr>
                 @empty
                     <tr>

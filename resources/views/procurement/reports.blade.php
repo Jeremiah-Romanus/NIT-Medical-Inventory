@@ -12,11 +12,11 @@
             <div class="row g-3 align-items-end">
                 <div class="col-md-3">
                     <label for="start_date" class="form-label">Start date</label>
-                    <input type="date" id="start_date" name="start_date" value="{{ $startDate }}" class="form-control">
+                    <input type="date" id="start_date" name="start_date" value="{{ \App\Helpers\DateHelper::formatForInput($startDate) }}" class="form-control">
                 </div>
                 <div class="col-md-3">
                     <label for="end_date" class="form-label">End date</label>
-                    <input type="date" id="end_date" name="end_date" value="{{ $endDate }}" class="form-control">
+                    <input type="date" id="end_date" name="end_date" value="{{ \App\Helpers\DateHelper::formatForInput($endDate) }}" class="form-control">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Catalog coverage</label>
