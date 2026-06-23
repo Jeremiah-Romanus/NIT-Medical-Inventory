@@ -1,23 +1,18 @@
 <style>
     .shared-footer {
-        padding: 18px 28px 20px;
+        padding: 12px 20px;
         background: #09074e;
         color: #ffffff;
-        font-size: 1rem;
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        font-size: 0.9rem;
+        display: flex;
+        justify-content: center;
         align-items: center;
-        gap: 20px;
-        border-top: 3px solid #d15400;
-    }
-
-    .shared-footer strong,
-    .shared-footer .text-dark {
-        color: #82a2ec !important;
+        border-top: 2px solid #d15400;
     }
 
     .shared-footer p {
         margin: 0;
+        text-align: center;
     }
 
     .shared-footer-details {
@@ -67,7 +62,7 @@
 
     @media (max-width: 767.98px) {
         .shared-footer {
-            padding: 14px 18px 20px;
+            padding: 12px 14px 16px;
             grid-template-columns: 1fr;
             text-align: center;
         }

@@ -59,8 +59,7 @@
 
         .info-panel {
             padding: 40px;
-            background:
-                url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80') center/cover;
+            background: #d9f1ff;
             position: relative;
             min-height: 620px;
         }
@@ -69,7 +68,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(15, 23, 42, 0.36);
+            background: rgba(255, 255, 255, 0.22);
         }
 
         .info-content {
@@ -313,7 +312,6 @@
 </head>
 <body>
     <div class="register-shell">
-        @include('partials.site-header')
         <div class="stage">
             <div class="card-register">
                 <section class="info-panel">
@@ -406,9 +404,6 @@
             </div>
         </div>
 
-        @include('partials.footer', [
-            'footerClass' => 'standalone-footer',
-        ])
     </div>
 
     @include('partials.site-header-script')

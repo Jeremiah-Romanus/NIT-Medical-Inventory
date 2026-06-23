@@ -70,6 +70,12 @@
     "user.total": "watumiaji wote",
     "user.no_users": "Hakuna watumiaji bado.",
     "user.save": "Hifadhi",
+    "user.add_user": "Ongeza Mtumiaji",
+    "user.full_name": "Jina Kamili",
+    "user.new_password": "Nenosiri Jipya",
+    "user.password_confirm": "Thibitisha Nenosiri",
+    "user.create_user": "Unda Mtumiaji",
+    "user.delete": "Futa",
 
     "request.title": "Maombi ya Dawa",
     "request.my_requests": "Maombi Yangu",

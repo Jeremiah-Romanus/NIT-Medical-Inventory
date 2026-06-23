@@ -60,8 +60,8 @@
             flex: 0 0 280px;
             width: 280px;
             position: sticky;
-            top: 76px;
-            height: calc(100vh - 76px);
+            top: 0;
+            height: 100vh;
             padding: 22px 18px;
             background: #ffffff;
             border-right: 1px solid var(--border);
@@ -109,16 +109,66 @@
             font-size: 0.9rem;
         }
 
-        .brand .chip {
+        .sidebar-toggle {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.22s ease-in-out;
+            padding: 0;
+            margin-right: 12px;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(143, 211, 255, 0.12);
+            border-color: rgba(143, 211, 255, 0.35);
+            color: var(--brand);
+        }
+
+        /* Collapsed sidebar state */
+        .sidebar.collapsed {
+            flex: 0 0 80px;
+            width: 80px;
+            padding: 22px 12px;
+        }
+
+        .sidebar.collapsed .brand-head {
+            flex-direction: column;
             gap: 8px;
-            margin-top: 12px;
-            padding: 8px 12px;
-            border-radius: 999px;
-            background: rgba(37, 99, 235, 0.10);
-            color: #0f172a;
-            font-size: 0.82rem;
+        }
+
+        .sidebar.collapsed .brand-head > div {
+            display: none;
+        }
+
+        .sidebar.collapsed .brand h1,
+        .sidebar.collapsed .brand p {
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-label {
+            display: none;
+        }
+
+        .sidebar.collapsed .side-link {
+            padding: 14px;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .sidebar.collapsed .side-link span {
+            display: none;
+        }
+
+        .sidebar.collapsed .side-link i {
+            width: auto;
+            margin: 0;
         }
 
         .nav-group {
@@ -242,11 +292,110 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px;
-            padding: 22px 28px;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(18px);
+            gap: 12px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .user-hub {
+            position: relative;
+        }
+
+        .user-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            background: #ffffff;
+            color: var(--text);
+            font-weight: 600;
+            min-height: 42px;
+        }
+
+        .user-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #4aaef0;
+            color: white;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        .user-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #4aaef0;
+            color: white;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .user-info {
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        .user-role {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-top: 2px;
+        }
+
+        .topbar-logout {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            background: white;
+            color: #0f172a;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .topbar-logout i {
+            font-size: 0.95rem;
+        }
+
+        .page-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
         }
 
         .page-head h2 {
@@ -516,40 +665,6 @@
             border-color: var(--border);
         }
 
-        .locale-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.8);
-            color: var(--text);
-            font-size: 0.82rem;
-            font-weight: 600;
-            transition:
-                transform 0.22s ease-in-out,
-                background-color 0.22s ease-in-out,
-                border-color 0.22s ease-in-out,
-                box-shadow 0.22s ease-in-out,
-                color 0.22s ease-in-out;
-            cursor: pointer;
-        }
-
-        .locale-btn:hover {
-            background: rgba(143, 211, 255, 0.18);
-            border-color: rgba(143, 211, 255, 0.42);
-        }
-
-        .locale-btn.active {
-            background: rgba(37, 99, 235, 0.12);
-            border-color: rgba(37, 99, 235, 0.25);
-        }
-
-        .locale-switcher {
-            display: flex;
-            gap: 4px;
-        }
 
         .table-filter-input {
             max-width: 280px;
@@ -577,6 +692,10 @@
                 transform: translateX(-100%);
                 transition: transform 0.25s ease;
                 z-index: 1050;
+            }
+
+            .sidebar-toggle {
+                display: none;
             }
 
             .content-shell {
@@ -628,12 +747,11 @@
         }
     </style>
 </head>
-<body x-data="{ sidebarOpen: false }" :class="{ 'sidebar-open': sidebarOpen }">
+<body x-data="{ sidebarOpen: false, sidebarCollapsed: false }" :class="{ 'sidebar-open': sidebarOpen }">
     <div class="page-shell">
-    @include('partials.site-header')
     <div class="app-shell">
         <div class="sidebar-backdrop" @@click="sidebarOpen = false"></div>
-        <aside class="sidebar">
+        <aside class="sidebar" :class="{ 'collapsed': sidebarCollapsed }">
                 <div class="brand">
                 <div class="brand-head">
                     <img src="{{ asset('images/NIT_logoBg.png') }}" alt="NIT Logo" class="brand-logo">
@@ -641,10 +759,6 @@
                         <h1>{{ __('app.name') }}</h1>
                         <p>{{ __('app.subtitle') }}</p>
                     </div>
-                </div>
-                <div class="chip">
-                    <i class="fa-solid fa-shield-heart"></i>
-                    {{ __('nav.role_badge') }}
                 </div>
             </div>
 
@@ -712,40 +826,6 @@
                     </a>
                 @endif
             </div>
-
-            <div class="side-footer">
-                <div class="profile">
-                    <div class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
-                    <div>
-                        <h6>{{ auth()->user()->name }}</h6>
-                        <p>
-                            @switch(auth()->user()->role)
-                                @case('admin')
-                                    {{ __('role.admin') }}
-                                    @break
-                                @case('procurement')
-                                    {{ __('role.procurement') }}
-                                    @break
-                                @default
-                                    {{ __('role.pharmacist') }}
-                            @endswitch
-                        </p>
-                    </div>
-                </div>
-
-                <a href="{{ route('profile.edit') }}" class="side-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-user-pen"></i>
-                    <span>{{ __('nav.profile') }}</span>
-                </a>
-
-                <form method="POST" action="{{ route('logout') }}" class="m-0">
-                    @csrf
-                    <button type="submit" class="logout-btn">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>{{ __('nav.logout') }}</span>
-                    </button>
-                </form>
-            </div>
         </aside>
 
         <main class="content-shell">
@@ -754,19 +834,30 @@
                     <button class="btn btn-outline-primary d-lg-none me-2" @@click="sidebarOpen = !sidebarOpen">
                         <i class="fa-solid fa-bars"></i>
                     </button>
+                    <button type="button" class="sidebar-toggle d-none d-lg-inline-flex" @click="sidebarCollapsed = !sidebarCollapsed" :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'" title="Toggle sidebar">
+                        <i :class="sidebarCollapsed ? 'fa-solid fa-chevron-right' : 'fa-solid fa-chevron-left'"></i>
+                    </button>
                     <h2>@yield('page-title', __('nav.dashboard'))</h2>
                     @hasSection('page-subtitle')
                         <p>@yield('page-subtitle')</p>
                     @endif
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <div class="locale-switcher">
-                        <a href="{{ route('locale.switch', 'en') }}" class="locale-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
-                            <span>🇬🇧</span> EN
-                        </a>
-                        <a href="{{ route('locale.switch', 'sw') }}" class="locale-btn {{ app()->getLocale() === 'sw' ? 'active' : '' }}">
-                            <span>🇹🇿</span> SW
-                        </a>
+                <div class="topbar-actions">
+                    <div class="user-hub dropdown">
+                        <button class="btn btn-sm btn-outline-secondary user-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="user-badge">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                            <span class="user-name ms-2">{{ auth()->user()->name }}</span>
+                            <i class="fa-solid fa-chevron-down ms-2"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -803,13 +894,6 @@
             </div>
 
         </main>
-    </div>
-    <div class="dashboard-footer-shell">
-        @include('partials.footer', [
-            'footerClass' => 'page-footer dashboard-footer',
-            'footerAlignClass' => 'text-md-end',
-        ])
-    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -16,8 +16,8 @@
     <style>
         :root {
             --bg: #f4fafe;
-            --panel: rgba(255, 255, 255, 0.94);
-            --border: rgba(143, 211, 255, 0.4);
+            --panel: #ffffff;
+            --border: #cfe5f5;
             --text: #0f172a;
             --muted: #64748b;
             --brand: #8fd3ff;
@@ -51,27 +51,19 @@
             width: min(1120px, 100%);
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
-            border-radius: 0;
-            overflow: visible;
+            border-radius: 18px;
+            overflow: hidden;
             border: 0;
-            background: transparent;
-            box-shadow: none;
-            backdrop-filter: none;
+            background: var(--panel);
+            box-shadow: 0 12px 40px rgba(2, 6, 23, 0.08);
+            backdrop-filter: blur(6px);
         }
 
         .hero-panel {
             padding: 40px;
-            background:
-                url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=1200&q=80') center/cover;
+            background: linear-gradient(90deg, rgba(37,99,235,0.04) 0%, rgba(99,102,241,0.02) 100%);
             position: relative;
-            min-height: 620px;
-        }
-
-        .hero-panel::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.30);
+            min-height: 520px;
         }
 
         .hero-content {
@@ -80,7 +72,7 @@
             max-width: 540px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             min-height: 100%;
         }
 
@@ -115,33 +107,27 @@
         }
 
         .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 28px;
-        }
-
-        .hero-stat {
-            padding: 16px;
-            border-radius: 0;
-            background: transparent;
-            border: 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .hero-stat strong {
-            display: block;
-            font-size: 1.4rem;
-        }
-
-        .hero-stat span {
-            color: var(--muted);
-            font-size: 0.85rem;
+            display: none;
         }
 
         .form-panel {
-            padding: 36px;
-            background: rgba(255, 255, 255, 0.96);
+            padding: 42px;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-inner {
+            width: 100%;
+            max-width: 420px;
+            background: var(--panel);
+            padding: 28px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
         }
 
         .form-panel h2 {
@@ -157,8 +143,9 @@
             background: #ffffff;
             border: 1px solid var(--border);
             color: var(--text);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 0.9rem 1rem;
+            box-shadow: none;
         }
 
         .form-control:focus {
@@ -193,11 +180,16 @@
 
         .btn-login {
             border: 0;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 0.95rem 1rem;
             font-weight: 800;
             color: white;
-            background: #4aaef0;
+            background: #4aaef0; /* system CTA */
+        }
+
+        .btn-login:hover {
+            background: #3b95d9;
+            box-shadow: 0 8px 26px rgba(59, 149, 217, 0.16);
         }
 
         .locale-btn {
@@ -227,12 +219,7 @@
         }
 
         .locale-switcher {
-            display: flex;
-            gap: 4px;
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            z-index: 2;
+            display: none;
         }
 
         .btn-alt {
@@ -297,27 +284,36 @@
         .locale-btn,
         .password-toggle {
             transition:
-                transform 0.22s ease-in-out,
-                background-color 0.22s ease-in-out,
-                border-color 0.22s ease-in-out,
-                box-shadow 0.22s ease-in-out,
-                color 0.22s ease-in-out;
+                transform 0.18s ease-in-out,
+                background-color 0.18s ease-in-out,
+                border-color 0.18s ease-in-out,
+                box-shadow 0.18s ease-in-out,
+                color 0.18s ease-in-out;
         }
 
         .btn-login:hover,
         .btn-alt:hover,
-        .locale-btn:hover,
         .password-toggle:hover {
-            transform: scale(1.025);
-            box-shadow: 0 0.45rem 1rem rgba(13, 110, 253, 0.14);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 26px rgba(2, 6, 23, 0.06);
         }
 
         .btn-login:active,
         .btn-alt:active,
-        .locale-btn:active,
         .password-toggle:active {
-            transform: scale(0.97);
-            box-shadow: 0 0.2rem 0.45rem rgba(13, 110, 253, 0.12);
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Keep the password toggle visually static (vertically centered) */
+        .password-toggle:hover {
+            transform: translateY(-50%);
+            box-shadow: none;
+        }
+
+        .password-toggle:active {
+            transform: translateY(-50%);
+            box-shadow: none;
         }
 
         .hero-stat {
@@ -346,7 +342,6 @@
 </head>
 <body>
     <div class="login-shell">
-        @include('partials.site-header')
         <div class="login-stage">
             <div class="login-card">
                 <section class="hero-panel">
@@ -378,14 +373,7 @@
                 </section>
 
                 <section class="form-panel" x-data="{ passwordVisible: false }">
-                    <div class="locale-switcher">
-                        <a href="{{ route('locale.switch', 'en') }}" class="locale-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
-                            <span>🇬🇧</span> EN
-                        </a>
-                        <a href="{{ route('locale.switch', 'sw') }}" class="locale-btn {{ app()->getLocale() === 'sw' ? 'active' : '' }}">
-                            <span>🇹🇿</span> SW
-                        </a>
-                    </div>
+                    <div class="form-inner">
                     <h2>{{ __('auth.login') }}</h2>
                     <p class="mb-4">{{ __('auth.login_title') }}</p>
 
@@ -424,8 +412,8 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">{{ __('auth.password') }}</label>
                             <div class="password-field">
-                                <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password" @disabled(!empty($isLocked))>
-                                <button type="button" class="password-toggle" @@click="passwordVisible = !passwordVisible" aria-label="Show password" @disabled(!empty($isLocked))>
+                                <input :type="passwordVisible ? 'text' : 'password'" id="password" name="password" class="form-control" required autocomplete="new-password" @disabled(!empty($isLocked))>
+                                <button type="button" class="password-toggle" @click="passwordVisible = !passwordVisible" :aria-label="passwordVisible ? 'Hide password' : 'Show password'" @disabled(!empty($isLocked))>
                                     <i :class="passwordVisible ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'"></i>
                                 </button>
                             </div>
@@ -447,18 +435,14 @@
                         </a>
                     </div>
 
-                    <div class="help-box">
-                        <h6><i class="fa-solid fa-circle-info me-2"></i>{{ __('auth.login_title') }}</h6>
-                        <p>{{ __('auth.logged_in_as') }}</p>
-                        <p>{{ __('user.subtitle') }}</p>
+                    <div class="mt-4 text-center text-muted small">
+                        <p>Secure login for system users. Enter your credentials to continue.</p>
+                    </div>
                     </div>
                 </section>
             </div>
         </div>
 
-        @include('partials.footer', [
-            'footerClass' => 'standalone-footer',
-        ])
     </div>
 
     @include('partials.site-header-script')

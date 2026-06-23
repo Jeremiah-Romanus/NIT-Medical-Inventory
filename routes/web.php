@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PharmacistController;
 use App\Http\Controllers\ProcurementController;
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/audit-trail', [AdminController::class, 'auditTrail'])->name('admin.audit-trail');
     Route::put('/users/{user}/role', [AdminController::class, 'updateUserRole'])->name('admin.users.role');
 });

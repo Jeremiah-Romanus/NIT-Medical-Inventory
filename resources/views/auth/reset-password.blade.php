@@ -113,7 +113,6 @@
 </head>
 <body>
     <div class="page-shell">
-        @include('partials.site-header')
 
         <div class="form-stage">
             <div class="form-panel">
@@ -165,7 +164,6 @@
             </div>
         </div>
 
-        @include('partials.footer', ['footerClass' => 'standalone-footer'])
     </div>
 
     @include('partials.site-header-script')

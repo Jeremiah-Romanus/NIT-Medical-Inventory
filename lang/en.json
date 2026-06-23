@@ -70,6 +70,12 @@
     "user.total": "total users",
     "user.no_users": "No users available yet.",
     "user.save": "Save",
+    "user.add_user": "Add User",
+    "user.full_name": "Full Name",
+    "user.new_password": "New Password",
+    "user.password_confirm": "Confirm Password",
+    "user.create_user": "Create User",
+    "user.delete": "Delete",
 
     "request.title": "Medicine Requests",
     "request.my_requests": "My Requests",
@@ -149,6 +155,7 @@
     "common.actions": "Actions",
     "common.loading": "Loading...",
     "common.na": "N/A",
+    "common.unknown": "Unknown",
     "common.created": "Created",
     "currency.tzs": "TZS",
 

@@ -87,6 +87,7 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'role' => ['required', Rule::in(['admin', 'pharmacist', 'procurement'])],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         if ((int) $request->user()->id === (int) $user->id && $validated['role'] !== 'admin') {
@@ -99,7 +100,13 @@ class AdminController extends Controller
 
         $user->forceFill([
             'role' => $validated['role'],
-        ])->save();
+        ]);
+
+        if (!empty($validated['password'])) {
+            $user->password = $validated['password'];
+        }
+
+        $user->save();
 
         if ($oldRole !== $user->role) {
             AuditTrail::record(
@@ -111,6 +118,16 @@ class AdminController extends Controller
             );
         }
 
-        return back()->with('success', 'User role updated successfully.');
+        if (!empty($validated['password'])) {
+            AuditTrail::record(
+                'user.password_updated',
+                $user,
+                $user->name,
+                [],
+                []
+            );
+        }
+
+        return back()->with('success', 'User updated successfully.');
     }
 }

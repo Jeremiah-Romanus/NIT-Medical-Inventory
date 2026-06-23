@@ -113,6 +113,17 @@
             color 0.22s ease-in-out;
     }
 
+    .shared-site-nav a.header-cta {
+        background: #4aaef0;
+        color: white;
+        border-color: transparent;
+    }
+
+    .shared-site-nav a.header-cta:hover {
+        background: #3b95d9;
+        border-color: transparent;
+    }
+
     .shared-site-nav a:hover {
         transform: scale(1.025);
         background: rgba(143, 211, 255, 0.18);

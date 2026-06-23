@@ -1,10 +1,5 @@
 <footer class="shared-footer {{ $footerClass ?? '' }}">
-    <div class="shared-footer-spacer" aria-hidden="true"></div>
-    <div class="shared-footer-copyright {{ $footerAlignClass ?? '' }}">
-        <p>Copyright &copy; {{ date('Y') }}</p>
-    </div>
-    <div class="shared-footer-details">
-        <strong>NIT Medical Inventory</strong>
-        <p>Digital medicine control for pharmacists and procurement officers.</p>
+    <div class="shared-footer-content">
+        <p class="mb-0 text-center">&copy; {{ date('Y') }} NIT Medical Management System. All rights reserved.</p>
     </div>
 </footer>

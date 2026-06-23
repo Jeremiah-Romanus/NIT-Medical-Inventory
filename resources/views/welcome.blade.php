@@ -133,6 +133,32 @@
             color: var(--text);
         }
 
+        .hero-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .hero-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(74, 174, 240, 0.16);
+            background: rgba(255, 255, 255, 0.92);
+            color: #0f172a;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.22s ease-in-out, background-color 0.22s ease-in-out, border-color 0.22s ease-in-out;
+        }
+
+        .hero-links a:hover {
+            transform: translateY(-1px);
+            background: rgba(74, 174, 240, 0.15);
+        }
+
         .visual-wrap {
             position: relative;
             min-height: 320px;
@@ -226,7 +252,7 @@
                             and connecting pharmacy with procurement through one clear workflow.
                         </p>
 
-                    <div class="cta-row">
+                    <div class="hero-links">
                         <a href="{{ route('login') }}" class="btn-hero primary">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             Login Now

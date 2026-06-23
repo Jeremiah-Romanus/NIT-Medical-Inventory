@@ -18,6 +18,9 @@
             <a href="{{ route('home') }}">
                 <i class="fa-solid fa-house me-2"></i>Home
             </a>
+            <a href="{{ route('login') }}" class="header-cta">
+                <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+            </a>
         </nav>
     </div>
 </header>

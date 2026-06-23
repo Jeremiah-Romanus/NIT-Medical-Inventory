@@ -70,6 +70,8 @@ class RequestController extends Controller
     {
         $requests = MedicineRequest::with(['medicine', 'user'])
             ->where('status', 'pending')
+            ->whereHas('user')
+            ->whereHas('medicine')
             ->latest()
             ->get();
 

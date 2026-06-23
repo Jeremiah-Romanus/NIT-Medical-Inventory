@@ -74,9 +74,9 @@
             </thead>
             <tbody>
                 @forelse($requests as $request)
-                    <tr x-show="!search || '{{ strtolower($request->user->name) }} {{ strtolower($request->medicine->name) }}'.includes(search.toLowerCase())" class="fade-in">
-                        <td>{{ $request->user->name }}</td>
-                        <td>{{ $request->medicine->name }}</td>
+                    <tr x-show="!search || '{{ strtolower(optional($request->user)->name ?? '') }} {{ strtolower(optional($request->medicine)->name ?? '') }}'.includes(search.toLowerCase())" class="fade-in">
+                        <td>{{ optional($request->user)->name ?? __('common.unknown') }}</td>
+                        <td>{{ optional($request->medicine)->name ?? __('common.unknown') }}</td>
                         <td>{{ $request->requested_quantity }}</td>
                         <td>
                             <span class="badge
