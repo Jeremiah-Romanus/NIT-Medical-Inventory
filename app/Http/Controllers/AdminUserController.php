@@ -39,6 +39,12 @@ class AdminUserController extends Controller
 
     public function destroy(Request $request, User $user)
     {
+        if ($user->role === 'admin') {
+            throw ValidationException::withMessages([
+                'user' => 'Administrator accounts cannot be deleted.',
+            ]);
+        }
+
         if ((int) $request->user()->id === (int) $user->id) {
             throw ValidationException::withMessages([
                 'user' => 'You cannot delete your own account while logged in.',

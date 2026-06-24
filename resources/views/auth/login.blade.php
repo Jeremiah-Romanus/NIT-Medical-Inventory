@@ -448,7 +448,15 @@
     @include('partials.site-header-script')
     @include('partials.sweetalert')
     <script>
-        window.addEventListener('pageshow', function () {
+        window.addEventListener('pageshow', function (event) {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            const cameFromHistory = event.persisted || (navigation && navigation.type === 'back_forward');
+
+            if (cameFromHistory) {
+                window.location.reload();
+                return;
+            }
+
             const form = document.querySelector('form');
             if (form) {
                 form.reset();

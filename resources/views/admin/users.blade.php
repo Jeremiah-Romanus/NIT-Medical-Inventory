@@ -110,11 +110,13 @@
                                             </div>
                                         </form>
 
-                                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to delete {{ addslashes($user->name) }}?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">{{ __('user.delete') }}</button>
-                                        </form>
+                                        @if($user->role !== 'admin')
+                                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to delete {{ addslashes($user->name) }}?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">{{ __('user.delete') }}</button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

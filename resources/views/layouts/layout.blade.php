@@ -907,6 +907,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @include('partials.site-header-script')
     @include('partials.sweetalert')
+    <script>
+        window.addEventListener('pageshow', function (event) {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            const cameFromHistory = event.persisted || (navigation && navigation.type === 'back_forward');
+
+            if (cameFromHistory) {
+                window.location.reload();
+            }
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>
