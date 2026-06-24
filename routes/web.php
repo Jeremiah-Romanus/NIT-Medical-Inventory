@@ -44,6 +44,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
 // Admin routes
@@ -59,9 +60,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 // Pharmacist routes
 Route::middleware(['auth', 'role:pharmacist'])->prefix('pharmacist')->group(function () {
     Route::get('/dashboard', [PharmacistController::class, 'dashboard'])->name('pharmacist.dashboard');
-    Route::get('/stock', [MedicineController::class, 'index'])->name('pharmacist.stock');
+    Route::get('/stock', [PharmacistController::class, 'viewStock'])->name('pharmacist.stock');
+    Route::get('/procurement-stock', [PharmacistController::class, 'procurementStock'])->name('pharmacist.procurement-stock');
+    Route::get('/received', [PharmacistController::class, 'received'])->name('pharmacist.received');
     Route::get('/request', [RequestController::class, 'myRequests'])->name('pharmacist.request');
     Route::get('/expiry', [PharmacistController::class, 'checkExpiry'])->name('pharmacist.expiry');
+    Route::get('/reports', [PharmacistController::class, 'reports'])->name('pharmacist.reports');
+    Route::get('/reports/print', [PharmacistController::class, 'printReports'])->name('pharmacist.reports.print');
+    Route::post('/notifications/read-all', function () {
+        auth()->user()?->unreadNotifications?->markAsRead();
+
+        return back()->with('success', 'Notifications marked as read.');
+    })->name('pharmacist.notifications.read-all');
 });
 
 // Procurement Officer routes

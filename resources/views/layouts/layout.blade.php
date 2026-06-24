@@ -797,7 +797,11 @@
                 @elseif(auth()->user()->role === 'pharmacist')
                     <a href="{{ route('pharmacist.stock') }}" class="side-link {{ request()->routeIs('pharmacist.stock') ? 'active' : '' }}">
                         <i class="fa-solid fa-boxes-stacked"></i>
-                        <span>{{ __('nav.inventory') }}</span>
+                        <span>My Stock</span>
+                    </a>
+                    <a href="{{ route('pharmacist.procurement-stock') }}" class="side-link {{ request()->routeIs('pharmacist.procurement-stock') ? 'active' : '' }}">
+                        <i class="fa-solid fa-warehouse"></i>
+                        <span>Procurement Stock</span>
                     </a>
                     <a href="{{ route('pharmacist.request') }}" class="side-link {{ request()->routeIs('pharmacist.request') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-list"></i>
@@ -806,6 +810,10 @@
                     <a href="{{ route('pharmacist.expiry') }}" class="side-link {{ request()->routeIs('pharmacist.expiry') ? 'active' : '' }}">
                         <i class="fa-solid fa-calendar-days"></i>
                         <span>{{ __('nav.expiry') }}</span>
+                    </a>
+                    <a href="{{ route('pharmacist.reports') }}" class="side-link {{ request()->routeIs('pharmacist.reports') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-column"></i>
+                        <span>Reports</span>
                     </a>
                 @else
                     <a href="{{ route('procurement.stock') }}" class="side-link {{ request()->routeIs('procurement.stock') ? 'active' : '' }}">

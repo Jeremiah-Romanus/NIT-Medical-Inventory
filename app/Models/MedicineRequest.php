@@ -17,6 +17,17 @@ class MedicineRequest extends Model
         'requested_quantity',
         'status',
         'remarks',
+        'approval_note',
+        'rejection_reason',
+        'approved_at',
+        'rejected_at',
+        'approved_by',
+        'rejected_by',
+    ];
+
+    protected $casts = [
+        'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
     ];
 
     public function user()
@@ -27,5 +38,15 @@ class MedicineRequest extends Model
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function rejector()
+    {
+        return $this->belongsTo(User::class, 'rejected_by');
     }
 }

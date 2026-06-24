@@ -49,6 +49,39 @@
         </div>
     </div>
 
+    @if(isset($lowStockMedicines) && $lowStockMedicines->isNotEmpty())
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Low stock alert</h5>
+                        <span class="badge bg-danger">{{ $lowStockMedicines->count() }} items</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Batch</th>
+                                    <th class="text-end">Pharmacy Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($lowStockMedicines as $medicine)
+                                    <tr>
+                                        <td>{{ $medicine->name }}</td>
+                                        <td>{{ $medicine->batch_number }}</td>
+                                        <td class="text-end fw-bold text-danger">{{ $medicine->pharmacy_quantity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row g-4 mb-4">
         <div class="col-lg-4">
             <div class="card h-100">

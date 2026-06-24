@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PasswordResetOtpMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -46,26 +47,17 @@ class AuthController extends Controller
         $user = User::where('email', $validated['email'])->first();
 
         if ($user) {
-            if (! $this->mailIsConfigured()) {
-                throw ValidationException::withMessages([
-                    'email' => 'Mailtrap SMTP settings are not complete yet. Add your Mailtrap host, username, and password in the .env file, then try again.',
-                ]);
-            }
-
             $otp = random_int(100000, 999999);
             $cacheKey = 'password-otp:' . strtolower($user->email);
             Cache::put($cacheKey, $otp, now()->addMinutes(10));
 
             try {
-                Mail::send('emails.password-otp', ['user' => $user, 'otp' => $otp], function ($message) use ($user) {
-                    $message->to($user->email, $user->name)
-                        ->subject('Your NIT Medical Inventory password reset OTP');
-                });
+                Mail::to($user->email)->send(new PasswordResetOtpMail($user, (string) $otp));
             } catch (Throwable $exception) {
                 report($exception);
 
                 throw ValidationException::withMessages([
-                    'email' => 'The reset email could not be sent right now. Please confirm your Mailtrap SMTP credentials and try again.',
+                    'email' => 'The reset email could not be sent right now. Please try again after confirming your mail settings.',
                 ]);
             }
         }
@@ -91,7 +83,6 @@ class AuthController extends Controller
                 'required',
                 'confirmed',
                 Password::min(8)
-                    ->max(12)
                     ->mixedCase()
                     ->numbers()
                     ->symbols(),
@@ -226,17 +217,4 @@ class AuthController extends Controller
         return Str::transliterate($identifier . '|' . $request->ip());
     }
 
-    protected function mailIsConfigured(): bool
-    {
-        $host = (string) config('mail.mailers.smtp.host');
-        $username = (string) config('mail.mailers.smtp.username');
-        $password = (string) config('mail.mailers.smtp.password');
-
-        if ($host === '' || $username === '' || $password === '') {
-            return false;
-        }
-
-        return ! in_array($username, ['your_mailtrap_username', 'null'], true)
-            && ! in_array($password, ['your_mailtrap_password', 'null'], true);
-    }
 }

@@ -34,13 +34,19 @@ class AdminController extends Controller
             'expiringSoonCount' => Medicine::whereDate('expiry_date', '>=', $today)
                 ->whereDate('expiry_date', '<=', $sixMonthsLater)
                 ->count(),
+            'lowStockCount' => Medicine::where('pharmacy_quantity', '<=', 30)->count(),
         ];
 
         $recentUsers = User::latest()->limit(6)->get();
         $recentRequests = MedicineRequest::with(['user', 'medicine'])->latest()->limit(6)->get();
         $recentAuditLogs = AuditLog::with('user')->latest()->limit(6)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentRequests', 'recentAuditLogs'));
+        $lowStockMedicines = Medicine::where('pharmacy_quantity', '<=', 30)
+            ->orderBy('pharmacy_quantity')
+            ->limit(6)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentRequests', 'recentAuditLogs', 'lowStockMedicines'));
     }
 
     public function users()

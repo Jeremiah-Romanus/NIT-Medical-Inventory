@@ -57,16 +57,6 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
 
-            $lowStockCount = Medicine::where('quantity', '<', 50)->count();
-            if ($lowStockCount > 0) {
-                $alerts->push([
-                    'type' => 'info',
-                    'icon' => 'fa-solid fa-box-open',
-                    'title' => 'Low stock attention',
-                    'message' => $lowStockCount . ' medicine records are below the stock threshold.',
-                ]);
-            }
-
             $view->with('sharedAlerts', $alerts);
         });
     }

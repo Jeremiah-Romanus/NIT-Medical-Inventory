@@ -50,10 +50,26 @@ class MedicineController extends Controller
         // Categories for filter dropdown
         $categories = Medicine::select('category')->distinct()->pluck('category')->filter()->values();
 
+        // Stock context is based on route name so role-specific pages show their own stock view
+        $stockContext = 'all';
+        if ($request->routeIs('pharmacist.stock')) {
+            $stockContext = 'pharmacy';
+            // Pharmacist should see items that exist in the pharmacy inventory
+            $query->where('pharmacy_quantity', '>', 0);
+        } elseif ($request->routeIs('procurement.stock')) {
+            $stockContext = 'procurement';
+        }
+
         // Paginate results and preserve query string
         $medicines = $query->orderBy('name')->paginate(25)->withQueryString();
 
-        return view('medicines.index', compact('medicines', 'expiredCount', 'expiringCount', 'categories'));
+        return view('medicines.index', compact(
+            'medicines',
+            'expiredCount',
+            'expiringCount',
+            'categories',
+            'stockContext'
+        ));
     }
 
     /**
@@ -75,6 +91,7 @@ class MedicineController extends Controller
             'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines',
             'quantity' => 'required|integer|min:0',
+            'pharmacy_quantity' => 'nullable|integer|min:0',
             'stored_date' => 'required|date_format:d/m/Y',
             'expiry_date' => 'required|date_format:d/m/Y',
             'unit_price' => 'required|numeric|min:0',
@@ -85,6 +102,7 @@ class MedicineController extends Controller
 
         $validated = $this->prepareMedicineDates($validated);
         $validated['category'] = '';
+        $validated['pharmacy_quantity'] = $validated['pharmacy_quantity'] ?? 0;
 
         $medicine = Medicine::create($validated);
 
@@ -127,6 +145,7 @@ class MedicineController extends Controller
             'formulation_strength' => 'required|string|max:255',
             'batch_number' => 'required|string|max:255|unique:medicines,batch_number,' . $medicine->id,
             'quantity' => 'required|integer|min:0',
+            'pharmacy_quantity' => 'nullable|integer|min:0',
             'stored_date' => 'required|date_format:d/m/Y',
             'expiry_date' => 'required|date_format:d/m/Y',
             'unit_price' => 'required|numeric|min:0',
@@ -137,6 +156,7 @@ class MedicineController extends Controller
 
         $validated = $this->prepareMedicineDates($validated);
         $validated['category'] = '';
+        $validated['pharmacy_quantity'] = $validated['pharmacy_quantity'] ?? 0;
 
         $oldValues = $medicine->only(array_keys($validated));
 

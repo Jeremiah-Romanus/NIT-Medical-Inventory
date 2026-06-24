@@ -28,7 +28,7 @@ class ProcurementController extends Controller
             'inventoryValue' => (float) (Medicine::query()
                 ->selectRaw('COALESCE(SUM(quantity * unit_price), 0) as total_value')
                 ->value('total_value') ?? 0),
-            'lowStockCount' => Medicine::where('quantity', '<', 50)->count(),
+            'lowStockCount' => Medicine::where('quantity', '<=', 30)->count(),
             'expiredCount' => Medicine::whereDate('expiry_date', '<', $today)->count(),
             'expiringSoonCount' => Medicine::whereDate('expiry_date', '>=', $today)
                 ->whereDate('expiry_date', '<=', $sixMonthsLater)
@@ -65,7 +65,7 @@ class ProcurementController extends Controller
 
         $criticalAlerts = Medicine::query()
             ->where(function ($query) use ($today, $sixMonthsLater) {
-                $query->where('quantity', '<', 50)
+                $query->where('quantity', '<=', 30)
                     ->orWhereDate('expiry_date', '<', $today)
                     ->orWhereDate('expiry_date', '<=', $sixMonthsLater);
             })

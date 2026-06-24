@@ -42,6 +42,11 @@
                             @error('quantity')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-3">
+                            <label class="form-label">Pharmacy Quantity</label>
+                            <input type="number" min="0" name="pharmacy_quantity" class="form-control @error('pharmacy_quantity') is-invalid @enderror" value="{{ old('pharmacy_quantity', $medicine->pharmacy_quantity) }}">
+                            @error('pharmacy_quantity')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-3">
                             <label class="form-label">Unit Price</label>
                             <input type="number" step="0.01" min="0" name="unit_price" class="form-control @error('unit_price') is-invalid @enderror" value="{{ old('unit_price', $medicine->unit_price) }}" required>
                             @error('unit_price')<div class="invalid-feedback">{{ $message }}</div>@enderror

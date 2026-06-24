@@ -78,7 +78,7 @@
               <div class="text-secondary small mt-1">{{ $medicines->total() }} {{ __('medicine.total') }}</div>
             </div>
             <div class="d-flex gap-2 align-items-center">
-              <form method="GET" action="{{ route('medicines.index') }}" class="d-flex gap-2 align-items-center" role="search">
+              <form method="GET" action="{{ url()->current() }}" class="d-flex gap-2 align-items-center" role="search">
                 <input type="search" name="q" value="{{ request('q') }}" class="form-control form-control-sm" placeholder="{{ __('common.search') }} {{ __('medicine.name') }}...">
                 <select name="status" class="form-select form-select-sm">
                   <option value="">{{ __('common.all') }}</option>
@@ -105,7 +105,14 @@
                         <th>{{ __('medicine.name') }}</th>
                         <th>{{ __('medicine.formulation') }}</th>
                         <th>{{ __('medicine.batch') }}</th>
-                        <th>{{ __('medicine.quantity') }}</th>
+                        @if($stockContext === 'all')
+                            <th>Procurement Qty</th>
+                            <th>Pharmacy Qty</th>
+                        @elseif($stockContext === 'pharmacy')
+                            <th>Pharmacy Qty</th>
+                        @else
+                            <th>Procurement Qty</th>
+                        @endif
                         <th>{{ __('medicine.unit_price') }}</th>
                         <th>{{ __('medicine.stored_date') }}</th>
                         <th>{{ __('medicine.expiry_date') }}</th>
@@ -122,11 +129,30 @@
                             </td>
                             <td>{{ $medicine->formulation_strength }}</td>
                             <td>{{ $medicine->batch_number }}</td>
-                            <td>
-                                <span class="badge stock-badge lively-pop @if($medicine->quantity < 50) bg-danger @elseif($medicine->quantity < 100) bg-warning @else bg-success @endif">
-                                    {{ $medicine->quantity }}
-                                </span>
-                            </td>
+                            @if($stockContext === 'all')
+                                <td>
+                                    <span class="badge stock-badge lively-pop @if($medicine->quantity <= 30) bg-danger @elseif($medicine->quantity < 100) bg-warning @else bg-success @endif">
+                                        {{ $medicine->quantity }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge stock-badge lively-pop @if($medicine->pharmacy_quantity <= 30) bg-danger @elseif($medicine->pharmacy_quantity < 100) bg-warning @else bg-success @endif">
+                                        {{ $medicine->pharmacy_quantity }}
+                                    </span>
+                                </td>
+                            @elseif($stockContext === 'pharmacy')
+                                <td>
+                                    <span class="badge stock-badge lively-pop @if($medicine->pharmacy_quantity <= 30) bg-danger @elseif($medicine->pharmacy_quantity < 100) bg-warning @else bg-success @endif">
+                                        {{ $medicine->pharmacy_quantity }}
+                                    </span>
+                                </td>
+                            @else
+                                <td>
+                                    <span class="badge stock-badge lively-pop @if($medicine->quantity <= 30) bg-danger @elseif($medicine->quantity < 100) bg-warning @else bg-success @endif">
+                                        {{ $medicine->quantity }}
+                                    </span>
+                                </td>
+                            @endif
                             <td>{{ __('currency.tzs') }} {{ number_format($medicine->unit_price, 2) }}</td>
                             <td>
                                 <small>{{ optional($medicine->stored_date) ? \App\Helpers\DateHelper::formatDate($medicine->stored_date) : __('common.na') }}</small>

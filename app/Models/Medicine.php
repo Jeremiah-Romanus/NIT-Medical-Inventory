@@ -17,6 +17,7 @@ class Medicine extends Model
         'formulation_strength',
         'batch_number',
         'quantity',
+        'pharmacy_quantity',
         'stored_date',
         'expiry_date',
         'unit_price',
@@ -26,6 +27,7 @@ class Medicine extends Model
         'stored_date' => 'date',
         'expiry_date' => 'date',
         'unit_price' => 'decimal:2',
+        'pharmacy_quantity' => 'integer',
     ];
 
     /**
